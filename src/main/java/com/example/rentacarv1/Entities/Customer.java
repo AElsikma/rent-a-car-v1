@@ -21,5 +21,5 @@ public class Customer {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private Users users;
+    private User users;
 }

@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "cars")
-public class Cars {
+public class Car {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,9 +31,9 @@ public class Cars {
 
     @ManyToOne
     @JoinColumn(name = "model_id")
-    private Models models;
+    private Model models;
 
     @ManyToOne
     @JoinColumn(name = "color_id")
-    private Colors colors;
+    private Color colors;
 }

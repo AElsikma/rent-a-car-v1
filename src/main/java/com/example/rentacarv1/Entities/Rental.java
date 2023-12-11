@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Entity
 @Table(name = "rentals")
-public class Rentals {
+public class Rental {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,7 +42,7 @@ public class Rentals {
 
     @ManyToOne
     @JoinColumn(name = "car_id", nullable = false)
-    private Cars cars;
+    private Car cars;
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)

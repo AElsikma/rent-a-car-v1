@@ -22,22 +22,22 @@ public class Rental {
     @Column(name = "start_date",nullable = false)
     private LocalDate startDate;
 
-    @Column(name = "end_date",nullable = false)
+    @Column(name = "end_date")
     private LocalDate endDate;
 
-    @Column(name = "return_date",nullable = false)
+    @Column(name = "return_date")
     private LocalDate returnDate;
 
     @Column(name = "start_kilometer",nullable = false)
     private int startKilometer;
 
-    @Column(name = "end_kilometer",nullable = false)
+    @Column(name = "end_kilometer")
     private int endKilometer;
 
     @Column(name = "total_price",nullable = false)
     private Double totalPrice;
 
-    @Column(name = "discount",nullable = false)
+    @Column(name = "discount")
     private Double discount;
 
     @ManyToOne

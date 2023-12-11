@@ -1,9 +1,12 @@
 package com.example.rentacarv1.Entities;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -31,9 +34,13 @@ public class Car {
 
     @ManyToOne
     @JoinColumn(name = "model_id")
-    private Model models;
+    private Model model;
 
     @ManyToOne
     @JoinColumn(name = "color_id")
-    private Color colors;
+    private Color color;
+
+    @OneToMany(mappedBy = "car")
+    @JsonIgnore
+    private List<Rental> rentals;
 }

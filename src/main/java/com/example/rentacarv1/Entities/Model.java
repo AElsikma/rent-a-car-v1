@@ -1,9 +1,12 @@
 package com.example.rentacarv1.Entities;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -22,5 +25,9 @@ public class Model {
 
     @ManyToOne
     @JoinColumn(name = "brand_id", nullable = false)
-    private Brand brands;
+    private Brand brand;
+
+    @OneToMany(mappedBy = "model")
+    @JsonIgnore
+    private List<Car> cars;
 }

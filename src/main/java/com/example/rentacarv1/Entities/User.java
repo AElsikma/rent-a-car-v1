@@ -1,9 +1,13 @@
 package com.example.rentacarv1.Entities;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
+import java.util.ListIterator;
 
 @Getter
 @Setter
@@ -26,4 +30,12 @@ public class User {
     private int gsm;
     @Column(name = "email",nullable = false)
     private String email;
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<Customer> customers;
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnore
+    private List<Employee> employees;
 }

@@ -42,7 +42,7 @@ public class Rental {
 
     @ManyToOne
     @JoinColumn(name = "car_id", nullable = false)
-    private Car cars;
+    private Car car;
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)

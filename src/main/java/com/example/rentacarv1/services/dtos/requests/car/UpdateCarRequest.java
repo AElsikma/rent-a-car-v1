@@ -1,6 +1,5 @@
 package com.example.rentacarv1.services.dtos.requests.car;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,8 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddCarRequest {
-
+public class UpdateCarRequest {
+    private int id;
     private double daily_price;
     private int kilometer;
     private String plate;

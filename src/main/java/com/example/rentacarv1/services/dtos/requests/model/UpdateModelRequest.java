@@ -11,7 +11,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddModelRequest {
+public class UpdateModelRequest {
+    @NotNull(message = "ID can not be null.")
+    @Positive(message = "Id must be a positive number.")
+    private int id;
     @NotBlank(message = "Model name can not be empty!")
     @Size(min = 3,max = 20,message = "Model name must be between 2 and 20!")
 

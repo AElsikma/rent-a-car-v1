@@ -5,6 +5,7 @@
 <h6>Request Pattern:</h6> <p>Proje, service request pattern kullanılarak tasarlanmıştır, bu sayede kullanıcı istekleri kolaylıkla yönetilebilir.</p>
 <h6>CRUD İşlemleri:</h6> <p>Temel CRUD (Create, Read, Update, Delete) işlemleri, araç ve renk modeli verilerini yönetmek için kullanılabilir.</p>
 
+<h3>Katkı</h3>
 Pair 8 : 
 [Asli Beyhan](https://github.com/aslibeyhan)
 [Furkan Sağ](https://github.com/frknsagg/)

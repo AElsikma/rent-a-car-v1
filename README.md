@@ -3,6 +3,5 @@ Pair 8 :
 [Furkan Sağ](https://github.com/frknsagg/)
 [Bayram Ulutaş](https://github.com/byulutas)
 [Abdulkadir Elsıkma](https://github.com/Homunculum)
-![rent-a-car-v1](https://github.com/Homunculum/rent-a-car-v1/assets/127428453/4d89009a-775c-422c-82ea-3a424c242f1b)
 
-
+![rent-a-car-v1](https://github.com/Homunculum/rent-a-car-v1/assets/127428453/fc08f7dd-8bc1-4e8a-9339-a07aceb2257a)

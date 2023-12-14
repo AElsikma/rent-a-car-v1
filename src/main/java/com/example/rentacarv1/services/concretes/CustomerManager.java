@@ -12,10 +12,13 @@ import com.example.rentacarv1.services.dtos.responses.color.GetColorListResponse
 import com.example.rentacarv1.services.dtos.responses.color.GetColorResponse;
 import com.example.rentacarv1.services.dtos.responses.customer.GetCustomerListResponse;
 import com.example.rentacarv1.services.dtos.responses.customer.GetCustomerResponse;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
+@Service
+@AllArgsConstructor
 public class CustomerManager implements CustomerService {
 
     private CustomerRepository customerRepository;

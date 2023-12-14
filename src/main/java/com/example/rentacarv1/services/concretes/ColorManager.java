@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-
 public class ColorManager implements ColorService {
     private final ColorRepository colorRepository;
     private final ModelMapperService modelMapperService;

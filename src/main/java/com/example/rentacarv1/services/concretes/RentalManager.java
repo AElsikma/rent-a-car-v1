@@ -12,10 +12,14 @@ import com.example.rentacarv1.services.dtos.responses.car.GetCarListResponse;
 import com.example.rentacarv1.services.dtos.responses.car.GetCarResponse;
 import com.example.rentacarv1.services.dtos.responses.rental.GetRentalListResponse;
 import com.example.rentacarv1.services.dtos.responses.rental.GetRentalResponse;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Service
+@AllArgsConstructor
 public class RentalManager implements RentalService {
 
     private RentalRepository rentalRepository;

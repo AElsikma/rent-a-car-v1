@@ -1,20 +1,13 @@
 package com.example.rentacarv1.services.concretes;
 
 import com.example.rentacarv1.Entities.Brand;
-import com.example.rentacarv1.Entities.Car;
-import com.example.rentacarv1.controllers.BrandsController;
 import com.example.rentacarv1.core.utilities.mappers.ModelMapperService;
 import com.example.rentacarv1.repositories.BrandRepository;
-import com.example.rentacarv1.repositories.CarRepository;
 import com.example.rentacarv1.services.abstracts.BrandService;
 import com.example.rentacarv1.services.dtos.requests.brand.AddBrandRequest;
 import com.example.rentacarv1.services.dtos.requests.brand.UpdateBrandRequest;
-import com.example.rentacarv1.services.dtos.requests.car.AddCarRequest;
-import com.example.rentacarv1.services.dtos.requests.car.UpdateCarRequest;
 import com.example.rentacarv1.services.dtos.responses.brand.GetBrandListResponse;
 import com.example.rentacarv1.services.dtos.responses.brand.GetBrandResponse;
-import com.example.rentacarv1.services.dtos.responses.car.GetCarListResponse;
-import com.example.rentacarv1.services.dtos.responses.car.GetCarResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 

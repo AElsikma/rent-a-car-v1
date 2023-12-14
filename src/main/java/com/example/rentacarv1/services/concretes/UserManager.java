@@ -1,15 +1,11 @@
 package com.example.rentacarv1.services.concretes;
 
-import com.example.rentacarv1.Entities.Car;
 import com.example.rentacarv1.Entities.User;
 import com.example.rentacarv1.core.utilities.mappers.ModelMapperService;
-import com.example.rentacarv1.repositories.CarRepository;
 import com.example.rentacarv1.repositories.UserRepository;
 import com.example.rentacarv1.services.abstracts.UserService;
 import com.example.rentacarv1.services.dtos.requests.user.AddUserRequest;
 import com.example.rentacarv1.services.dtos.requests.user.UpdateUserRequest;
-import com.example.rentacarv1.services.dtos.responses.car.GetCarListResponse;
-import com.example.rentacarv1.services.dtos.responses.car.GetCarResponse;
 import com.example.rentacarv1.services.dtos.responses.user.GetUserListResponse;
 import com.example.rentacarv1.services.dtos.responses.user.GetUserResponse;
 import lombok.AllArgsConstructor;

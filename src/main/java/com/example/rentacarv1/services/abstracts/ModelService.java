@@ -2,7 +2,6 @@ package com.example.rentacarv1.services.abstracts;
 
 import com.example.rentacarv1.services.dtos.requests.model.AddModelRequest;
 import com.example.rentacarv1.services.dtos.requests.model.UpdateModelRequest;
-import com.example.rentacarv1.services.dtos.responses.brand.GetBrandResponse;
 import com.example.rentacarv1.services.dtos.responses.model.GetModelListResponse;
 import com.example.rentacarv1.services.dtos.responses.model.GetModelResponse;
 

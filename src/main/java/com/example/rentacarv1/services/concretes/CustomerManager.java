@@ -1,15 +1,11 @@
 package com.example.rentacarv1.services.concretes;
 
-import com.example.rentacarv1.Entities.Color;
 import com.example.rentacarv1.Entities.Customer;
 import com.example.rentacarv1.core.utilities.mappers.ModelMapperService;
-import com.example.rentacarv1.repositories.ColorRepository;
 import com.example.rentacarv1.repositories.CustomerRepository;
 import com.example.rentacarv1.services.abstracts.CustomerService;
 import com.example.rentacarv1.services.dtos.requests.customer.AddCustomerRequest;
 import com.example.rentacarv1.services.dtos.requests.customer.UpdateCustomerRequest;
-import com.example.rentacarv1.services.dtos.responses.color.GetColorListResponse;
-import com.example.rentacarv1.services.dtos.responses.color.GetColorResponse;
 import com.example.rentacarv1.services.dtos.responses.customer.GetCustomerListResponse;
 import com.example.rentacarv1.services.dtos.responses.customer.GetCustomerResponse;
 import lombok.AllArgsConstructor;

@@ -1,14 +1,8 @@
 package com.example.rentacarv1.controllers;
 
-import com.example.rentacarv1.services.abstracts.ColorService;
 import com.example.rentacarv1.services.abstracts.ModelService;
-import com.example.rentacarv1.services.dtos.requests.color.AddColorRequest;
-import com.example.rentacarv1.services.dtos.requests.color.UpdateColorRequest;
 import com.example.rentacarv1.services.dtos.requests.model.AddModelRequest;
 import com.example.rentacarv1.services.dtos.requests.model.UpdateModelRequest;
-import com.example.rentacarv1.services.dtos.responses.color.GetColorListResponse;
-import com.example.rentacarv1.services.dtos.responses.color.GetColorResponse;
-import com.example.rentacarv1.services.dtos.responses.employee.GetEmployeeListResponse;
 import com.example.rentacarv1.services.dtos.responses.model.GetModelListResponse;
 import com.example.rentacarv1.services.dtos.responses.model.GetModelResponse;
 import jakarta.validation.Valid;

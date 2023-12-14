@@ -1,11 +1,7 @@
 package com.example.rentacarv1.services.abstracts;
 
-import com.example.rentacarv1.services.dtos.requests.car.AddCarRequest;
-import com.example.rentacarv1.services.dtos.requests.car.UpdateCarRequest;
 import com.example.rentacarv1.services.dtos.requests.customer.AddCustomerRequest;
 import com.example.rentacarv1.services.dtos.requests.customer.UpdateCustomerRequest;
-import com.example.rentacarv1.services.dtos.responses.car.GetCarListResponse;
-import com.example.rentacarv1.services.dtos.responses.car.GetCarResponse;
 import com.example.rentacarv1.services.dtos.responses.customer.GetCustomerListResponse;
 import com.example.rentacarv1.services.dtos.responses.customer.GetCustomerResponse;
 

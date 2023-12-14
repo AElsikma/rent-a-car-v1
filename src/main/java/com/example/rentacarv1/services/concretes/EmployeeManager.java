@@ -1,20 +1,15 @@
 package com.example.rentacarv1.services.concretes;
 
-import com.example.rentacarv1.Entities.Car;
 import com.example.rentacarv1.Entities.Employee;
 import com.example.rentacarv1.core.utilities.mappers.ModelMapperService;
-import com.example.rentacarv1.repositories.ColorRepository;
 import com.example.rentacarv1.repositories.EmployeeRepository;
 import com.example.rentacarv1.services.abstracts.EmployeeService;
 import com.example.rentacarv1.services.dtos.requests.employee.AddEmployeeRequest;
 import com.example.rentacarv1.services.dtos.requests.employee.UpdateEmployeeRequest;
-import com.example.rentacarv1.services.dtos.responses.car.GetCarListResponse;
-import com.example.rentacarv1.services.dtos.responses.car.GetCarResponse;
 import com.example.rentacarv1.services.dtos.responses.employee.GetEmployeeListResponse;
 import com.example.rentacarv1.services.dtos.responses.employee.GetEmployeeResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.stream.Collectors;
 

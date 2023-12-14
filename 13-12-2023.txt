@@ -1,0 +1,27 @@
+Uygulama:
+
+--Eklemediyseniz sisteminize swagger desteği ekleyiniz.
+
+--Service katmanı için bugün "Car" entitysi kodlamlarını gerçekleştireceğiz. 5 temel crud işlemini (GetAll,GetById,Add,Update,Delete) kodlayalım ve controller katmanında endpointlerimizi bağlayalım.
+
+Ekleme ve güncelleme işlemlerinde;
+
+Araba tablosundaki "kilometer" alanı 0'dan küçük olamaz.
+"Plate" alanı için Regex ile Türkiye plakasına uygunluk validasyonu eklenmelidir.
+Yıl bilgisi 2005-2024 arasında olmalıdır
+DailyPrice 0'dan küçük olamaz
+ModelId ve ColorId 0'dan küçük olamaz.
+
+Araç eklenirken plate kısmında verilen stringdeki tüm boşluklar kaldırılıp kaydedilmelidir ( örn : kullanıcının vereceği 34 ABC 06 => 34ABC06 olarak kaydedilmelidir)
+
+Verilen ModelId ile bir model db'de bulunmalıdır ( Burada ModelService içerisinde kodlama yapmak da gerekecek, unutmayalım bir service diğer bir entity'nin reposunu değil service'ini çağırıyor idi)
+
+Verilen ColorId ile bir color db'de bulunmalıdır (model ile aynı durum mevcut)
+
+Aynı plakaya sahip bir başka araç bulunmamalıdır.
+
+TÜM İşlemler için Request-Response pattern'a uyulmalıdır.
+
+Araç verileri listelenirken
+Plaka,Kilometre,Ücret,Yıl, Model Adı, Renk Adı
+bilgileri listelenmelidir.

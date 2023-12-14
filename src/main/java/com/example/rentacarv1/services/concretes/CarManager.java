@@ -41,9 +41,12 @@ public class CarManager implements CarService {
 
     @Override
     public void add(AddCarRequest addCarRequest) {
-
         String plate = addCarRequest.getPlate().replaceAll("\\s","");
         addCarRequest.setPlate(plate);
+        if(carRepository.existsByPlate(addCarRequest.getPlate())){
+            throw new RuntimeException("There cannot be more than one vehicle with the same license plate");
+        }
+
        Car car =this.modelMapperService.forRequest().map(addCarRequest,Car.class);
 
        this.carRepository.save(car);

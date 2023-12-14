@@ -9,8 +9,11 @@
 
 Pair 8 : 
 [Asli Beyhan](https://github.com/aslibeyhan)
+<br>
 [Furkan Sağ](https://github.com/frknsagg/)
+<br>
 [Bayram Ulutaş](https://github.com/byulutas)
+<br>
 [Abdulkadir Elsıkma](https://github.com/Homunculum)
 
 

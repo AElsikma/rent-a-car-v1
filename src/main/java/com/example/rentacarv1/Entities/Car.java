@@ -27,7 +27,7 @@ public class Car {
     private int year;
 
     @Column(name = "daily_price", nullable = false)
-    private Double dailyPrice;
+    private double dailyPrice;
 
     @Column(name = "plate",unique = true)
     private String plate;

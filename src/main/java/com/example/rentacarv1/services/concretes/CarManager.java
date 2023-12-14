@@ -41,7 +41,11 @@ public class CarManager implements CarService {
 
     @Override
     public void add(AddCarRequest addCarRequest) {
+
+        String plate = addCarRequest.getPlate().replaceAll("\\s","");
+        addCarRequest.setPlate(plate);
        Car car =this.modelMapperService.forRequest().map(addCarRequest,Car.class);
+
        this.carRepository.save(car);
     }
 

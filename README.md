@@ -6,6 +6,7 @@
 <h6>CRUD İşlemleri:</h6> <p>Temel CRUD (Create, Read, Update, Delete) işlemleri, araç ve renk modeli verilerini yönetmek için kullanılabilir.</p>
 
 <h3>Katkı</h3>
+
 Pair 8 : 
 [Asli Beyhan](https://github.com/aslibeyhan)
 [Furkan Sağ](https://github.com/frknsagg/)

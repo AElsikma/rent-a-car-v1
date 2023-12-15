@@ -21,7 +21,7 @@ public class AddCarRequest {
 
 
     @NotBlank(message = "The plate field can't be empty.")
-    @Size(min=5,max=10,message = "Licence plate must be between 5 and 9 characters")
+    @Size(min=5,max=9,message = "Licence plate must be between 5 and 9 characters")
     private String plate;
 
 

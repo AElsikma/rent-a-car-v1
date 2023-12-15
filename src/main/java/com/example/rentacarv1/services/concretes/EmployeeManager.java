@@ -31,7 +31,7 @@ public class EmployeeManager implements EmployeeService {
     @Override
     public GetEmployeeResponse getById(int id) {
         Employee employee = employeeRepository.findById(id).orElseThrow();
-        GetEmployeeResponse getEmployeeResponse=this.modelMapperService.forRequest().map(employee,GetEmployeeResponse.class);
+        GetEmployeeResponse getEmployeeResponse=this.modelMapperService.forResponse().map(employee,GetEmployeeResponse.class);
         return getEmployeeResponse;
     }
 

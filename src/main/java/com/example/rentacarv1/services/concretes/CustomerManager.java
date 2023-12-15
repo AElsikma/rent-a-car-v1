@@ -31,7 +31,7 @@ public class CustomerManager implements CustomerService {
     @Override
     public GetCustomerResponse getById(int id) {
         Customer customer = customerRepository.findById(id).orElseThrow();
-        GetCustomerResponse getCustomerResponse=this.modelMapperService.forRequest().map(customer,GetCustomerResponse.class);
+        GetCustomerResponse getCustomerResponse=this.modelMapperService.forResponse().map(customer,GetCustomerResponse.class);
         return getCustomerResponse;
     }
 

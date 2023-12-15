@@ -36,7 +36,7 @@ public class RentalManager implements RentalService {
     @Override
     public GetRentalResponse getById(int id) {
         Rental rental = rentalRepository.findById(id).orElseThrow();
-        GetRentalResponse getRentalResponse=this.modelMapperService.forRequest().map(rental,GetRentalResponse.class);
+        GetRentalResponse getRentalResponse=this.modelMapperService.forResponse().map(rental,GetRentalResponse.class);
         return getRentalResponse;
     }
 

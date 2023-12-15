@@ -20,6 +20,7 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(name="salary")
     private Double salary;
 
     @ManyToOne

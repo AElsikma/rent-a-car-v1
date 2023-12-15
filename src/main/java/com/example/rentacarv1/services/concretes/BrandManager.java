@@ -39,7 +39,7 @@ public class BrandManager implements BrandService {
     public GetBrandResponse getById(int id) {
 
         Brand brand = brandRepository.findById(id).orElseThrow();
-        GetBrandResponse getBrandResponse=this.modelMapperService.forRequest().map(brand,GetBrandResponse.class);
+        GetBrandResponse getBrandResponse=this.modelMapperService.forResponse().map(brand,GetBrandResponse.class);
         return getBrandResponse;
     }
 

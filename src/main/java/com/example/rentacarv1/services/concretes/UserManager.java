@@ -31,7 +31,7 @@ public class UserManager implements UserService {
     @Override
     public GetUserResponse getById(int id) {
         User user = userRepository.findById(id).orElseThrow();
-        GetUserResponse getUserResponse=this.modelMapperService.forRequest().map(user,GetUserResponse.class);
+        GetUserResponse getUserResponse=this.modelMapperService.forResponse().map(user,GetUserResponse.class);
         return getUserResponse;
     }
 

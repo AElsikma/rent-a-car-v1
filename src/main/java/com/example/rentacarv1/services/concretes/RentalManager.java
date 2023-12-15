@@ -1,7 +1,10 @@
 package com.example.rentacarv1.services.concretes;
 
+import com.example.rentacarv1.Entities.Customer;
 import com.example.rentacarv1.Entities.Rental;
 import com.example.rentacarv1.core.utilities.mappers.ModelMapperService;
+import com.example.rentacarv1.repositories.CustomerRepository;
+import com.example.rentacarv1.repositories.EmployeeRepository;
 import com.example.rentacarv1.repositories.RentalRepository;
 import com.example.rentacarv1.services.abstracts.RentalService;
 import com.example.rentacarv1.services.dtos.requests.rental.AddRentalRequest;
@@ -20,6 +23,7 @@ public class RentalManager implements RentalService {
 
     private RentalRepository rentalRepository;
     private ModelMapperService modelMapperService;
+
     @Override
     public List<GetRentalListResponse> getAll() {
         List<Rental> rentals=rentalRepository.findAll();

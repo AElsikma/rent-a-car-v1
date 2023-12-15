@@ -5,9 +5,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.Year;
+import java.util.Date;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+
 public class AddCarRequest {
 
     @NotNull(message = "The daily price field cannot be null !")
@@ -27,7 +31,7 @@ public class AddCarRequest {
 
     @NotNull(message = "The year field cannot be null")
     @Min(value = 2005,message = "Year must be greater than or equal to 2005.")
-    @Max(value = 2024, message ="Year must be less than or equal to the current yaer." )
+    @Max(value = 2024,message = "Car model year can not be higher than ")
     private int year;
 
     @NotNull(message = "The model id cannot be null.")

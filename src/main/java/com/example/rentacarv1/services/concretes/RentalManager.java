@@ -8,6 +8,7 @@ import com.example.rentacarv1.services.dtos.requests.rental.AddRentalRequest;
 import com.example.rentacarv1.services.dtos.requests.rental.UpdateRentalRequest;
 import com.example.rentacarv1.services.dtos.responses.rental.GetRentalListResponse;
 import com.example.rentacarv1.services.dtos.responses.rental.GetRentalResponse;
+import com.example.rentacarv1.services.rules.RentalBusinessRules;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,6 +24,7 @@ public class RentalManager implements RentalService {
     private final CustomerRepository customerRepository;
     private final CarRepository carRepository;
     private final EmployeeRepository employeeRepository;
+    private final RentalBusinessRules rentalBusinessRules;
 
 
     @Override
@@ -43,6 +45,9 @@ public class RentalManager implements RentalService {
 
     @Override
     public void add(AddRentalRequest addRentalRequest) {
+
+        rentalBusinessRules.isEndDateAfterStartDate(addRentalRequest.getEndDate(),addRentalRequest.getStartDate());
+
         Customer customer = customerRepository.findById(Integer.valueOf(addRentalRequest.getCustomer()))
                 .orElseThrow(()-> new IllegalArgumentException("The specified user was not found"));
         Car car = carRepository.findById(Integer.valueOf(addRentalRequest.getCar()))
@@ -54,6 +59,9 @@ public class RentalManager implements RentalService {
         rental.setCar(car);
         rental.setCustomer(customer);
         rental.setEmployee(employee);
+        rental.setStartKilometer(car.getKilometer());
+        int rentalLimit = rental.getStartDate().until(rental.getEndDate()).getDays() + 1;
+        rental.setTotalPrice(car.getDailyPrice() * rentalLimit);
         this.rentalRepository.save(rental);
     }
 

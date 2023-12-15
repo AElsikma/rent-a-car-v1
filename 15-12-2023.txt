@@ -11,12 +11,12 @@
 ☑️Aynı isimde 2. model eklenememelidir.
 ☑️Eklenecek model en az 2 harften oluşmalıdır.
 
-Kullanıcılar araç kiralayabilmelidir.
-Araç kiralarken verilen başlangıç tarihi bugünden daha geçmiş bi tarih olamaz.
-Araç kiralarken verilen bitiş tarihi başlangıç tarihinden daha geçmiş bi tarih olamaz.
-Araç kiralarken verilen CarId ile sistemde bir Araba olmalıdır.
-Araç kiralarken verilen UserId ile sistemde bir User olmalıdır.
-Bir araç maksimum 25 gün kiralanabilir.
-Kiralama yapılırken StartKilometer kiralanmak istenen aracın Kilometer alanından alınmalıdır.
-EndKilometer ve ReturnDate null bırakılmalıdır.
-totalPrice hesaplanarak kayıt edilmelidir (kullanıcı vermeyecek)
+☑️Kullanıcılar araç kiralayabilmelidir.
+☑️Araç kiralarken verilen başlangıç tarihi bugünden daha geçmiş bi tarih olamaz.
+☑️Araç kiralarken verilen bitiş tarihi başlangıç tarihinden daha geçmiş bi tarih olamaz.
+☑️Araç kiralarken verilen CarId ile sistemde bir Araba olmalıdır.
+☑️Araç kiralarken verilen UserId ile sistemde bir User olmalıdır.
+☑️Bir araç maksimum 25 gün kiralanabilir.
+☑️Kiralama yapılırken StartKilometer kiralanmak istenen aracın Kilometer alanından alınmalıdır.
+☑️EndKilometer ve ReturnDate null bırakılmalıdır.
+☑️totalPrice hesaplanarak kayıt edilmelidir (kullanıcı vermeyecek)

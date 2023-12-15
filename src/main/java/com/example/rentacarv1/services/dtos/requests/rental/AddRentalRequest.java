@@ -14,22 +14,12 @@ import java.time.LocalDate;
 public class AddRentalRequest {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @FutureOrPresent(message = "The starting date cannot be further back than today.")
     private LocalDate startDate;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @Future(message = "The end date cannot be further back than today.")
     private LocalDate endDate;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate returnDate;
-
-    @Positive(message = "enter only positive")
-    private int startKilometer;
-
-    @Positive(message = "enter only positive")
-    private Long endKilometer;
-
-    @Positive(message = "enter only positive")
-    private Double totalPrice;
 
     @Min(value = 0,message = "The discount value can not be lower than 0")
     private Double discount;

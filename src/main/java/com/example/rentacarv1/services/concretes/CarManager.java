@@ -8,10 +8,13 @@ import com.example.rentacarv1.services.dtos.requests.car.AddCarRequest;
 import com.example.rentacarv1.services.dtos.requests.car.UpdateCarRequest;
 import com.example.rentacarv1.services.dtos.responses.car.GetByIdCarResponse;
 import com.example.rentacarv1.services.dtos.responses.car.GetCarResponse;
+import com.example.rentacarv1.services.rules.CarBusinessRules;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,6 +23,7 @@ public class CarManager implements CarService {
 
     private CarRepository carRepository;
     private ModelMapperService modelMapperService;
+    private CarBusinessRules carBusinessRules;
 
     @Override
     public List<GetCarResponse> getAll() {
@@ -41,15 +45,14 @@ public class CarManager implements CarService {
 
     @Override
     public void add(AddCarRequest addCarRequest) {
-        String plate = addCarRequest.getPlate().replaceAll("\\s","");
-        addCarRequest.setPlate(plate);
-        if(carRepository.existsByPlate(addCarRequest.getPlate())){
-            throw new RuntimeException("There cannot be more than one vehicle with the same license plate");
-        }
 
-       Car car =this.modelMapperService.forRequest().map(addCarRequest,Car.class);
+        addCarRequest.setPlate(carBusinessRules.plateValidator(addCarRequest.getPlate()));
+        carBusinessRules.existsByPlate(addCarRequest.getPlate());
 
-       this.carRepository.save(car);
+        Car car =this.modelMapperService.forRequest().map(addCarRequest,Car.class);
+
+        this.carRepository.save(car);
+
     }
 
     @Override

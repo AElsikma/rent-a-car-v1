@@ -25,20 +25,9 @@ public class AddCarRequest {
    // @Pattern(regexp = "^[0-9]{2}\\s[A-Z]{1,3}\\s[0-9]{2,4}$", message = "Invalid licence plate" )
 
     //@Size(min=5,max=10,message = "Licence plate must be between 5 and 9 characters")
-    @Pattern(regexp = "(0[1-9]|[1-7][0-9]|8[01]) [A-Z]{2,3}(\\d{2,4})", message = "Invalid licence plate")
+   // @Pattern(regexp = "(0[1-9]|[1-7][0-9]|8[01]) [A-Z]{2,3}(\\d{2,4})", message = "Invalid licence plate")
     @Size(min=5,max=10,message = "Licence plate must be between 5 and 9 characters")
     private String plate;
-
-
-    public String getPlate() {
-        return plate;
-    }
-
-    public void setPlate(String plate) {
-        this.plate = plate.replaceAll("\s", "");
-    }
-
-   // private String plate;
 
 
     @NotNull(message = "The year field cannot be null")

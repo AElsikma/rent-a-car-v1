@@ -16,10 +16,21 @@ public class CarBusinessRules {
     private CarRepository carRepository;
 
   public void existsByPlate(String plate){
-        existsByPlate(plate.replaceAll("\\s",""));
         if(this.carRepository.existsByPlate(plate)){
         throw new BusinessException("There cannot be more than one vehicle with the same license plate");
     }}
+
+    public String plateValidator(String plate){
+        plate=plate.replaceAll("\s","").toUpperCase();
+        String regex = "^(0[1-9]|[1-7][0-9]|8[01])[A-Z]{1,3}\\d{2,4}$";
+
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(plate);
+        if (!matcher.matches()) {
+            throw new RuntimeException("Plaka formatı hatalı.");
+        }
+        return plate;
+    }
 
 
 }

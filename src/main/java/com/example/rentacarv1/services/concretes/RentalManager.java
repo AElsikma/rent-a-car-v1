@@ -1,11 +1,8 @@
 package com.example.rentacarv1.services.concretes;
 
-import com.example.rentacarv1.Entities.Customer;
-import com.example.rentacarv1.Entities.Rental;
+import com.example.rentacarv1.Entities.*;
 import com.example.rentacarv1.core.utilities.mappers.ModelMapperService;
-import com.example.rentacarv1.repositories.CustomerRepository;
-import com.example.rentacarv1.repositories.EmployeeRepository;
-import com.example.rentacarv1.repositories.RentalRepository;
+import com.example.rentacarv1.repositories.*;
 import com.example.rentacarv1.services.abstracts.RentalService;
 import com.example.rentacarv1.services.dtos.requests.rental.AddRentalRequest;
 import com.example.rentacarv1.services.dtos.requests.rental.UpdateRentalRequest;
@@ -21,8 +18,12 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class RentalManager implements RentalService {
 
-    private RentalRepository rentalRepository;
-    private ModelMapperService modelMapperService;
+    private final RentalRepository rentalRepository;
+    private final ModelMapperService modelMapperService;
+    private final CustomerRepository customerRepository;
+    private final CarRepository carRepository;
+    private final EmployeeRepository employeeRepository;
+
 
     @Override
     public List<GetRentalListResponse> getAll() {
@@ -42,7 +43,17 @@ public class RentalManager implements RentalService {
 
     @Override
     public void add(AddRentalRequest addRentalRequest) {
+        Customer customer = customerRepository.findById(Integer.valueOf(addRentalRequest.getCustomer()))
+                .orElseThrow(()-> new IllegalArgumentException("The specified user was not found"));
+        Car car = carRepository.findById(Integer.valueOf(addRentalRequest.getCar()))
+                .orElseThrow(()-> new IllegalArgumentException("The specified user was not found"));
+        Employee employee = employeeRepository.findById(Integer.valueOf(addRentalRequest.getEmployee()))
+                .orElseThrow(()-> new IllegalArgumentException("The specified user was not found"));
+
         Rental rental=this.modelMapperService.forRequest().map(addRentalRequest,Rental.class);
+        rental.setCar(car);
+        rental.setCustomer(customer);
+        rental.setEmployee(employee);
         this.rentalRepository.save(rental);
     }
 

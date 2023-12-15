@@ -12,29 +12,36 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddRentalRequest {
-    @Positive(message = "enter only positive")
-    @DateTimeFormat(pattern = "YYYY-MM-DD")
-    @Past(message = "Just enter the startDate as YYYY-MM-DD")
-    @NotEmpty(message = "startDate cannot be empty or null")
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate startDate;
 
-    @Positive(message = "enter only positive")
-    @DateTimeFormat(pattern = "YYYY-MM-DD")
-    @Past(message = "Just enter the endDate as YYYY-MM-DD")
-    @NotEmpty(message = "endDate cannot be empty or null")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
 
-    @NotEmpty(message = "cannot be empty or null")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate returnDate;
+
+    @Positive(message = "enter only positive")
+    private int startKilometer;
+
+    @Positive(message = "enter only positive")
+    private Long endKilometer;
+
+    @Positive(message = "enter only positive")
+    private Double totalPrice;
+
+    @Min(value = 0,message = "The discount value can not be lower than 0")
+    private Double discount;
+
     @Positive(message = "enter only positive")
     @Max(value = 2,message = "Enter the Car ID as a number between zero and two.")
     private int car;
 
-    @NotEmpty(message = "cannot be empty or null")
     @Positive(message = "enter only positive")
     @Max(value = 2,message = "Enter the customer ID as a number between zero and two.")
     private int customer;
 
-    @NotEmpty(message = "cannot be empty or null")
     @Positive(message = "enter only positive")
     @Max(value = 999999,message = "Enter the employee ID as a number")
     private int employee;

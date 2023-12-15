@@ -8,6 +8,7 @@ import com.example.rentacarv1.services.dtos.requests.brand.AddBrandRequest;
 import com.example.rentacarv1.services.dtos.requests.brand.UpdateBrandRequest;
 import com.example.rentacarv1.services.dtos.responses.brand.GetBrandListResponse;
 import com.example.rentacarv1.services.dtos.responses.brand.GetBrandResponse;
+import com.example.rentacarv1.services.rules.BrandBusinessRules;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +19,10 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class BrandManager implements BrandService {
 
-    private BrandRepository brandRepository;
-    private ModelMapperService modelMapperService;
+    private final BrandRepository brandRepository;
+    private final ModelMapperService modelMapperService;
+
+    private final BrandBusinessRules brandBusinessRules;
 
 
     @Override
@@ -42,6 +45,8 @@ public class BrandManager implements BrandService {
 
     @Override
     public void add(AddBrandRequest addBrandRequest) {
+
+        brandBusinessRules.existsByBrand(addBrandRequest.getName());
 
         Brand brand=this.modelMapperService.forRequest().map(addBrandRequest,Brand.class);
         this.brandRepository.save(brand);

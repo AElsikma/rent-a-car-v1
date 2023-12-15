@@ -8,6 +8,7 @@ import com.example.rentacarv1.services.dtos.requests.model.AddModelRequest;
 import com.example.rentacarv1.services.dtos.requests.model.UpdateModelRequest;
 import com.example.rentacarv1.services.dtos.responses.model.GetModelListResponse;
 import com.example.rentacarv1.services.dtos.responses.model.GetModelResponse;
+import com.example.rentacarv1.services.rules.ModelBusinessRules;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -18,6 +19,8 @@ import java.util.stream.Collectors;
 public class ModelManager implements ModelService {
     private final ModelRepository modelRepository;
     private final ModelMapperService modelMapperService;
+
+    private final ModelBusinessRules modelBusinessRules;
 
     @Override
     public List<GetModelListResponse> getAll() {
@@ -30,6 +33,9 @@ public class ModelManager implements ModelService {
 
     @Override
     public void add(AddModelRequest addModelRequest) {
+
+        modelBusinessRules.existsByModel(addModelRequest.getName());
+
         Model model = this.modelMapperService.forRequest().map(addModelRequest,Model.class);
         this.modelRepository.save(model);
     }

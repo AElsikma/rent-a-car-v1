@@ -1,15 +1,15 @@
-Kullanıcılar sisteme renk ekleyebilmelidir.
-Aynı renk 2. kez eklenememelidir.
-Eklenecek renk en az 2 harften oluşmalıdır.
+☑️Kullanıcılar sisteme renk ekleyebilmelidir.
+☑️Aynı renk 2. kez eklenememelidir.
+☑️Eklenecek renk en az 2 harften oluşmalıdır.
 
-Kullanıcılar sisteme Marka ekleyebilmelidir.
-Aynı marka 2. kez eklenememelidir.
-Eklenecek marka en az 2 harften oluşmalıdır.
+☑️Kullanıcılar sisteme Marka ekleyebilmelidir.
+☑️Aynı marka 2. kez eklenememelidir.
+☑️Eklenecek marka en az 2 harften oluşmalıdır.
 
-Kullanıcılar sisteme Model ekleyebilmelidir.
-Eklenecek model için verilen "BrandId" alanı ile veritabanında bir kayıt bulunmalıdır.
-Aynı isimde 2. model eklenememelidir.
-Eklenecek model en az 2 harften oluşmalıdır.
+☑️Kullanıcılar sisteme Model ekleyebilmelidir.
+☑️Eklenecek model için verilen "BrandId" alanı ile veritabanında bir kayıt bulunmalıdır.
+☑️Aynı isimde 2. model eklenememelidir.
+☑️Eklenecek model en az 2 harften oluşmalıdır.
 
 Kullanıcılar araç kiralayabilmelidir.
 Araç kiralarken verilen başlangıç tarihi bugünden daha geçmiş bi tarih olamaz.

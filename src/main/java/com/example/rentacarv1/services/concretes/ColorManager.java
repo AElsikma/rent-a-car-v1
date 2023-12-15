@@ -8,6 +8,7 @@ import com.example.rentacarv1.services.dtos.requests.color.AddColorRequest;
 import com.example.rentacarv1.services.dtos.requests.color.UpdateColorRequest;
 import com.example.rentacarv1.services.dtos.responses.color.GetColorListResponse;
 import com.example.rentacarv1.services.dtos.responses.color.GetColorResponse;
+import com.example.rentacarv1.services.rules.ColorBusinessRules;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,9 @@ import java.util.stream.Collectors;
 public class ColorManager implements ColorService {
     private final ColorRepository colorRepository;
     private final ModelMapperService modelMapperService;
+
+    private final ColorBusinessRules colorBusinessRules;
+
     @Override
     public List<GetColorListResponse> getAll() {
        List<Color> colors = this.colorRepository.findAll();
@@ -38,6 +42,9 @@ public class ColorManager implements ColorService {
 
     @Override
     public void add(AddColorRequest addColorRequest) {
+
+        colorBusinessRules.existsByColor(addColorRequest.getName());
+
         Color color = this.modelMapperService.forRequest().map(addColorRequest,Color.class);
         this.colorRepository.save(color);
     }

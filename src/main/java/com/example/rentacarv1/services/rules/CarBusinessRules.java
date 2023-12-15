@@ -15,6 +15,11 @@ public class CarBusinessRules {
 
     private CarRepository carRepository;
 
+  public void existsByPlate(String plate){
+        existsByPlate(plate.replaceAll("\\s",""));
+        if(this.carRepository.existsByPlate(plate)){
+        throw new BusinessException("There cannot be more than one vehicle with the same license plate");
+    }}
 
 
 }

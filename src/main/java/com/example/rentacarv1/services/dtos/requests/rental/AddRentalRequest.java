@@ -16,7 +16,6 @@ public class AddRentalRequest {
     @DateTimeFormat(pattern = "YYYY-MM-DD")
     @Past(message = "Just enter the startDate as YYYY-MM-DD")
     @NotEmpty(message = "startDate cannot be empty or null")
-    @Future(message = "The starting date cannot be further back than today.")
     private LocalDate startDate;
 
     @Positive(message = "enter only positive")
@@ -28,16 +27,16 @@ public class AddRentalRequest {
     @NotEmpty(message = "cannot be empty or null")
     @Positive(message = "enter only positive")
     @Max(value = 2,message = "Enter the Car ID as a number between zero and two.")
-    private int carId;
+    private int car;
 
     @NotEmpty(message = "cannot be empty or null")
     @Positive(message = "enter only positive")
     @Max(value = 2,message = "Enter the customer ID as a number between zero and two.")
-    private int customerId;
+    private int customer;
 
     @NotEmpty(message = "cannot be empty or null")
     @Positive(message = "enter only positive")
     @Max(value = 999999,message = "Enter the employee ID as a number")
-    private int employeeId;
+    private int employee;
 
 }

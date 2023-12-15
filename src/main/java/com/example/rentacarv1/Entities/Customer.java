@@ -20,7 +20,7 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column(name = "nationality_id", nullable = false)
-    private int nationalityId;
+    private Long nationalityId;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

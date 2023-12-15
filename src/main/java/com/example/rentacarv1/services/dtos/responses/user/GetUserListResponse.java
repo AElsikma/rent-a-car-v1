@@ -11,6 +11,6 @@ public class GetUserListResponse {
 
     private String name;
     private String surname;
-    private int gsm;
+    private String gsm;
     private String email;
 }

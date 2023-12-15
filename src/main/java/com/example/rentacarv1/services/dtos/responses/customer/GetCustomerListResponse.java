@@ -9,5 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GetCustomerListResponse {
 
-    private Long nationalityId;
+    private String nationalityId;
 }

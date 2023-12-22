@@ -1,6 +1,6 @@
 package com.example.rentacarv1.services.concretes;
 
-import com.example.rentacarv1.Entities.*;
+import com.example.rentacarv1.entities.*;
 import com.example.rentacarv1.core.utilities.mappers.ModelMapperService;
 import com.example.rentacarv1.repositories.*;
 import com.example.rentacarv1.services.abstracts.RentalService;
@@ -46,7 +46,7 @@ public class RentalManager implements RentalService {
     @Override
     public void add(AddRentalRequest addRentalRequest) {
 
-        rentalBusinessRules.isEndDateAfterStartDate(addRentalRequest.getEndDate(),addRentalRequest.getStartDate());
+
 
         Customer customer = customerRepository.findById(Integer.valueOf(addRentalRequest.getCustomer()))
                 .orElseThrow(()-> new IllegalArgumentException("The specified user was not found"));

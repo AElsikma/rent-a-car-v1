@@ -17,6 +17,7 @@ public class AddRentalRequest {
     @FutureOrPresent(message = "The starting date cannot be further back than today.")
     private LocalDate startDate;
 
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Future(message = "The end date cannot be further back than today.")
     private LocalDate endDate;
@@ -35,5 +36,17 @@ public class AddRentalRequest {
     @Positive(message = "enter only positive")
     @Max(value = 999999,message = "Enter the employee ID as a number")
     private int employee;
+    @AssertTrue(message = "End date can not before than start date")
+    private boolean isStartDateBeforeEndDate(){
+        return startDate.isBefore(endDate);
+    }
+    @AssertTrue(message = "The vehicle can be rented for a maximum of 25 days")
+    private boolean isRentalLimitOK(){
+        int rentalLimit = startDate.until(endDate).getDays() + 1;
+        if (rentalLimit > 25) {
+           return false;
+        }
+        return true;
+    }
 
 }

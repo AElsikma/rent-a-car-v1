@@ -51,7 +51,7 @@ public class RentalManager implements RentalService {
         Customer customer = customerRepository.findById(Integer.valueOf(addRentalRequest.getCustomer()))
                 .orElseThrow(()-> new IllegalArgumentException("The specified user was not found"));
         Car car = carRepository.findById(Integer.valueOf(addRentalRequest.getCar()))
-                .orElseThrow(()-> new IllegalArgumentException("The specified user was not found"));
+                .orElseThrow(()-> new IllegalArgumentException("The specified car was not found"));
         Employee employee = employeeRepository.findById(Integer.valueOf(addRentalRequest.getEmployee()))
                 .orElseThrow(()-> new IllegalArgumentException("The specified user was not found"));
 

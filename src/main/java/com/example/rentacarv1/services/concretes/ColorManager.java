@@ -1,5 +1,9 @@
 package com.example.rentacarv1.services.concretes;
 
+import com.example.rentacarv1.core.utilities.results.DataResult;
+import com.example.rentacarv1.core.utilities.results.Result;
+import com.example.rentacarv1.core.utilities.results.SuccessDataResult;
+import com.example.rentacarv1.core.utilities.results.SuccessResult;
 import com.example.rentacarv1.entities.Color;
 import com.example.rentacarv1.core.utilities.mappers.ModelMapperService;
 import com.example.rentacarv1.repositories.ColorRepository;
@@ -24,39 +28,43 @@ public class ColorManager implements ColorService {
     private final ColorBusinessRules colorBusinessRules;
 
     @Override
-    public List<GetColorListResponse> getAll() {
+    public DataResult<List<GetColorListResponse>> getAll() {
        List<Color> colors = this.colorRepository.findAll();
        List<GetColorListResponse> getColorListResponses = colors.stream().map
                (color -> this.modelMapperService.forResponse().map(color, GetColorListResponse.class)).
                collect(Collectors.toList());
-       return getColorListResponses;
+       return new SuccessDataResult<List<GetColorListResponse>>(getColorListResponses,"Colors listed");
     }
 
     @Override
-    public GetColorResponse getById(int id) {
+    public DataResult<GetColorResponse> getById(int id) {
         Color color  = this.colorRepository.findById(id).orElseThrow();
         GetColorResponse getColorResponse =this.modelMapperService.forResponse()
                 .map(color,GetColorResponse.class);
-        return getColorResponse;
+        return new SuccessDataResult<GetColorResponse>(getColorResponse,"Color listed");
     }
 
     @Override
-    public void add(AddColorRequest addColorRequest) {
+    public Result add(AddColorRequest addColorRequest) {
 
         colorBusinessRules.existsByColor(addColorRequest.getName());
 
         Color color = this.modelMapperService.forRequest().map(addColorRequest,Color.class);
         this.colorRepository.save(color);
+        return new SuccessResult("Color added");
     }
 
     @Override
-    public void update(UpdateColorRequest updateColorRequest) {
+    public Result update(UpdateColorRequest updateColorRequest) {
         Color color = this.modelMapperService.forRequest().map(updateColorRequest,Color.class);
         this.colorRepository.save(color);
+        return  new SuccessResult("Color updated");
     }
 
     @Override
-    public void delete(int id) {
+    public Result delete(int id) {
+
         this.colorRepository.deleteById(id);
+        return new SuccessResult("Color deleted !");
     }
 }

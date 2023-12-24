@@ -1,5 +1,7 @@
 package com.example.rentacarv1.controllers;
 
+import com.example.rentacarv1.core.utilities.results.DataResult;
+import com.example.rentacarv1.core.utilities.results.Result;
 import com.example.rentacarv1.services.abstracts.EmployeeService;
 import com.example.rentacarv1.services.dtos.requests.employee.AddEmployeeRequest;
 import com.example.rentacarv1.services.dtos.requests.employee.UpdateEmployeeRequest;
@@ -7,6 +9,7 @@ import com.example.rentacarv1.services.dtos.responses.employee.GetEmployeeListRe
 import com.example.rentacarv1.services.dtos.responses.employee.GetEmployeeResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,28 +21,30 @@ public class EmployeesController {
     private EmployeeService employeeService;
 
     @GetMapping("/getAll")
-    public List<GetEmployeeListResponse> getAll(){
-        return employeeService.getAll();
+    public DataResult<List<GetEmployeeListResponse>> getAll(){
+        return this.employeeService.getAll();
     }
 
     @GetMapping("/{id}")
-    public GetEmployeeResponse getById(@PathVariable int id){
-        return employeeService.getById(id);
+    public DataResult<GetEmployeeResponse> getById(@PathVariable int id){
+        return this.employeeService.getById(id);
     }
 
     @PostMapping("/add")
-    public void add(@RequestBody @Valid AddEmployeeRequest addEmployeeRequest){
-        this.employeeService.add(addEmployeeRequest);
+    public Result add(@RequestBody @Valid AddEmployeeRequest addEmployeeRequest){
+       return this.employeeService.add(addEmployeeRequest);
+
     }
 
 
     @PutMapping("/update")
-    public void update( @RequestBody @Valid UpdateEmployeeRequest updateEmployeeRequest){
-        this.employeeService.update(updateEmployeeRequest);
+    public Result update( @RequestBody @Valid UpdateEmployeeRequest updateEmployeeRequest){
+        return this.employeeService.update(updateEmployeeRequest);
     }
 
     @DeleteMapping("/{id}")
-    public void delete( @PathVariable int id){
-        this.employeeService.delete(id);
+    public Result delete( @PathVariable int id){
+
+        return  this.employeeService.delete(id);
     }
 }

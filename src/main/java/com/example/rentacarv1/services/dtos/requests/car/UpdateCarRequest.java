@@ -34,7 +34,7 @@ public class UpdateCarRequest {
     @Max(value = 2024, message ="Year must be less than or equal to the current yaer." )
     private int year;
 
-    @NotNull(message = "The model id cannot be null.")
+    @NotNull(message = "The color id cannot be null.")
     @Positive(message = "Id must be a positive number.")
     private int colorId;
 

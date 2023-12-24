@@ -1,5 +1,9 @@
 package com.example.rentacarv1.services.concretes;
 
+import com.example.rentacarv1.core.utilities.results.DataResult;
+import com.example.rentacarv1.core.utilities.results.Result;
+import com.example.rentacarv1.core.utilities.results.SuccessDataResult;
+import com.example.rentacarv1.core.utilities.results.SuccessResult;
 import com.example.rentacarv1.entities.*;
 import com.example.rentacarv1.core.utilities.mappers.ModelMapperService;
 import com.example.rentacarv1.repositories.*;
@@ -28,25 +32,23 @@ public class RentalManager implements RentalService {
 
 
     @Override
-    public List<GetRentalListResponse> getAll() {
+    public DataResult<List<GetRentalListResponse>> getAll() {
         List<Rental> rentals=rentalRepository.findAll();
         List<GetRentalListResponse> rentalListResponse=rentals.stream().map(rental -> this.modelMapperService.forResponse()
                 .map(rental,GetRentalListResponse.class)).collect(Collectors.toList());
 
-        return rentalListResponse;
+        return new SuccessDataResult<List<GetRentalListResponse>>(rentalListResponse,"Rentals listed");
     }
 
     @Override
-    public GetRentalResponse getById(int id) {
+    public DataResult<GetRentalResponse> getById(int id) {
         Rental rental = rentalRepository.findById(id).orElseThrow();
         GetRentalResponse getRentalResponse=this.modelMapperService.forResponse().map(rental,GetRentalResponse.class);
-        return getRentalResponse;
+        return new SuccessDataResult<GetRentalResponse>(getRentalResponse,"Rental listed") ;
     }
 
     @Override
-    public void add(AddRentalRequest addRentalRequest) {
-
-
+    public Result add(AddRentalRequest addRentalRequest) {
 
         Customer customer = customerRepository.findById(Integer.valueOf(addRentalRequest.getCustomer()))
                 .orElseThrow(()-> new IllegalArgumentException("The specified user was not found"));
@@ -63,16 +65,21 @@ public class RentalManager implements RentalService {
         int rentalLimit = rental.getStartDate().until(rental.getEndDate()).getDays() + 1;
         rental.setTotalPrice(car.getDailyPrice() * rentalLimit);
         this.rentalRepository.save(rental);
+        return new SuccessResult("Rental added");
+
     }
 
     @Override
-    public void update(UpdateRentalRequest updateRentalRequest) {
+    public Result update(UpdateRentalRequest updateRentalRequest) {
         Rental rental =this.modelMapperService.forRequest().map(updateRentalRequest,Rental.class);
         rentalRepository.save(rental);
+        return new SuccessResult("Rental updated");
     }
 
     @Override
-    public void delete(int id) {
+    public Result delete(int id) {
+
         rentalRepository.deleteById(id);
+        return new SuccessResult("Rental deleted !");
     }
 }

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateBrandRequest {
-    @NotNull(message = "The car id cannot be null.")
+    @NotNull(message = "The brand id cannot be null.")
     @Positive(message = "Id must be a positive number.")
     private int id;
     @NotBlank(message = "Brand name can not be empty!")

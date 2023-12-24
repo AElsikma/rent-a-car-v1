@@ -1,5 +1,7 @@
 package com.example.rentacarv1.services.abstracts;
 
+import com.example.rentacarv1.core.utilities.results.DataResult;
+import com.example.rentacarv1.core.utilities.results.Result;
 import com.example.rentacarv1.services.dtos.requests.customer.AddCustomerRequest;
 import com.example.rentacarv1.services.dtos.requests.customer.UpdateCustomerRequest;
 import com.example.rentacarv1.services.dtos.responses.customer.GetCustomerListResponse;
@@ -8,9 +10,9 @@ import com.example.rentacarv1.services.dtos.responses.customer.GetCustomerRespon
 import java.util.List;
 
 public interface CustomerService {
-    List<GetCustomerListResponse> getAll();
-    GetCustomerResponse getById(int id);
-    void add (AddCustomerRequest addCustomerRequest);
-    void update (UpdateCustomerRequest updateCustomerRequest);
-    void delete (int id);
+    DataResult<List<GetCustomerListResponse>> getAll();
+    DataResult<GetCustomerResponse> getById(int id);
+    Result add (AddCustomerRequest addCustomerRequest);
+    Result update (UpdateCustomerRequest updateCustomerRequest);
+    Result delete (int id);
 }

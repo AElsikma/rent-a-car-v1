@@ -1,5 +1,7 @@
 package com.example.rentacarv1.controllers;
 
+import com.example.rentacarv1.core.utilities.results.DataResult;
+import com.example.rentacarv1.core.utilities.results.Result;
 import com.example.rentacarv1.services.abstracts.CarService;
 import com.example.rentacarv1.services.dtos.requests.car.AddCarRequest;
 import com.example.rentacarv1.services.dtos.requests.car.UpdateCarRequest;
@@ -18,29 +20,30 @@ public class CarsController {
     private CarService carService;
 
     @GetMapping("/getAll")
-    public List<GetCarResponse> getAll(){
-      return carService.getAll();
+    public DataResult<List<GetCarResponse>> getAll(){
+      return this.carService.getAll();
     }
 
     @GetMapping("/{id}")
-    public GetByIdCarResponse getById( @PathVariable int id){
-      return carService.getById(id);
+    public DataResult<GetByIdCarResponse> getById( @PathVariable int id){
+      return this.carService.getById(id);
     }
 
     @PostMapping("/add")
-    public void add(@RequestBody @Valid AddCarRequest addCarRequest){
-         this.carService.add(addCarRequest);
+    public Result add(@RequestBody @Valid AddCarRequest addCarRequest){
+        return this.carService.add(addCarRequest);
+
     }
 
 
     @PutMapping("/update")
-    public void update( @RequestBody @Valid UpdateCarRequest updateCarRequest){
-        this.carService.update(updateCarRequest);
+    public Result update( @RequestBody @Valid UpdateCarRequest updateCarRequest){
+       return this.carService.update(updateCarRequest);
     }
 
     @DeleteMapping("/{id}")
-    public void delete( @PathVariable int id){
-         this.carService.delete(id);
+    public Result delete( @PathVariable int id){
+        return this.carService.delete(id);
     }
 
 

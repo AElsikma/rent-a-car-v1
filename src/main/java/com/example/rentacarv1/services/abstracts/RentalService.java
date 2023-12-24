@@ -1,5 +1,7 @@
 package com.example.rentacarv1.services.abstracts;
 
+import com.example.rentacarv1.core.utilities.results.DataResult;
+import com.example.rentacarv1.core.utilities.results.Result;
 import com.example.rentacarv1.services.dtos.requests.rental.AddRentalRequest;
 import com.example.rentacarv1.services.dtos.requests.rental.UpdateRentalRequest;
 import com.example.rentacarv1.services.dtos.responses.rental.GetRentalListResponse;
@@ -8,9 +10,9 @@ import com.example.rentacarv1.services.dtos.responses.rental.GetRentalResponse;
 import java.util.List;
 
 public interface RentalService {
-    List<GetRentalListResponse> getAll();
-    GetRentalResponse getById(int id);
-    void add (AddRentalRequest addRentalRequest);
-    void update (UpdateRentalRequest updateRentalRequest);
-    void delete (int id);
+    DataResult<List<GetRentalListResponse>> getAll();
+    DataResult<GetRentalResponse> getById(int id);
+    Result add (AddRentalRequest addRentalRequest);
+    Result update (UpdateRentalRequest updateRentalRequest);
+    Result delete (int id);
 }

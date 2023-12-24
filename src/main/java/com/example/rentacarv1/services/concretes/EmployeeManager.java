@@ -1,5 +1,9 @@
 package com.example.rentacarv1.services.concretes;
 
+import com.example.rentacarv1.core.utilities.results.DataResult;
+import com.example.rentacarv1.core.utilities.results.Result;
+import com.example.rentacarv1.core.utilities.results.SuccessDataResult;
+import com.example.rentacarv1.core.utilities.results.SuccessResult;
 import com.example.rentacarv1.entities.Employee;
 import com.example.rentacarv1.core.utilities.mappers.ModelMapperService;
 import com.example.rentacarv1.repositories.EmployeeRepository;
@@ -20,35 +24,38 @@ public class EmployeeManager implements EmployeeService {
     private EmployeeRepository employeeRepository;
     private ModelMapperService modelMapperService;
     @Override
-    public List<GetEmployeeListResponse> getAll() {
+    public DataResult<List<GetEmployeeListResponse>> getAll() {
         List<Employee> employees=employeeRepository.findAll();
         List<GetEmployeeListResponse> employeeListResponse=employees.stream().map(employee -> this.modelMapperService.forResponse()
                 .map(employee,GetEmployeeListResponse.class)).collect(Collectors.toList());
 
-        return employeeListResponse;
+        return new SuccessDataResult<List<GetEmployeeListResponse>>(employeeListResponse,"Employees listed");
     }
 
     @Override
-    public GetEmployeeResponse getById(int id) {
+    public DataResult<GetEmployeeResponse> getById(int id) {
         Employee employee = employeeRepository.findById(id).orElseThrow();
         GetEmployeeResponse getEmployeeResponse=this.modelMapperService.forResponse().map(employee,GetEmployeeResponse.class);
-        return getEmployeeResponse;
+        return new SuccessDataResult<GetEmployeeResponse>(getEmployeeResponse,"Employee listed");
     }
 
     @Override
-    public void add(AddEmployeeRequest addEmployeeRequest) {
+    public Result add(AddEmployeeRequest addEmployeeRequest) {
         Employee employee =this.modelMapperService.forRequest().map(addEmployeeRequest,Employee.class);
         this.employeeRepository.save(employee);
+        return new SuccessResult("Employee added");
     }
 
     @Override
-    public void update(UpdateEmployeeRequest updateEmployeeRequest) {
+    public Result update(UpdateEmployeeRequest updateEmployeeRequest) {
         Employee employee =this.modelMapperService.forRequest().map(updateEmployeeRequest,Employee.class);
         employeeRepository.save(employee);
+        return new SuccessResult("Employee updated");
     }
 
     @Override
-    public void delete(int id) {
+    public Result delete(int id) {
         employeeRepository.deleteById(id);
+        return new SuccessResult("Empoyee deleted !");
     }
 }

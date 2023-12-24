@@ -1,5 +1,7 @@
 package com.example.rentacarv1.controllers;
 
+import com.example.rentacarv1.core.utilities.results.DataResult;
+import com.example.rentacarv1.core.utilities.results.Result;
 import com.example.rentacarv1.services.abstracts.BrandService;
 import com.example.rentacarv1.services.dtos.requests.brand.AddBrandRequest;
 import com.example.rentacarv1.services.dtos.requests.brand.UpdateBrandRequest;
@@ -18,29 +20,30 @@ public class BrandsController {
     private BrandService brandService;
 
     @GetMapping("/getAll")
-    public List<GetBrandListResponse> getAll(){
-        return brandService.getAll();
+    public DataResult<List<GetBrandListResponse>> getAll(){
+
+        return this.brandService.getAll();
     }
 
     @GetMapping("/{id}")
-    public GetBrandResponse getById(@PathVariable int id){
-        return brandService.getById(id);
+    public DataResult<GetBrandResponse> getById(@PathVariable int id){
+        return this.brandService.getById(id);
     }
 
     @PostMapping("/add")
-    public void add(@RequestBody @Valid AddBrandRequest addBrandRequest){
-        this.brandService.add(addBrandRequest);
+    public Result add(@RequestBody @Valid AddBrandRequest addBrandRequest) {
+       return this.brandService.add(addBrandRequest);
     }
 
 
     @PutMapping("/update")
-    public void update( @RequestBody @Valid UpdateBrandRequest updateBrandRequest){
-        this.brandService.update(updateBrandRequest);
+    public Result update( @RequestBody @Valid UpdateBrandRequest updateBrandRequest){
+        return this.brandService.update(updateBrandRequest);
     }
 
     @DeleteMapping("/{id}")
-    public void delete( @PathVariable int id){
-        this.brandService.delete(id);
+    public Result delete( @PathVariable int id){
+        return this.brandService.delete(id);
     }
 
 }

@@ -1,5 +1,7 @@
 package com.example.rentacarv1.controllers;
 
+import com.example.rentacarv1.core.utilities.results.DataResult;
+import com.example.rentacarv1.core.utilities.results.Result;
 import com.example.rentacarv1.services.abstracts.ColorService;
 import com.example.rentacarv1.services.dtos.requests.color.AddColorRequest;
 import com.example.rentacarv1.services.dtos.requests.color.UpdateColorRequest;
@@ -18,28 +20,31 @@ public class ColorsController {
     private ColorService colorService;
 
     @GetMapping("/getAll")
-    public List<GetColorListResponse> getAll(){
-        return colorService.getAll();
+    public DataResult<List<GetColorListResponse>> getAll(){
+        return this.colorService.getAll();
     }
 
     @GetMapping("/{id}")
-    public GetColorResponse getById(@PathVariable int id){
-        return colorService.getById(id);
+    public DataResult<GetColorResponse> getById(@PathVariable int id){
+        return this.colorService.getById(id);
     }
 
     @PostMapping("/add")
-    public void add(@RequestBody @Valid AddColorRequest addColorRequest){
-        this.colorService.add(addColorRequest);
+    public Result add(@RequestBody @Valid AddColorRequest addColorRequest){
+
+        return this.colorService.add(addColorRequest);
+
     }
 
 
     @PutMapping("/update")
-    public void update( @RequestBody @Valid UpdateColorRequest updateColorRequest){
-        this.colorService.update(updateColorRequest);
+    public Result update( @RequestBody @Valid UpdateColorRequest updateColorRequest){
+        return this.colorService.update(updateColorRequest);
     }
 
     @DeleteMapping("/{id}")
-    public void delete( @PathVariable int id){
-        this.colorService.delete(id);
+    public Result delete( @PathVariable int id){
+
+        return this.colorService.delete(id);
     }
 }

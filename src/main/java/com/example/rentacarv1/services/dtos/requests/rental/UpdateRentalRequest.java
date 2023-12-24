@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateRentalRequest {
+    private  int id;
 
     private LocalDate startDate;
 

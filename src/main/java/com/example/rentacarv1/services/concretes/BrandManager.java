@@ -1,5 +1,9 @@
 package com.example.rentacarv1.services.concretes;
 
+import com.example.rentacarv1.core.utilities.results.DataResult;
+import com.example.rentacarv1.core.utilities.results.Result;
+import com.example.rentacarv1.core.utilities.results.SuccessDataResult;
+import com.example.rentacarv1.core.utilities.results.SuccessResult;
 import com.example.rentacarv1.entities.Brand;
 import com.example.rentacarv1.core.utilities.mappers.ModelMapperService;
 import com.example.rentacarv1.repositories.BrandRepository;
@@ -26,41 +30,45 @@ public class BrandManager implements BrandService {
 
 
     @Override
-    public List<GetBrandListResponse> getAll() {
+    public DataResult<List<GetBrandListResponse>> getAll() {
 
         List<Brand> brands=brandRepository.findAll();
         List<GetBrandListResponse> brandListResponse=brands.stream().map(brand -> this.modelMapperService.forResponse()
                 .map(brand,GetBrandListResponse.class)).collect(Collectors.toList());
 
-        return brandListResponse;
+        return new SuccessDataResult<List<GetBrandListResponse>>(brandListResponse,"Brands Listed ");
     }
 
     @Override
-    public GetBrandResponse getById(int id) {
+    public DataResult<GetBrandResponse> getById(int id) {
 
         Brand brand = brandRepository.findById(id).orElseThrow();
         GetBrandResponse getBrandResponse=this.modelMapperService.forResponse().map(brand,GetBrandResponse.class);
-        return getBrandResponse;
+        return new SuccessDataResult<GetBrandResponse>(getBrandResponse,"Brand listed");
     }
 
     @Override
-    public void add(AddBrandRequest addBrandRequest) {
+    public Result add(AddBrandRequest addBrandRequest) {
 
-        brandBusinessRules.existsByBrand(addBrandRequest.getName());
+         brandBusinessRules.existsByBrand(addBrandRequest.getName());
 
         Brand brand=this.modelMapperService.forRequest().map(addBrandRequest,Brand.class);
         this.brandRepository.save(brand);
+
+        return new SuccessResult("Brand added");
     }
 
     @Override
-    public void update(UpdateBrandRequest updateBrandRequest) {
+    public Result update(UpdateBrandRequest updateBrandRequest) {
         Brand brand =this.modelMapperService.forRequest().map(updateBrandRequest,Brand.class);
         brandRepository.save(brand);
+        return new SuccessResult("Brand update");
     }
 
     @Override
-    public void delete(int id) {
+    public Result delete(int id) {
         brandRepository.deleteById(id);
+        return new SuccessResult("Brand deleted !");
     }
 
 }

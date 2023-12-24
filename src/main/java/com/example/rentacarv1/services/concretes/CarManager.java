@@ -1,5 +1,9 @@
 package com.example.rentacarv1.services.concretes;
 
+import com.example.rentacarv1.core.utilities.results.DataResult;
+import com.example.rentacarv1.core.utilities.results.Result;
+import com.example.rentacarv1.core.utilities.results.SuccessDataResult;
+import com.example.rentacarv1.core.utilities.results.SuccessResult;
 import com.example.rentacarv1.entities.Car;
 import com.example.rentacarv1.core.utilities.mappers.ModelMapperService;
 import com.example.rentacarv1.repositories.CarRepository;
@@ -24,25 +28,25 @@ public class CarManager implements CarService {
     private CarBusinessRules carBusinessRules;
 
     @Override
-    public List<GetCarResponse> getAll() {
+    public DataResult<List<GetCarResponse>> getAll() {
       List<Car> cars= carRepository.findAll();
       List<GetCarResponse> carResponses=cars.stream()
               .map(car -> this.modelMapperService.forResponse()
                       .map(car,GetCarResponse.class)).collect(Collectors.toList());
-      return carResponses;
+      return new SuccessDataResult<List<GetCarResponse>>(carResponses,"Cars Listed");
     }
 
     @Override
-    public GetByIdCarResponse getById(int id) {
+    public DataResult<GetByIdCarResponse> getById(int id) {
         Car car=this.carRepository.findById(id).orElseThrow();
         GetByIdCarResponse byIdCarResponse=this.modelMapperService.forResponse()
                 .map(car, GetByIdCarResponse.class);
-        return  byIdCarResponse;
+        return new SuccessDataResult<GetByIdCarResponse>(byIdCarResponse,"Car Listed") ;
 
     }
 
     @Override
-    public void add(AddCarRequest addCarRequest) {
+    public Result add(AddCarRequest addCarRequest) {
 
         addCarRequest.setPlate(carBusinessRules.plateValidator(addCarRequest.getPlate()));
         carBusinessRules.existsByPlate(addCarRequest.getPlate());
@@ -50,19 +54,20 @@ public class CarManager implements CarService {
         Car car =this.modelMapperService.forRequest().map(addCarRequest,Car.class);
 
         this.carRepository.save(car);
-
+         return new SuccessResult("Car added");
     }
 
     @Override
-    public void update(UpdateCarRequest updateCarRequest) {
+    public Result update(UpdateCarRequest updateCarRequest) {
        Car car=this.modelMapperService.forRequest().map(updateCarRequest,Car.class);
        this.carRepository.save(car);
+       return new SuccessResult("Car updated");
 
     }
 
     @Override
-    public void delete(int id) {
+    public Result delete(int id) {
          this.carRepository.deleteById(id);
-
+         return new SuccessResult("Car deleted !");
     }
 }

@@ -34,7 +34,7 @@ public class AddCarRequest {
     @Max(value = 2024,message = "Car model year can not be higher than ")
     private int year;
 
-    @NotNull(message = "The model id cannot be null.")
+    @NotNull(message = "The color id cannot be null.")
     @Positive(message = "Id must be a positive number.")
     private int colorId;
 

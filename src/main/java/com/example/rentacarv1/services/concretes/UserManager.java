@@ -1,5 +1,9 @@
 package com.example.rentacarv1.services.concretes;
 
+import com.example.rentacarv1.core.utilities.results.DataResult;
+import com.example.rentacarv1.core.utilities.results.Result;
+import com.example.rentacarv1.core.utilities.results.SuccessDataResult;
+import com.example.rentacarv1.core.utilities.results.SuccessResult;
 import com.example.rentacarv1.entities.User;
 import com.example.rentacarv1.core.utilities.mappers.ModelMapperService;
 import com.example.rentacarv1.repositories.UserRepository;
@@ -20,35 +24,39 @@ public class UserManager implements UserService {
     private UserRepository userRepository;
     private ModelMapperService modelMapperService;
     @Override
-    public List<GetUserListResponse> getAll() {
+    public DataResult<List<GetUserListResponse>> getAll() {
         List<User> users=userRepository.findAll();
         List<GetUserListResponse> userListResponse=users.stream().map(user -> this.modelMapperService.forResponse()
                 .map(user,GetUserListResponse.class)).collect(Collectors.toList());
 
-        return userListResponse;
+        return new SuccessDataResult<List<GetUserListResponse>>(userListResponse,"Users listed");
     }
 
     @Override
-    public GetUserResponse getById(int id) {
+    public DataResult<GetUserResponse> getById(int id) {
         User user = userRepository.findById(id).orElseThrow();
         GetUserResponse getUserResponse=this.modelMapperService.forResponse().map(user,GetUserResponse.class);
-        return getUserResponse;
+        return new SuccessDataResult<GetUserResponse>(getUserResponse,"User listed");
     }
 
     @Override
-    public void add(AddUserRequest addUserRequest) {
+    public Result add(AddUserRequest addUserRequest) {
         User user=this.modelMapperService.forRequest().map(addUserRequest,User.class);
         this.userRepository.save(user);
+        return new SuccessResult("User added");
     }
 
     @Override
-    public void update(UpdateUserRequest updateUserRequest) {
+    public Result update(UpdateUserRequest updateUserRequest) {
         User user =this.modelMapperService.forRequest().map(updateUserRequest,User.class);
         userRepository.save(user);
+        return new SuccessResult("User updated");
     }
 
     @Override
-    public void delete(int id) {
+    public Result delete(int id) {
+
         userRepository.deleteById(id);
+        return new SuccessResult("User deleted !");
     }
 }

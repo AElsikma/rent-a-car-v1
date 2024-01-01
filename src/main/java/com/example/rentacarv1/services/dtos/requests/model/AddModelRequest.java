@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class AddModelRequest {
 
     @NotBlank(message = "Model name can not be empty!")
-    @Min(value = 2,message = "Model name must be min 2!")
+    @Size(min = 2, message = "Model name must be at least 2 characters long!")
     private String name;
 
     @NotNull(message = "The brand id can not be null.")

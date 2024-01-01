@@ -45,7 +45,7 @@ public class ModelManager implements ModelService {
     @Override
     public Result add(AddModelRequest addModelRequest) {
 
-        modelBusinessRules.existsByModel(addModelRequest.getName());
+        modelBusinessRules.checkIfModelNameExists(addModelRequest.getName());
 
         Model model = this.modelMapperService.forRequest().map(addModelRequest,Model.class);
         this.modelRepository.save(model);
@@ -56,6 +56,8 @@ public class ModelManager implements ModelService {
 
     @Override
     public Result update(UpdateModelRequest updateModelRequest) {
+        modelBusinessRules.checkIfModelNameExists(updateModelRequest.getName());
+
         Model model = this.modelMapperService.forRequest().map(updateModelRequest,Model.class);
         this.modelRepository.save(model);
         return new SuccessResult("Model updated");

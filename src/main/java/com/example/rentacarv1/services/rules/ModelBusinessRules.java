@@ -11,8 +11,8 @@ public class ModelBusinessRules {
 
     private ModelRepository modelRepository;
 
-    public void existsByModel(String modelName){
-        if(this.modelRepository.existsByName(modelName)){
+    public void checkIfModelNameExists(String name){
+        if(this.modelRepository.existsByName(name)){
             throw new BusinessException("There cannot be more than one model with the same model name");
         };
     };

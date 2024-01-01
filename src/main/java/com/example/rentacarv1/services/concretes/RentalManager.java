@@ -50,11 +50,11 @@ public class RentalManager implements RentalService {
     @Override
     public Result add(AddRentalRequest addRentalRequest) {
 
-        Customer customer = customerRepository.findById(Integer.valueOf(addRentalRequest.getCustomer()))
+        Customer customer = customerRepository.findById(Integer.valueOf(addRentalRequest.getCustomerId()))
                 .orElseThrow(()-> new IllegalArgumentException("The specified user was not found"));
-        Car car = carRepository.findById(Integer.valueOf(addRentalRequest.getCar()))
+        Car car = carRepository.findById(Integer.valueOf(addRentalRequest.getCarId()))
                 .orElseThrow(()-> new IllegalArgumentException("The specified car was not found"));
-        Employee employee = employeeRepository.findById(Integer.valueOf(addRentalRequest.getEmployee()))
+        Employee employee = employeeRepository.findById(Integer.valueOf(addRentalRequest.getEmployeeId()))
                 .orElseThrow(()-> new IllegalArgumentException("The specified user was not found"));
 
         Rental rental=this.modelMapperService.forRequest().map(addRentalRequest,Rental.class);

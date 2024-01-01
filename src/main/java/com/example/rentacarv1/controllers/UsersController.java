@@ -9,6 +9,7 @@ import com.example.rentacarv1.services.dtos.responses.user.GetUserListResponse;
 import com.example.rentacarv1.services.dtos.responses.user.GetUserResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,14 +31,15 @@ public class UsersController {
     }
 
     @PostMapping("/add")
-    public Result add(@RequestBody @Valid AddUserRequest addUserRequest){
+    @ResponseStatus(code= HttpStatus.CREATED)
+    public Result add(@RequestBody @Valid() AddUserRequest addUserRequest){
 
         return this.userService.add(addUserRequest);
     }
 
 
     @PutMapping("/update")
-    public Result update( @RequestBody @Valid UpdateUserRequest updateUserRequest){
+    public Result update( @RequestBody @Valid() UpdateUserRequest updateUserRequest){
         return this.userService.update(updateUserRequest);
     }
 

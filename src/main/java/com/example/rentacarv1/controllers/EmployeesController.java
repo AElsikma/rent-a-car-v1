@@ -10,6 +10,7 @@ import com.example.rentacarv1.services.dtos.responses.employee.GetEmployeeRespon
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,14 +32,15 @@ public class EmployeesController {
     }
 
     @PostMapping("/add")
-    public Result add(@RequestBody @Valid AddEmployeeRequest addEmployeeRequest){
+    @ResponseStatus(code= HttpStatus.CREATED)
+    public Result add(@RequestBody @Valid() AddEmployeeRequest addEmployeeRequest){
        return this.employeeService.add(addEmployeeRequest);
 
     }
 
 
     @PutMapping("/update")
-    public Result update( @RequestBody @Valid UpdateEmployeeRequest updateEmployeeRequest){
+    public Result update( @RequestBody @Valid() UpdateEmployeeRequest updateEmployeeRequest){
         return this.employeeService.update(updateEmployeeRequest);
     }
 

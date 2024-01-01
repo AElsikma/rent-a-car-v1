@@ -11,8 +11,8 @@ public class ColorBusinessRules {
 
     private ColorRepository colorRepository;
 
-    public void existsByColor(String colorName){
-        if(this.colorRepository.existsByName(colorName)){
+    public void checkIfColorNameExists(String name){
+        if(this.colorRepository.existsByName(name)){
             throw new BusinessException("There cannot be more than one color with the same color name");
         };
     };

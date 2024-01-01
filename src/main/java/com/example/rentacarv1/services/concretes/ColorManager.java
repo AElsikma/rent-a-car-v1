@@ -47,7 +47,7 @@ public class ColorManager implements ColorService {
     @Override
     public Result add(AddColorRequest addColorRequest) {
 
-        colorBusinessRules.existsByColor(addColorRequest.getName());
+        colorBusinessRules.checkIfColorNameExists(addColorRequest.getName());
 
         Color color = this.modelMapperService.forRequest().map(addColorRequest,Color.class);
         this.colorRepository.save(color);
@@ -56,6 +56,8 @@ public class ColorManager implements ColorService {
 
     @Override
     public Result update(UpdateColorRequest updateColorRequest) {
+        colorBusinessRules.checkIfColorNameExists(updateColorRequest.getName());
+
         Color color = this.modelMapperService.forRequest().map(updateColorRequest,Color.class);
         this.colorRepository.save(color);
         return  new SuccessResult("Color updated");

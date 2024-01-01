@@ -9,6 +9,7 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetRentalListResponse {
+    private int id;
 
     private LocalDate startDate;
 

@@ -12,7 +12,9 @@ public class UpdateBrandRequest {
     @NotNull(message = "The brand id cannot be null.")
     @Positive(message = "Id must be a positive number.")
     private int id;
-    @NotBlank(message = "Brand name can not be empty!")
-    @Min(value = 2,message = "Brand name must be min 2!")
+
+    @NotBlank(message = "Brand name must not be blank!")
+    @Size(min = 2, message = "Brand name must be at least 2 characters long!")
     private String name;
+
 }

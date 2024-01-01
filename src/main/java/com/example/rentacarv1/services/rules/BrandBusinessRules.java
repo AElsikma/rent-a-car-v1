@@ -11,8 +11,8 @@ public class BrandBusinessRules {
 
     private BrandRepository brandRepository;
 
-    public void existsByBrand(String brandName){
-        if(this.brandRepository.existsByName(brandName)){
+    public void checkIfBrandNameExists(String name){
+        if(this.brandRepository.existsByName(name)){
             throw new BusinessException("There cannot be more than one brand with the same brand name");
         };
     }

@@ -9,6 +9,7 @@ import com.example.rentacarv1.services.dtos.responses.model.GetModelListResponse
 import com.example.rentacarv1.services.dtos.responses.model.GetModelResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,14 +31,15 @@ public class ModelsController {
     }
 
     @PostMapping("/add")
-    public Result add(@RequestBody @Valid AddModelRequest addModelRequest){
+    @ResponseStatus(code= HttpStatus.CREATED)
+    public Result add(@RequestBody @Valid() AddModelRequest addModelRequest){
 
         return this.modelService.add(addModelRequest);
     }
 
 
     @PutMapping("/update")
-    public Result update( @RequestBody @Valid UpdateModelRequest updateModelRequest){
+    public Result update( @RequestBody @Valid() UpdateModelRequest updateModelRequest){
         return this.modelService.update(updateModelRequest);
     }
 

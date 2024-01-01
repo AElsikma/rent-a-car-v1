@@ -9,6 +9,7 @@ import com.example.rentacarv1.services.dtos.responses.color.GetColorListResponse
 import com.example.rentacarv1.services.dtos.responses.color.GetColorResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,7 +31,8 @@ public class ColorsController {
     }
 
     @PostMapping("/add")
-    public Result add(@RequestBody @Valid AddColorRequest addColorRequest){
+    @ResponseStatus(code= HttpStatus.CREATED)
+    public Result add(@RequestBody @Valid() AddColorRequest addColorRequest){
 
         return this.colorService.add(addColorRequest);
 
@@ -38,7 +40,7 @@ public class ColorsController {
 
 
     @PutMapping("/update")
-    public Result update( @RequestBody @Valid UpdateColorRequest updateColorRequest){
+    public Result update( @RequestBody @Valid() UpdateColorRequest updateColorRequest){
         return this.colorService.update(updateColorRequest);
     }
 

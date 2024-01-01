@@ -11,7 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddBrandRequest {
-    @NotBlank(message = "Brand name can not be empty!")
-    @Min(value = 2,message = "Brand name must be min 2!")
+
+    @NotBlank(message = "Brand name must not be blank!")
+    @Size(min = 2, message = "Brand name must be at least 2 characters long!")
     private String name;
+
 }

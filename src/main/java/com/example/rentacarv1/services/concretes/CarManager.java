@@ -10,7 +10,7 @@ import com.example.rentacarv1.repositories.CarRepository;
 import com.example.rentacarv1.services.abstracts.CarService;
 import com.example.rentacarv1.services.dtos.requests.car.AddCarRequest;
 import com.example.rentacarv1.services.dtos.requests.car.UpdateCarRequest;
-import com.example.rentacarv1.services.dtos.responses.car.GetByIdCarResponse;
+import com.example.rentacarv1.services.dtos.responses.car.GetCarListResponse;
 import com.example.rentacarv1.services.dtos.responses.car.GetCarResponse;
 import com.example.rentacarv1.services.rules.CarBusinessRules;
 import lombok.AllArgsConstructor;
@@ -28,20 +28,20 @@ public class CarManager implements CarService {
     private CarBusinessRules carBusinessRules;
 
     @Override
-    public DataResult<List<GetCarResponse>> getAll() {
+    public DataResult<List<GetCarListResponse>> getAll() {
       List<Car> cars= carRepository.findAll();
-      List<GetCarResponse> carResponses=cars.stream()
+      List<GetCarListResponse> carListResponses=cars.stream()
               .map(car -> this.modelMapperService.forResponse()
-                      .map(car,GetCarResponse.class)).collect(Collectors.toList());
-      return new SuccessDataResult<List<GetCarResponse>>(carResponses,"Cars Listed");
+                      .map(car,GetCarListResponse.class)).collect(Collectors.toList());
+      return new SuccessDataResult<List<GetCarListResponse>>(carListResponses,"Cars Listed");
     }
 
     @Override
-    public DataResult<GetByIdCarResponse> getById(int id) {
+    public DataResult<GetCarResponse> getById(int id) {
         Car car=this.carRepository.findById(id).orElseThrow();
-        GetByIdCarResponse byIdCarResponse=this.modelMapperService.forResponse()
-                .map(car, GetByIdCarResponse.class);
-        return new SuccessDataResult<GetByIdCarResponse>(byIdCarResponse,"Car Listed") ;
+        GetCarResponse carResponse=this.modelMapperService.forResponse()
+                .map(car, GetCarResponse.class);
+        return new SuccessDataResult<GetCarResponse>(carResponse,"Car Listed") ;
 
     }
 
@@ -59,6 +59,9 @@ public class CarManager implements CarService {
 
     @Override
     public Result update(UpdateCarRequest updateCarRequest) {
+        updateCarRequest.setPlate(carBusinessRules.plateValidator(updateCarRequest.getPlate()));
+        carBusinessRules.existsByPlate(updateCarRequest.getPlate());
+
        Car car=this.modelMapperService.forRequest().map(updateCarRequest,Car.class);
        this.carRepository.save(car);
        return new SuccessResult("Car updated");

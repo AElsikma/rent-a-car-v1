@@ -27,15 +27,15 @@ public class AddRentalRequest {
 
     @Positive(message = "enter only positive")
     @Max(value = 2,message = "Enter the Car ID as a number between zero and two.")
-    private int car;
+    private int carId;
 
     @Positive(message = "enter only positive")
     @Max(value = 2,message = "Enter the customer ID as a number between zero and two.")
-    private int customer;
+    private int customerId;
 
     @Positive(message = "enter only positive")
     @Max(value = 999999,message = "Enter the employee ID as a number")
-    private int employee;
+    private int employeeId;
     @AssertTrue(message = "End date can not before than start date")
     private boolean isStartDateBeforeEndDate(){
         return startDate.isBefore(endDate);

@@ -9,6 +9,7 @@ import com.example.rentacarv1.services.dtos.responses.customer.GetCustomerListRe
 import com.example.rentacarv1.services.dtos.responses.customer.GetCustomerResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,13 +31,14 @@ public class CustomersController {
     }
 
     @PostMapping("/add")
-    public Result add(@RequestBody @Valid AddCustomerRequest addCustomerRequest){
+    @ResponseStatus(code= HttpStatus.CREATED)
+    public Result add(@RequestBody @Valid() AddCustomerRequest addCustomerRequest){
         return this.customerService.add(addCustomerRequest);
     }
 
 
     @PutMapping("/update")
-    public Result update( @RequestBody @Valid UpdateCustomerRequest updateCustomerRequest){
+    public Result update( @RequestBody @Valid() UpdateCustomerRequest updateCustomerRequest){
        return this.customerService.update(updateCustomerRequest);
     }
 

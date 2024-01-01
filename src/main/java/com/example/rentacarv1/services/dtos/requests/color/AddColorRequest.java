@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AddColorRequest {
     @NotBlank(message = "Color name can not be empty!")
-    @Min(value = 2,message = "Color name must be min 2!")
+    @Size(min = 2, message = "Color name must be at least 2 characters long!")
     private String name;
 }

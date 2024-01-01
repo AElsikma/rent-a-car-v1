@@ -9,6 +9,7 @@ import com.example.rentacarv1.services.dtos.responses.brand.GetBrandListResponse
 import com.example.rentacarv1.services.dtos.responses.brand.GetBrandResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,13 +32,14 @@ public class BrandsController {
     }
 
     @PostMapping("/add")
-    public Result add(@RequestBody @Valid AddBrandRequest addBrandRequest) {
+    @ResponseStatus(code= HttpStatus.CREATED)
+    public Result add(@RequestBody @Valid() AddBrandRequest addBrandRequest) {
        return this.brandService.add(addBrandRequest);
     }
 
 
     @PutMapping("/update")
-    public Result update( @RequestBody @Valid UpdateBrandRequest updateBrandRequest){
+    public Result update( @RequestBody @Valid() UpdateBrandRequest updateBrandRequest){
         return this.brandService.update(updateBrandRequest);
     }
 

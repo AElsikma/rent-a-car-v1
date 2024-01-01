@@ -50,7 +50,7 @@ public class BrandManager implements BrandService {
     @Override
     public Result add(AddBrandRequest addBrandRequest) {
 
-         brandBusinessRules.existsByBrand(addBrandRequest.getName());
+         brandBusinessRules.checkIfBrandNameExists(addBrandRequest.getName());
 
         Brand brand=this.modelMapperService.forRequest().map(addBrandRequest,Brand.class);
         this.brandRepository.save(brand);
@@ -60,6 +60,8 @@ public class BrandManager implements BrandService {
 
     @Override
     public Result update(UpdateBrandRequest updateBrandRequest) {
+        brandBusinessRules.checkIfBrandNameExists(updateBrandRequest.getName());
+
         Brand brand =this.modelMapperService.forRequest().map(updateBrandRequest,Brand.class);
         brandRepository.save(brand);
         return new SuccessResult("Brand update");

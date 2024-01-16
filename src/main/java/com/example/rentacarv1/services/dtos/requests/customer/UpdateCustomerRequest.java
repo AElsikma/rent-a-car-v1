@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateCustomerRequest {
+
     @NotNull(message = "ID can not be null.")
     @Positive(message = "Id must be a positive number.")
     private int id;

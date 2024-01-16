@@ -1,6 +1,7 @@
-package com.example.rentacarv1.entities;
+package com.example.rentacarv1.entities.concretes;
 
 
+import com.example.rentacarv1.entities.abstracts.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -17,11 +18,8 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "brands")
-public class Brand {
-    @Id
-    @Column(name="id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+public class Brand  extends BaseEntity {
+
 
     @Column(name = "name", nullable = false)
     private String name;

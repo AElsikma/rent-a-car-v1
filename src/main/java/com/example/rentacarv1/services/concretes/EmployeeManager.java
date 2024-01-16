@@ -4,7 +4,7 @@ import com.example.rentacarv1.core.utilities.results.DataResult;
 import com.example.rentacarv1.core.utilities.results.Result;
 import com.example.rentacarv1.core.utilities.results.SuccessDataResult;
 import com.example.rentacarv1.core.utilities.results.SuccessResult;
-import com.example.rentacarv1.entities.Employee;
+import com.example.rentacarv1.entities.concretes.Employee;
 import com.example.rentacarv1.core.utilities.mappers.ModelMapperService;
 import com.example.rentacarv1.repositories.EmployeeRepository;
 import com.example.rentacarv1.services.abstracts.EmployeeService;

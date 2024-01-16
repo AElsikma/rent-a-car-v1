@@ -1,4 +1,5 @@
-package com.example.rentacarv1.entities;
+package com.example.rentacarv1.entities.concretes;
+import com.example.rentacarv1.entities.abstracts.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -13,20 +14,18 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "customers")
-public class Customer {
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    @Column(name = "nationality_id", nullable = false)
-    private String nationalityId;
+@Table(name = "employees")
+public class Employee extends BaseEntity {
+
+
+    @Column(name="salary")
+    private Double salary;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "customer")
+    @OneToMany(mappedBy = "employee")
     @JsonIgnore
     private List<Rental> rentals;
 }

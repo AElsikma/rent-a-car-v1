@@ -1,4 +1,7 @@
-package com.example.rentacarv1.entities;
+package com.example.rentacarv1.entities.concretes;
+import com.example.rentacarv1.entities.abstracts.BaseEntity;
+import com.example.rentacarv1.entities.concretes.Customer;
+import com.example.rentacarv1.entities.concretes.Employee;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,11 +17,9 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "users")
-public class User {
-    @Id
-    @Column(name="id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+public class User extends BaseEntity {
+
+
 
     @Column(name = "name",nullable = false)
     private String name;

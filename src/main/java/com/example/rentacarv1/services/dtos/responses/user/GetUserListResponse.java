@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GetUserListResponse {
 
+    private int id;
     private String name;
     private String surname;
     private String gsm;

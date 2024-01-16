@@ -1,4 +1,5 @@
-package com.example.rentacarv1.entities;
+package com.example.rentacarv1.entities.concretes;
+import com.example.rentacarv1.entities.abstracts.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,11 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "cars")
-public class Car {
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+public class Car extends BaseEntity {
+
 
     @Column (name = "kilometer", nullable = false)
     private int kilometer;

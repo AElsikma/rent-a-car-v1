@@ -8,6 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetEmployeeResponse {
-
+    private int id;
     private double salary;
 }

@@ -1,4 +1,8 @@
-package com.example.rentacarv1.entities;
+package com.example.rentacarv1.entities.concretes;
+import com.example.rentacarv1.entities.abstracts.BaseEntity;
+import com.example.rentacarv1.entities.concretes.Car;
+import com.example.rentacarv1.entities.concretes.Customer;
+import com.example.rentacarv1.entities.concretes.Employee;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -13,11 +17,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Entity
 @Table(name = "rentals")
-public class Rental {
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+public class Rental extends BaseEntity {
 
     @Column(name = "start_date",nullable = false)
     private LocalDate startDate;

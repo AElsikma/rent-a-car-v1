@@ -8,12 +8,17 @@ import com.example.rentacarv1.entities.concretes.User;
 import com.example.rentacarv1.core.utilities.mappers.ModelMapperService;
 import com.example.rentacarv1.repositories.UserRepository;
 import com.example.rentacarv1.services.abstracts.UserService;
+import com.example.rentacarv1.services.dtos.requests.auth.LoginRequest;
 import com.example.rentacarv1.services.dtos.requests.user.AddUserRequest;
 import com.example.rentacarv1.services.dtos.requests.user.UpdateUserRequest;
+import com.example.rentacarv1.services.dtos.requests.user.UserAuthenticationRequest;
 import com.example.rentacarv1.services.dtos.responses.user.GetUserListResponse;
 import com.example.rentacarv1.services.dtos.responses.user.GetUserResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,6 +28,7 @@ public class UserManager implements UserService {
 
     private UserRepository userRepository;
     private ModelMapperService modelMapperService;
+    private final PasswordEncoder passwordEncoder;
     @Override
     public DataResult<List<GetUserListResponse>> getAll() {
         List<User> users=userRepository.findAll();
@@ -58,5 +64,30 @@ public class UserManager implements UserService {
 
         userRepository.deleteById(id);
         return new SuccessResult("User deleted !");
+    }
+
+    @Override
+    public void register(UserAuthenticationRequest userAuthenticationRequest) {
+        User user = User.builder()
+                .name(userAuthenticationRequest.getName())
+                .surname(userAuthenticationRequest.getSurname())
+                .email(userAuthenticationRequest.getEmail())
+                .gsm(userAuthenticationRequest.getGsm())
+                .authorities(userAuthenticationRequest.getRoles())
+                .password(passwordEncoder.encode(userAuthenticationRequest.getPassword()))
+                .build();
+
+        userRepository.save(user);
+    }
+
+    @Override
+    public void login(LoginRequest request) {
+
+    }
+
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found!"));
     }
 }

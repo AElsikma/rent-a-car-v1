@@ -1,12 +1,13 @@
 package com.example.rentacarv1.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -14,7 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "users")
-public class User {
+@Builder
+public class User implements UserDetails {
     @Id
     @Column(name="id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,6 +32,9 @@ public class User {
     @Column(name = "email",nullable = false)
     private String email;
 
+    @Column(name = "password")
+    private String password;
+
     @OneToMany(mappedBy = "user")
     @JsonIgnore
     private List<Customer> customers;
@@ -37,4 +42,34 @@ public class User {
     @OneToMany(mappedBy = "user")
     @JsonIgnore
     private List<Employee> employees;
+
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Role> authorities;
+
+
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
 }

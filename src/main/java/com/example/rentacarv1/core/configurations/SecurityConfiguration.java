@@ -1,7 +1,6 @@
 package com.example.rentacarv1.core.configurations;
 
 import com.example.rentacarv1.core.filters.JwtAuthFilter;
-import com.example.rentacarv1.entities.Role;
 import com.example.rentacarv1.services.abstracts.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;

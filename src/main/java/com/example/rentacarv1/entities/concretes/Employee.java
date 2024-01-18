@@ -1,4 +1,5 @@
 package com.example.rentacarv1.entities.concretes;
+import com.example.rentacarv1.entities.User;
 import com.example.rentacarv1.entities.abstracts.BaseEntity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;

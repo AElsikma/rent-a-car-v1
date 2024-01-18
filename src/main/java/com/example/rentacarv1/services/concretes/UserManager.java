@@ -1,11 +1,9 @@
 package com.example.rentacarv1.services.concretes;
 
-import com.example.rentacarv1.core.services.JwtService;
 import com.example.rentacarv1.core.utilities.results.DataResult;
 import com.example.rentacarv1.core.utilities.results.Result;
 import com.example.rentacarv1.core.utilities.results.SuccessDataResult;
 import com.example.rentacarv1.core.utilities.results.SuccessResult;
-import com.example.rentacarv1.entities.Role;
 import com.example.rentacarv1.entities.User;
 import com.example.rentacarv1.core.utilities.mappers.ModelMapperService;
 import com.example.rentacarv1.repositories.UserRepository;
@@ -13,23 +11,16 @@ import com.example.rentacarv1.services.abstracts.RoleService;
 import com.example.rentacarv1.services.abstracts.UserService;
 import com.example.rentacarv1.services.dtos.requests.auth.LoginRequest;
 import com.example.rentacarv1.services.dtos.requests.user.AddUserRequest;
-import com.example.rentacarv1.services.dtos.requests.user.CreateUserRequest;
 import com.example.rentacarv1.services.dtos.requests.user.UpdateUserRequest;
 import com.example.rentacarv1.services.dtos.responses.user.GetUserListResponse;
 import com.example.rentacarv1.services.dtos.responses.user.GetUserResponse;
 import lombok.AllArgsConstructor;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor

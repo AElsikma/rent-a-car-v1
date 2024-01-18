@@ -1,11 +1,13 @@
 package com.example.rentacarv1.entities;
+import com.example.rentacarv1.entities.abstracts.BaseEntity;
+import com.example.rentacarv1.entities.concretes.Customer;
+import com.example.rentacarv1.entities.concretes.Employee;
+import com.example.rentacarv1.entities.concretes.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -16,11 +18,7 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 @Builder
-public class User implements UserDetails {
-    @Id
-    @Column(name="id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+public class User extends BaseEntity implements UserDetails {
 
     @Column(name = "name",nullable = false)
     private String name;

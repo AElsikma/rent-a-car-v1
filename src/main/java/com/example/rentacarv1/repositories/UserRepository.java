@@ -1,6 +1,6 @@
 package com.example.rentacarv1.repositories;
 
-import com.example.rentacarv1.entities.concretes.User;
+import com.example.rentacarv1.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

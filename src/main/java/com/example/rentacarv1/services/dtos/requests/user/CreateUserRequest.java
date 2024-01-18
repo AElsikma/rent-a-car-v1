@@ -1,6 +1,6 @@
 package com.example.rentacarv1.services.dtos.requests.user;
 
-import com.example.rentacarv1.entities.Role;
+import com.example.rentacarv1.entities.concretes.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

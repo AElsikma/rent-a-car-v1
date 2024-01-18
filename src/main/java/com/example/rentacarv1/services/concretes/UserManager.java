@@ -1,28 +1,45 @@
 package com.example.rentacarv1.services.concretes;
 
+import com.example.rentacarv1.core.services.JwtService;
 import com.example.rentacarv1.core.utilities.results.DataResult;
 import com.example.rentacarv1.core.utilities.results.Result;
 import com.example.rentacarv1.core.utilities.results.SuccessDataResult;
 import com.example.rentacarv1.core.utilities.results.SuccessResult;
-import com.example.rentacarv1.entities.concretes.User;
+import com.example.rentacarv1.entities.Role;
+import com.example.rentacarv1.entities.User;
 import com.example.rentacarv1.core.utilities.mappers.ModelMapperService;
 import com.example.rentacarv1.repositories.UserRepository;
+import com.example.rentacarv1.services.abstracts.RoleService;
 import com.example.rentacarv1.services.abstracts.UserService;
+import com.example.rentacarv1.services.dtos.requests.auth.LoginRequest;
 import com.example.rentacarv1.services.dtos.requests.user.AddUserRequest;
+import com.example.rentacarv1.services.dtos.requests.user.CreateUserRequest;
 import com.example.rentacarv1.services.dtos.requests.user.UpdateUserRequest;
 import com.example.rentacarv1.services.dtos.responses.user.GetUserListResponse;
 import com.example.rentacarv1.services.dtos.responses.user.GetUserResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class UserManager implements UserService {
 
-    private UserRepository userRepository;
-    private ModelMapperService modelMapperService;
+    private final UserRepository userRepository;
+    private final ModelMapperService modelMapperService;
+    private final PasswordEncoder passwordEncoder;
+    private final RoleService roleService;
+
     @Override
     public DataResult<List<GetUserListResponse>> getAll() {
         List<User> users=userRepository.findAll();
@@ -41,8 +58,20 @@ public class UserManager implements UserService {
 
     @Override
     public Result add(AddUserRequest addUserRequest) {
-        User user=this.modelMapperService.forRequest().map(addUserRequest,User.class);
-        this.userRepository.save(user);
+        User user = User.builder()
+                .name(addUserRequest.getName())
+                .surname(addUserRequest.getSurname())
+                .gsm(addUserRequest.getGsm())
+                .email(addUserRequest.getEmail())
+                .authorities(
+                        addUserRequest.getRoles().stream()
+                                .map(addRoleUserRequest -> roleService.findByName(addRoleUserRequest.getName()))
+                                .collect(Collectors.toSet())
+                )
+                .password(passwordEncoder.encode(addUserRequest.getPassword()))
+                .build();
+
+        userRepository.save(user);
         return new SuccessResult("User added");
     }
 
@@ -58,5 +87,37 @@ public class UserManager implements UserService {
 
         userRepository.deleteById(id);
         return new SuccessResult("User deleted !");
+    }
+
+    @Override
+    public void register(AddUserRequest request) {
+        User user = User.builder()
+                .email(request.getEmail())
+                .authorities(
+                        request.getRoles().stream()
+                                .map(addRoleUserRequest -> roleService.findByName(addRoleUserRequest.getName()))
+                                .collect(Collectors.toSet())
+                )
+                .password(passwordEncoder.encode(request.getPassword()))
+                .build();
+    }
+
+    @Override
+    public String login(LoginRequest request) {
+       /* Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+        if(authentication.isAuthenticated())
+        {
+            // jwt oluştur.
+            Map<String,Object> claims = new HashMap<>();
+            return jwtService.generateToken(request.getEmail(), claims);
+        }
+        throw new RuntimeException("Bilgiler hatalı");*/
+        return "";
+    }
+
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found!"));
     }
 }

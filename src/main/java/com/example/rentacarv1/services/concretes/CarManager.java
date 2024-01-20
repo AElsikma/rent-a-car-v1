@@ -13,7 +13,12 @@ import com.example.rentacarv1.services.dtos.requests.car.UpdateCarRequest;
 import com.example.rentacarv1.services.dtos.responses.car.GetCarListResponse;
 import com.example.rentacarv1.services.dtos.responses.car.GetCarResponse;
 import com.example.rentacarv1.services.rules.CarBusinessRules;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,20 +26,36 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
+
 public class CarManager implements CarService {
 
+    public static final String HASH_KEY = "CarList";
     private CarRepository carRepository;
     private ModelMapperService modelMapperService;
     private CarBusinessRules carBusinessRules;
+    private RedisTemplate<String,Object> template;
 
-    @Override
+
+
+    @Cacheable(value = "carListCache", key = "#root.methodName")
     public DataResult<List<GetCarListResponse>> getAll() {
-      List<Car> cars= carRepository.findAll();
-      List<GetCarListResponse> carListResponses=cars.stream()
-              .map(car -> this.modelMapperService.forResponse()
-                      .map(car,GetCarListResponse.class)).collect(Collectors.toList());
-      return new SuccessDataResult<List<GetCarListResponse>>(carListResponses,"Cars Listed");
+
+        List<Car> cars = carRepository.findAll();
+
+        List<GetCarListResponse> carListResponses = cars.stream()
+                .map(car -> modelMapperService.forResponse().map(car, GetCarListResponse.class))
+                .collect(Collectors.toList());
+        try {
+            String carListResponsesString = new ObjectMapper().writeValueAsString(carListResponses);
+            template.opsForHash().put("carListCache", "getAll", carListResponsesString);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Json processing exception: " + e.getMessage());
+        }
+
+        return new SuccessDataResult<>(carListResponses, "Cars listed.");
     }
+
 
     @Override
     public DataResult<GetCarResponse> getById(int id) {

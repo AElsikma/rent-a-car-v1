@@ -5,11 +5,17 @@ import com.example.rentacarv1.services.dtos.responses.model.GetModelResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.redis.core.RedisHash;
+
+import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GetCarListResponse {
+@RedisHash("CarList")
+public class GetCarListResponse implements Serializable {
+    private static final long serialVersionUID = 8775378630877700674L;
+
     private int id;
     private double daily_price;
     private int kilometer;
@@ -17,4 +23,5 @@ public class GetCarListResponse {
     private int year;
     private GetModelResponse modelResponse;
     private GetColorResponse colorResponse;
+
 }

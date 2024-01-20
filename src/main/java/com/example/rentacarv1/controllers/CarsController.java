@@ -9,7 +9,9 @@ import com.example.rentacarv1.services.dtos.responses.car.GetCarListResponse;
 import com.example.rentacarv1.services.dtos.responses.car.GetCarResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,8 +24,8 @@ public class CarsController {
     private CarService carService;
 
     @GetMapping("/getAll")
-    public DataResult<List<GetCarListResponse>> getAll(){
-      return this.carService.getAll();
+    public ResponseEntity<DataResult<List<GetCarListResponse>>> getAll() {
+        return ResponseEntity.ok(carService.getAll());
     }
 
     @GetMapping("/{id}")
@@ -36,6 +38,13 @@ public class CarsController {
     public Result add(@RequestBody @Valid() AddCarRequest addCarRequest){
         return this.carService.add(addCarRequest);
 
+    }
+
+    @GetMapping("/deneme")
+    @Cacheable(cacheNames = "deneme")
+    public String deneme() throws InterruptedException {
+        Thread.sleep(5000);
+        return "deneme";
     }
 
 

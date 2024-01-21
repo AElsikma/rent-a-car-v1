@@ -4,9 +4,6 @@ import java.io.Serial;
 import java.io.Serializable;
 
 public class SuccessDataResult<T> extends DataResult<T> implements Serializable{
-    @Serial
-    private static final long serialVersionUID = 8205633081840468799L;
-
 
     public SuccessDataResult(T data, String message) {
 

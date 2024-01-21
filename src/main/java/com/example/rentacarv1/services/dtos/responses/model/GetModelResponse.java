@@ -11,7 +11,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetModelResponse implements Serializable {
-    private static final long serialVersionUID = 8775378630877700674L;
+
     private int id;
     private String name;
 }

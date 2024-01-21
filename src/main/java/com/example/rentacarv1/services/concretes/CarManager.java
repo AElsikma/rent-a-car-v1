@@ -1,5 +1,6 @@
 package com.example.rentacarv1.services.concretes;
 
+import com.example.rentacarv1.core.config.cache.RedisCacheManager;
 import com.example.rentacarv1.core.utilities.results.DataResult;
 import com.example.rentacarv1.core.utilities.results.Result;
 import com.example.rentacarv1.core.utilities.results.SuccessDataResult;
@@ -13,11 +14,7 @@ import com.example.rentacarv1.services.dtos.requests.car.UpdateCarRequest;
 import com.example.rentacarv1.services.dtos.responses.car.GetCarListResponse;
 import com.example.rentacarv1.services.dtos.responses.car.GetCarResponse;
 import com.example.rentacarv1.services.rules.CarBusinessRules;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -29,14 +26,10 @@ import java.util.stream.Collectors;
 
 public class CarManager implements CarService {
 
-    public static final String HASH_KEY = "CarList";
     private CarRepository carRepository;
     private ModelMapperService modelMapperService;
     private CarBusinessRules carBusinessRules;
-    private RedisTemplate<String,Object> template;
     private RedisCacheManager redisCacheManager;
-
-
 
 
     public DataResult<List<GetCarListResponse>> getAll() {
@@ -49,7 +42,7 @@ public class CarManager implements CarService {
 
         return new SuccessDataResult<>(carListResponses, "Cars Listed.");
     }
-    
+
     public List<GetCarListResponse> getCarsAndCache() {
         List<Car> cars = carRepository.findAll();
         List<GetCarListResponse> carListResponses = cars.stream()
@@ -79,7 +72,8 @@ public class CarManager implements CarService {
         Car car =this.modelMapperService.forRequest().map(addCarRequest,Car.class);
 
         this.carRepository.save(car);
-         return new SuccessResult("Car added");
+        redisCacheManager.cacheData("carListCache", "getCarsAndCache", null);
+        return new SuccessResult("Car added");
     }
 
     @Override
@@ -89,6 +83,7 @@ public class CarManager implements CarService {
 
        Car car=this.modelMapperService.forRequest().map(updateCarRequest,Car.class);
        this.carRepository.save(car);
+        redisCacheManager.cacheData("carListCache", "getCarsAndCache", null);
        return new SuccessResult("Car updated");
 
     }
@@ -96,6 +91,7 @@ public class CarManager implements CarService {
     @Override
     public Result delete(int id) {
          this.carRepository.deleteById(id);
+        redisCacheManager.cacheData("carListCache", "getCarsAndCache", null);
          return new SuccessResult("Car deleted !");
     }
 }

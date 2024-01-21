@@ -1,4 +1,4 @@
-package com.example.rentacarv1.services.concretes;
+package com.example.rentacarv1.core.config.cache;
 
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;

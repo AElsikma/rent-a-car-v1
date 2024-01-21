@@ -34,27 +34,31 @@ public class CarManager implements CarService {
     private ModelMapperService modelMapperService;
     private CarBusinessRules carBusinessRules;
     private RedisTemplate<String,Object> template;
+    private RedisCacheManager redisCacheManager;
 
 
 
-    @Cacheable(value = "carListCache", key = "#root.methodName")
+
     public DataResult<List<GetCarListResponse>> getAll() {
+        List<GetCarListResponse> carListResponses = (List<GetCarListResponse>) redisCacheManager.getCachedData("carListCache", "getCarsAndCache");
 
+        if (carListResponses == null) {
+            carListResponses = getCarsAndCache();
+            redisCacheManager.cacheData("carListCache", "getCarsAndCache", carListResponses);
+        }
+
+        return new SuccessDataResult<>(carListResponses, "Cars Listed.");
+    }
+    
+    public List<GetCarListResponse> getCarsAndCache() {
         List<Car> cars = carRepository.findAll();
-
         List<GetCarListResponse> carListResponses = cars.stream()
                 .map(car -> modelMapperService.forResponse().map(car, GetCarListResponse.class))
                 .collect(Collectors.toList());
-        try {
-            String carListResponsesString = new ObjectMapper().writeValueAsString(carListResponses);
-            template.opsForHash().put("carListCache", "getAll", carListResponsesString);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Json processing exception: " + e.getMessage());
-        }
-
-        return new SuccessDataResult<>(carListResponses, "Cars listed.");
+        return carListResponses;
     }
+
+
 
 
     @Override

@@ -24,8 +24,8 @@ public class CarsController {
     private CarService carService;
 
     @GetMapping("/getAll")
-    public ResponseEntity<DataResult<List<GetCarListResponse>>> getAll() {
-        return ResponseEntity.ok(carService.getAll());
+    public DataResult<List<GetCarListResponse>> getAll() {
+        return (carService.getAll());
     }
 
     @GetMapping("/{id}")
@@ -41,10 +41,8 @@ public class CarsController {
     }
 
     @GetMapping("/deneme")
-    @Cacheable(cacheNames = "deneme")
-    public String deneme() throws InterruptedException {
-        Thread.sleep(5000);
-        return "deneme";
+    public List<GetCarListResponse> deneme(){
+        return this.carService.getCarsAndCache();
     }
 
 

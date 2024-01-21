@@ -25,6 +25,7 @@ public class RentACarV1Application {
         SpringApplication.run(RentACarV1Application.class, args);
     }
 
+
     @ExceptionHandler
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     public ProblemDetails handleBusinessException(BusinessException businessException){

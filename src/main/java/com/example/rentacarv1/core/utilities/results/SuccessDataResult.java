@@ -23,5 +23,6 @@ public class SuccessDataResult<T> extends DataResult<T> implements Serializable{
     }
 
     public SuccessDataResult() {
+        super(null,true);
     }
 }

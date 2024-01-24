@@ -13,6 +13,7 @@ import com.example.rentacarv1.services.dtos.requests.employee.UpdateEmployeeRequ
 import com.example.rentacarv1.services.dtos.responses.employee.GetEmployeeListResponse;
 import com.example.rentacarv1.services.dtos.responses.employee.GetEmployeeResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,33 +30,33 @@ public class EmployeeManager implements EmployeeService {
         List<GetEmployeeListResponse> employeeListResponse=employees.stream().map(employee -> this.modelMapperService.forResponse()
                 .map(employee,GetEmployeeListResponse.class)).collect(Collectors.toList());
 
-        return new SuccessDataResult<List<GetEmployeeListResponse>>(employeeListResponse,"Employees listed");
+        return new SuccessDataResult<List<GetEmployeeListResponse>>(employeeListResponse,"Employees listed", HttpStatus.OK);
     }
 
     @Override
     public DataResult<GetEmployeeResponse> getById(int id) {
         Employee employee = employeeRepository.findById(id).orElseThrow();
         GetEmployeeResponse getEmployeeResponse=this.modelMapperService.forResponse().map(employee,GetEmployeeResponse.class);
-        return new SuccessDataResult<GetEmployeeResponse>(getEmployeeResponse,"Employee listed");
+        return new SuccessDataResult<GetEmployeeResponse>(getEmployeeResponse,"Employee listed", HttpStatus.OK);
     }
 
     @Override
     public Result add(AddEmployeeRequest addEmployeeRequest) {
         Employee employee =this.modelMapperService.forRequest().map(addEmployeeRequest,Employee.class);
         this.employeeRepository.save(employee);
-        return new SuccessResult("Employee added");
+        return new SuccessResult( HttpStatus.CREATED,"Employee added");
     }
 
     @Override
     public Result update(UpdateEmployeeRequest updateEmployeeRequest) {
         Employee employee =this.modelMapperService.forRequest().map(updateEmployeeRequest,Employee.class);
         employeeRepository.save(employee);
-        return new SuccessResult("Employee updated");
+        return new SuccessResult( HttpStatus.OK,"Employee updated");
     }
 
     @Override
     public Result delete(int id) {
         employeeRepository.deleteById(id);
-        return new SuccessResult("Empoyee deleted !");
+        return new SuccessResult( HttpStatus.OK,"Empoyee deleted !");
     }
 }

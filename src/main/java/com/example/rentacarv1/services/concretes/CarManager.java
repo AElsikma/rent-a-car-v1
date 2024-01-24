@@ -14,6 +14,7 @@ import com.example.rentacarv1.services.dtos.responses.car.GetCarListResponse;
 import com.example.rentacarv1.services.dtos.responses.car.GetCarResponse;
 import com.example.rentacarv1.services.rules.CarBusinessRules;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,7 +34,7 @@ public class CarManager implements CarService {
       List<GetCarListResponse> carListResponses=cars.stream()
               .map(car -> this.modelMapperService.forResponse()
                       .map(car,GetCarListResponse.class)).collect(Collectors.toList());
-      return new SuccessDataResult<List<GetCarListResponse>>(carListResponses,"Cars Listed");
+      return new SuccessDataResult<List<GetCarListResponse>>(carListResponses,"Cars Listed", HttpStatus.OK);
     }
 
     @Override
@@ -41,7 +42,7 @@ public class CarManager implements CarService {
         Car car=this.carRepository.findById(id).orElseThrow();
         GetCarResponse carResponse=this.modelMapperService.forResponse()
                 .map(car, GetCarResponse.class);
-        return new SuccessDataResult<GetCarResponse>(carResponse,"Car Listed") ;
+        return new SuccessDataResult<GetCarResponse>(carResponse,"Car Listed", HttpStatus.OK) ;
 
     }
 
@@ -54,7 +55,7 @@ public class CarManager implements CarService {
         Car car =this.modelMapperService.forRequest().map(addCarRequest,Car.class);
 
         this.carRepository.save(car);
-         return new SuccessResult("Car added");
+         return new SuccessResult(HttpStatus.CREATED,"Car added");
     }
 
     @Override
@@ -64,13 +65,13 @@ public class CarManager implements CarService {
 
        Car car=this.modelMapperService.forRequest().map(updateCarRequest,Car.class);
        this.carRepository.save(car);
-       return new SuccessResult("Car updated");
+       return new SuccessResult( HttpStatus.OK,"Car updated");
 
     }
 
     @Override
     public Result delete(int id) {
          this.carRepository.deleteById(id);
-         return new SuccessResult("Car deleted !");
+         return new SuccessResult( HttpStatus.OK,"Car deleted !");
     }
 }

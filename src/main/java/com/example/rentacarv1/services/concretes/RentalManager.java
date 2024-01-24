@@ -17,6 +17,7 @@ import com.example.rentacarv1.services.dtos.responses.rental.GetRentalListRespon
 import com.example.rentacarv1.services.dtos.responses.rental.GetRentalResponse;
 import com.example.rentacarv1.services.rules.RentalBusinessRules;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -40,14 +41,14 @@ public class RentalManager implements RentalService {
         List<GetRentalListResponse> rentalListResponse=rentals.stream().map(rental -> this.modelMapperService.forResponse()
                 .map(rental,GetRentalListResponse.class)).collect(Collectors.toList());
 
-        return new SuccessDataResult<List<GetRentalListResponse>>(rentalListResponse,"Rentals listed");
+        return new SuccessDataResult<List<GetRentalListResponse>>(rentalListResponse,"Rentals listed", HttpStatus.OK);
     }
 
     @Override
     public DataResult<GetRentalResponse> getById(int id) {
         Rental rental = rentalRepository.findById(id).orElseThrow();
         GetRentalResponse getRentalResponse=this.modelMapperService.forResponse().map(rental,GetRentalResponse.class);
-        return new SuccessDataResult<GetRentalResponse>(getRentalResponse,"Rental listed") ;
+        return new SuccessDataResult<GetRentalResponse>(getRentalResponse,"Rental listed", HttpStatus.OK) ;
     }
 
     @Override
@@ -68,7 +69,7 @@ public class RentalManager implements RentalService {
         int rentalLimit = rental.getStartDate().until(rental.getEndDate()).getDays() + 1;
         rental.setTotalPrice(car.getDailyPrice() * rentalLimit);
         this.rentalRepository.save(rental);
-        return new SuccessResult("Rental added");
+        return new SuccessResult( HttpStatus.CREATED,"Rental added");
 
     }
 
@@ -76,13 +77,13 @@ public class RentalManager implements RentalService {
     public Result update(UpdateRentalRequest updateRentalRequest) {
         Rental rental =this.modelMapperService.forRequest().map(updateRentalRequest,Rental.class);
         rentalRepository.save(rental);
-        return new SuccessResult("Rental updated");
+        return new SuccessResult( HttpStatus.OK,"Rental updated");
     }
 
     @Override
     public Result delete(int id) {
 
         rentalRepository.deleteById(id);
-        return new SuccessResult("Rental deleted !");
+        return new SuccessResult( HttpStatus.OK,"Rental deleted !");
     }
 }

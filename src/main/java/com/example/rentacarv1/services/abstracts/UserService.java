@@ -21,6 +21,5 @@ public interface UserService extends UserDetailsService {
     Result update (UpdateUserRequest updateUserRequest);
     Result delete (int id);
 
-    void register(AddUserRequest request);
-    String login(LoginRequest request);
+
 }

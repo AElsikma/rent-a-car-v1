@@ -80,31 +80,6 @@ public class UserManager implements UserService {
         return new SuccessResult("User deleted !");
     }
 
-    @Override
-    public void register(AddUserRequest request) {
-        User user = User.builder()
-                .email(request.getEmail())
-                .authorities(
-                        request.getRoles().stream()
-                                .map(addRoleUserRequest -> roleService.findByName(addRoleUserRequest.getName()))
-                                .collect(Collectors.toSet())
-                )
-                .password(passwordEncoder.encode(request.getPassword()))
-                .build();
-    }
-
-    @Override
-    public String login(LoginRequest request) {
-       /* Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        if(authentication.isAuthenticated())
-        {
-            // jwt oluştur.
-            Map<String,Object> claims = new HashMap<>();
-            return jwtService.generateToken(request.getEmail(), claims);
-        }
-        throw new RuntimeException("Bilgiler hatalı");*/
-        return "";
-    }
 
 
     @Override

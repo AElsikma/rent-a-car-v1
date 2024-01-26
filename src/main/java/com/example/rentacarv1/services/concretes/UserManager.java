@@ -1,17 +1,20 @@
 package com.example.rentacarv1.services.concretes;
 
+import com.example.rentacarv1.core.config.cache.RedisCacheManager;
 import com.example.rentacarv1.core.utilities.results.DataResult;
 import com.example.rentacarv1.core.utilities.results.Result;
 import com.example.rentacarv1.core.utilities.results.SuccessDataResult;
 import com.example.rentacarv1.core.utilities.results.SuccessResult;
 import com.example.rentacarv1.entities.User;
 import com.example.rentacarv1.core.utilities.mappers.ModelMapperService;
+import com.example.rentacarv1.entities.concretes.Car;
 import com.example.rentacarv1.repositories.UserRepository;
 import com.example.rentacarv1.services.abstracts.RoleService;
 import com.example.rentacarv1.services.abstracts.UserService;
 import com.example.rentacarv1.services.dtos.requests.auth.LoginRequest;
 import com.example.rentacarv1.services.dtos.requests.user.AddUserRequest;
 import com.example.rentacarv1.services.dtos.requests.user.UpdateUserRequest;
+import com.example.rentacarv1.services.dtos.responses.car.GetCarListResponse;
 import com.example.rentacarv1.services.dtos.responses.user.GetUserListResponse;
 import com.example.rentacarv1.services.dtos.responses.user.GetUserResponse;
 import lombok.AllArgsConstructor;
@@ -31,14 +34,24 @@ public class UserManager implements UserService {
     private final ModelMapperService modelMapperService;
     private final PasswordEncoder passwordEncoder;
     private final RoleService roleService;
+    private RedisCacheManager redisCacheManager;
 
     @Override
     public DataResult<List<GetUserListResponse>> getAll() {
-        List<User> users=userRepository.findAll();
-        List<GetUserListResponse> userListResponse=users.stream().map(user -> this.modelMapperService.forResponse()
-                .map(user,GetUserListResponse.class)).collect(Collectors.toList());
+        List<GetUserListResponse> userListResponses = (List<GetUserListResponse>) redisCacheManager.getCachedData("userListCache", "getUsersAndCache");
+        if (userListResponses == null) {
+            userListResponses = getUsersAndCache();
+            redisCacheManager.cacheData("userListCache", "getUsersAndCache", userListResponses);
+        }
 
-        return new SuccessDataResult<List<GetUserListResponse>>(userListResponse,"Users listed", HttpStatus.OK);
+        return new SuccessDataResult<>(userListResponses, "Users Listed.",HttpStatus.OK);
+    }
+    public List<GetUserListResponse> getUsersAndCache() {
+        List<User> users = userRepository.findAll();
+        List<GetUserListResponse> userListResponses = users.stream()
+                .map(user -> modelMapperService.forResponse().map(user, GetUserListResponse.class))
+                .collect(Collectors.toList());
+        return userListResponses;
     }
 
     @Override
@@ -64,6 +77,7 @@ public class UserManager implements UserService {
                 .build();
 
         userRepository.save(user);
+        redisCacheManager.cacheData("userListCache", "getUsersAndCache", null);
         return new SuccessResult( HttpStatus.CREATED,"User added");
     }
 
@@ -71,6 +85,7 @@ public class UserManager implements UserService {
     public Result update(UpdateUserRequest updateUserRequest) {
         User user =this.modelMapperService.forRequest().map(updateUserRequest,User.class);
         userRepository.save(user);
+        redisCacheManager.cacheData("userListCache", "getUsersAndCache", null);
         return new SuccessResult( HttpStatus.OK,"User updated");
     }
 
@@ -78,6 +93,7 @@ public class UserManager implements UserService {
     public Result delete(int id) {
 
         userRepository.deleteById(id);
+        redisCacheManager.cacheData("userListCache", "getUsersAndCache", null);
         return new SuccessResult( HttpStatus.OK,"User deleted !");
     }
 

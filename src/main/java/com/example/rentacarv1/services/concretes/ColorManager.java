@@ -1,15 +1,18 @@
 package com.example.rentacarv1.services.concretes;
 
+import com.example.rentacarv1.core.config.cache.RedisCacheManager;
 import com.example.rentacarv1.core.utilities.results.DataResult;
 import com.example.rentacarv1.core.utilities.results.Result;
 import com.example.rentacarv1.core.utilities.results.SuccessDataResult;
 import com.example.rentacarv1.core.utilities.results.SuccessResult;
+import com.example.rentacarv1.entities.concretes.Car;
 import com.example.rentacarv1.entities.concretes.Color;
 import com.example.rentacarv1.core.utilities.mappers.ModelMapperService;
 import com.example.rentacarv1.repositories.ColorRepository;
 import com.example.rentacarv1.services.abstracts.ColorService;
 import com.example.rentacarv1.services.dtos.requests.color.AddColorRequest;
 import com.example.rentacarv1.services.dtos.requests.color.UpdateColorRequest;
+import com.example.rentacarv1.services.dtos.responses.car.GetCarListResponse;
 import com.example.rentacarv1.services.dtos.responses.color.GetColorListResponse;
 import com.example.rentacarv1.services.dtos.responses.color.GetColorResponse;
 import com.example.rentacarv1.services.rules.ColorBusinessRules;
@@ -25,16 +28,26 @@ import java.util.stream.Collectors;
 public class ColorManager implements ColorService {
     private final ColorRepository colorRepository;
     private final ModelMapperService modelMapperService;
+    private RedisCacheManager redisCacheManager;
 
     private final ColorBusinessRules colorBusinessRules;
 
     @Override
     public DataResult<List<GetColorListResponse>> getAll() {
-       List<Color> colors = this.colorRepository.findAll();
-       List<GetColorListResponse> getColorListResponses = colors.stream().map
-               (color -> this.modelMapperService.forResponse().map(color, GetColorListResponse.class)).
-               collect(Collectors.toList());
-       return new SuccessDataResult<List<GetColorListResponse>>(getColorListResponses,"Colors listed", HttpStatus.OK);
+        List<GetColorListResponse> colorListResponses = (List<GetColorListResponse>) redisCacheManager.getCachedData("colorListCache", "getColorsAndCache");
+        if (colorListResponses == null) {
+            colorListResponses = getColorsAndCache();
+            redisCacheManager.cacheData("colorListCache", "getColorsAndCache", colorListResponses);
+        }
+        return new SuccessDataResult<>(colorListResponses, "Colors Listed.",HttpStatus.OK);
+    }
+
+    public List<GetColorListResponse> getColorsAndCache() {
+        List<Color> colors = colorRepository.findAll();
+        List<GetColorListResponse> colorListResponses = colors.stream()
+                .map(color -> modelMapperService.forResponse().map(color, GetColorListResponse.class))
+                .collect(Collectors.toList());
+        return colorListResponses;
     }
 
     @Override
@@ -52,6 +65,7 @@ public class ColorManager implements ColorService {
 
         Color color = this.modelMapperService.forRequest().map(addColorRequest,Color.class);
         this.colorRepository.save(color);
+        redisCacheManager.cacheData("colorListCache", "getColorsAndCache", null);
         return new SuccessResult( HttpStatus.CREATED,"Color added");
     }
 
@@ -61,6 +75,7 @@ public class ColorManager implements ColorService {
 
         Color color = this.modelMapperService.forRequest().map(updateColorRequest,Color.class);
         this.colorRepository.save(color);
+        redisCacheManager.cacheData("colorListCache", "getColorsAndCache", null);
         return  new SuccessResult( HttpStatus.OK,"Color updated");
     }
 
@@ -68,6 +83,7 @@ public class ColorManager implements ColorService {
     public Result delete(int id) {
 
         this.colorRepository.deleteById(id);
+        redisCacheManager.cacheData("colorListCache", "getColorsAndCache", null);
         return new SuccessResult( HttpStatus.OK,"Color deleted !");
     }
 }

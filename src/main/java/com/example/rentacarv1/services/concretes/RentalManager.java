@@ -1,5 +1,6 @@
 package com.example.rentacarv1.services.concretes;
 
+import com.example.rentacarv1.core.config.cache.RedisCacheManager;
 import com.example.rentacarv1.core.utilities.results.DataResult;
 import com.example.rentacarv1.core.utilities.results.Result;
 import com.example.rentacarv1.core.utilities.results.SuccessDataResult;
@@ -13,6 +14,7 @@ import com.example.rentacarv1.repositories.*;
 import com.example.rentacarv1.services.abstracts.RentalService;
 import com.example.rentacarv1.services.dtos.requests.rental.AddRentalRequest;
 import com.example.rentacarv1.services.dtos.requests.rental.UpdateRentalRequest;
+import com.example.rentacarv1.services.dtos.responses.car.GetCarListResponse;
 import com.example.rentacarv1.services.dtos.responses.rental.GetRentalListResponse;
 import com.example.rentacarv1.services.dtos.responses.rental.GetRentalResponse;
 import com.example.rentacarv1.services.rules.RentalBusinessRules;
@@ -33,15 +35,26 @@ public class RentalManager implements RentalService {
     private final CarRepository carRepository;
     private final EmployeeRepository employeeRepository;
     private final RentalBusinessRules rentalBusinessRules;
+    private RedisCacheManager redisCacheManager;
 
 
     @Override
     public DataResult<List<GetRentalListResponse>> getAll() {
-        List<Rental> rentals=rentalRepository.findAll();
-        List<GetRentalListResponse> rentalListResponse=rentals.stream().map(rental -> this.modelMapperService.forResponse()
-                .map(rental,GetRentalListResponse.class)).collect(Collectors.toList());
+        List<GetRentalListResponse> rentalListResponses = (List<GetRentalListResponse>) redisCacheManager.getCachedData("rentalListCache", "getRentalsAndCache");
+        if (rentalListResponses == null) {
+            rentalListResponses= getRentalsAndCache();
+            redisCacheManager.cacheData("rentalListCache", "getRentalsAndCache", rentalListResponses);
+        }
 
-        return new SuccessDataResult<List<GetRentalListResponse>>(rentalListResponse,"Rentals listed", HttpStatus.OK);
+        return new SuccessDataResult<>(rentalListResponses, "Rentals Listed.",HttpStatus.OK);
+    }
+
+    public List<GetRentalListResponse> getRentalsAndCache() {
+        List<Rental> rentals = rentalRepository.findAll();
+        List<GetRentalListResponse> rentalListResponses = rentals.stream()
+                .map(rental -> modelMapperService.forResponse().map(rental, GetRentalListResponse.class))
+                .collect(Collectors.toList());
+        return rentalListResponses;
     }
 
     @Override
@@ -69,6 +82,7 @@ public class RentalManager implements RentalService {
         int rentalLimit = rental.getStartDate().until(rental.getEndDate()).getDays() + 1;
         rental.setTotalPrice(car.getDailyPrice() * rentalLimit);
         this.rentalRepository.save(rental);
+        redisCacheManager.cacheData("rentalListCache", "getRentalsAndCache", null);
         return new SuccessResult( HttpStatus.CREATED,"Rental added");
 
     }
@@ -77,6 +91,7 @@ public class RentalManager implements RentalService {
     public Result update(UpdateRentalRequest updateRentalRequest) {
         Rental rental =this.modelMapperService.forRequest().map(updateRentalRequest,Rental.class);
         rentalRepository.save(rental);
+        redisCacheManager.cacheData("rentalListCache", "getRentalsAndCache", null);
         return new SuccessResult( HttpStatus.OK,"Rental updated");
     }
 
@@ -84,6 +99,7 @@ public class RentalManager implements RentalService {
     public Result delete(int id) {
 
         rentalRepository.deleteById(id);
+        redisCacheManager.cacheData("rentalListCache", "getRentalsAndCache", null);
         return new SuccessResult( HttpStatus.OK,"Rental deleted !");
     }
 }

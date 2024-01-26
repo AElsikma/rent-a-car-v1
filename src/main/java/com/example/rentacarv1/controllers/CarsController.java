@@ -40,12 +40,6 @@ public class CarsController {
 
     }
 
-    @GetMapping("/deneme")
-    public List<GetCarListResponse> deneme(){
-        return this.carService.getCarsAndCache();
-    }
-
-
     @PutMapping("/update")
     public Result update( @RequestBody @Valid() UpdateCarRequest updateCarRequest){
        return this.carService.update(updateCarRequest);

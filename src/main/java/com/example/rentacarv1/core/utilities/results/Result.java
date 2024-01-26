@@ -1,29 +1,42 @@
 package com.example.rentacarv1.core.utilities.results;
+
+
+import org.springframework.http.HttpStatus;
+
 public class Result {
 
     private  boolean success;
     private  String message;
 
-    public Result(boolean success){
-        this.success=success;
-    }
-    public Result(boolean success,String message){
+    private HttpStatus httpStatus;
 
-        this(success);
-        this.message=message;
+    public Result(boolean success, HttpStatus httpStatus) {
+        this.success = success;
+        this.httpStatus = httpStatus;
+    }
+
+    public Result(boolean success, HttpStatus httpStatus, String message) {
+        this(success, httpStatus);
+        this.message = message;
     }
     public Result(){
 
     }
 
     public boolean isSuccess() {
-        return this.success;
+        return success;
     }
 
     public String getMessage() {
-        return this.message;
+        return message;
     }
 
+    public HttpStatus getHttpStatus() {
+        return httpStatus;
+    }
 
+    public int getHttpStatusCode() {
+        return httpStatus.value();
+    }
 
 }

@@ -14,6 +14,7 @@ import com.example.rentacarv1.services.dtos.responses.color.GetColorListResponse
 import com.example.rentacarv1.services.dtos.responses.color.GetColorResponse;
 import com.example.rentacarv1.services.rules.ColorBusinessRules;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,7 +34,7 @@ public class ColorManager implements ColorService {
        List<GetColorListResponse> getColorListResponses = colors.stream().map
                (color -> this.modelMapperService.forResponse().map(color, GetColorListResponse.class)).
                collect(Collectors.toList());
-       return new SuccessDataResult<List<GetColorListResponse>>(getColorListResponses,"Colors listed");
+       return new SuccessDataResult<List<GetColorListResponse>>(getColorListResponses,"Colors listed", HttpStatus.OK);
     }
 
     @Override
@@ -41,7 +42,7 @@ public class ColorManager implements ColorService {
         Color color  = this.colorRepository.findById(id).orElseThrow();
         GetColorResponse getColorResponse =this.modelMapperService.forResponse()
                 .map(color,GetColorResponse.class);
-        return new SuccessDataResult<GetColorResponse>(getColorResponse,"Color listed");
+        return new SuccessDataResult<GetColorResponse>(getColorResponse,"Color listed", HttpStatus.OK);
     }
 
     @Override
@@ -51,7 +52,7 @@ public class ColorManager implements ColorService {
 
         Color color = this.modelMapperService.forRequest().map(addColorRequest,Color.class);
         this.colorRepository.save(color);
-        return new SuccessResult("Color added");
+        return new SuccessResult( HttpStatus.CREATED,"Color added");
     }
 
     @Override
@@ -60,13 +61,13 @@ public class ColorManager implements ColorService {
 
         Color color = this.modelMapperService.forRequest().map(updateColorRequest,Color.class);
         this.colorRepository.save(color);
-        return  new SuccessResult("Color updated");
+        return  new SuccessResult( HttpStatus.OK,"Color updated");
     }
 
     @Override
     public Result delete(int id) {
 
         this.colorRepository.deleteById(id);
-        return new SuccessResult("Color deleted !");
+        return new SuccessResult( HttpStatus.OK,"Color deleted !");
     }
 }

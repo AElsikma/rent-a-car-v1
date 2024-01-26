@@ -14,6 +14,7 @@ import com.example.rentacarv1.services.dtos.responses.brand.GetBrandListResponse
 import com.example.rentacarv1.services.dtos.responses.brand.GetBrandResponse;
 import com.example.rentacarv1.services.rules.BrandBusinessRules;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,7 +37,7 @@ public class BrandManager implements BrandService {
         List<GetBrandListResponse> brandListResponse=brands.stream().map(brand -> this.modelMapperService.forResponse()
                 .map(brand,GetBrandListResponse.class)).collect(Collectors.toList());
 
-        return new SuccessDataResult<List<GetBrandListResponse>>(brandListResponse,"Brands Listed ");
+        return new SuccessDataResult<List<GetBrandListResponse>>(brandListResponse,"Brands Listed ", HttpStatus.OK);
     }
 
     @Override
@@ -44,7 +45,7 @@ public class BrandManager implements BrandService {
 
         Brand brand = brandRepository.findById(id).orElseThrow();
         GetBrandResponse getBrandResponse=this.modelMapperService.forResponse().map(brand,GetBrandResponse.class);
-        return new SuccessDataResult<GetBrandResponse>(getBrandResponse,"Brand listed");
+        return new SuccessDataResult<GetBrandResponse>(getBrandResponse,"Brand listed",HttpStatus.OK);
     }
 
     @Override
@@ -55,7 +56,7 @@ public class BrandManager implements BrandService {
         Brand brand=this.modelMapperService.forRequest().map(addBrandRequest,Brand.class);
         this.brandRepository.save(brand);
 
-        return new SuccessResult("Brand added");
+        return new SuccessResult(HttpStatus.CREATED, "Brand added");
     }
 
     @Override
@@ -64,13 +65,13 @@ public class BrandManager implements BrandService {
 
         Brand brand =this.modelMapperService.forRequest().map(updateBrandRequest,Brand.class);
         brandRepository.save(brand);
-        return new SuccessResult("Brand update");
+        return new SuccessResult( HttpStatus.OK,"Brand update");
     }
 
     @Override
     public Result delete(int id) {
         brandRepository.deleteById(id);
-        return new SuccessResult("Brand deleted !");
+        return new SuccessResult( HttpStatus.OK,"Brand deleted !");
     }
 
 }

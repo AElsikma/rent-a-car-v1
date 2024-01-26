@@ -58,14 +58,5 @@ public class UsersController {
         return this.userService.delete(id);
     }
 
-    @PostMapping("/login")
-    public String login(@RequestBody LoginRequest request) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        if(authentication.isAuthenticated())
-        {
-            Map<String,Object> claims = new HashMap<>();
-            return jwtService.generateToken(request.getEmail(), claims);
-        }
-        throw new RuntimeException("Bilgiler hatalı");
-    }
+
 }

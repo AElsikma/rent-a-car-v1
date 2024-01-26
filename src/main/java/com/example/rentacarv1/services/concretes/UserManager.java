@@ -15,6 +15,7 @@ import com.example.rentacarv1.services.dtos.requests.user.UpdateUserRequest;
 import com.example.rentacarv1.services.dtos.responses.user.GetUserListResponse;
 import com.example.rentacarv1.services.dtos.responses.user.GetUserResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -37,14 +38,14 @@ public class UserManager implements UserService {
         List<GetUserListResponse> userListResponse=users.stream().map(user -> this.modelMapperService.forResponse()
                 .map(user,GetUserListResponse.class)).collect(Collectors.toList());
 
-        return new SuccessDataResult<List<GetUserListResponse>>(userListResponse,"Users listed");
+        return new SuccessDataResult<List<GetUserListResponse>>(userListResponse,"Users listed", HttpStatus.OK);
     }
 
     @Override
     public DataResult<GetUserResponse> getById(int id) {
         User user = userRepository.findById(id).orElseThrow();
         GetUserResponse getUserResponse=this.modelMapperService.forResponse().map(user,GetUserResponse.class);
-        return new SuccessDataResult<GetUserResponse>(getUserResponse,"User listed");
+        return new SuccessDataResult<GetUserResponse>(getUserResponse,"User listed", HttpStatus.OK);
     }
 
     @Override
@@ -63,48 +64,23 @@ public class UserManager implements UserService {
                 .build();
 
         userRepository.save(user);
-        return new SuccessResult("User added");
+        return new SuccessResult( HttpStatus.CREATED,"User added");
     }
 
     @Override
     public Result update(UpdateUserRequest updateUserRequest) {
         User user =this.modelMapperService.forRequest().map(updateUserRequest,User.class);
         userRepository.save(user);
-        return new SuccessResult("User updated");
+        return new SuccessResult( HttpStatus.OK,"User updated");
     }
 
     @Override
     public Result delete(int id) {
 
         userRepository.deleteById(id);
-        return new SuccessResult("User deleted !");
+        return new SuccessResult( HttpStatus.OK,"User deleted !");
     }
 
-    @Override
-    public void register(AddUserRequest request) {
-        User user = User.builder()
-                .email(request.getEmail())
-                .authorities(
-                        request.getRoles().stream()
-                                .map(addRoleUserRequest -> roleService.findByName(addRoleUserRequest.getName()))
-                                .collect(Collectors.toSet())
-                )
-                .password(passwordEncoder.encode(request.getPassword()))
-                .build();
-    }
-
-    @Override
-    public String login(LoginRequest request) {
-       /* Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        if(authentication.isAuthenticated())
-        {
-            // jwt oluştur.
-            Map<String,Object> claims = new HashMap<>();
-            return jwtService.generateToken(request.getEmail(), claims);
-        }
-        throw new RuntimeException("Bilgiler hatalı");*/
-        return "";
-    }
 
 
     @Override

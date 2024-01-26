@@ -14,6 +14,7 @@ import com.example.rentacarv1.services.dtos.responses.model.GetModelListResponse
 import com.example.rentacarv1.services.dtos.responses.model.GetModelResponse;
 import com.example.rentacarv1.services.rules.ModelBusinessRules;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,14 +33,14 @@ public class ModelManager implements ModelService {
         List<GetModelListResponse> getModelListResponses = models.stream().map
                 (model -> this.modelMapperService.forResponse().map(model, GetModelListResponse.class))
                 .collect(Collectors.toList());
-        return new SuccessDataResult<List<GetModelListResponse>>(getModelListResponses,"Models listed");
+        return new SuccessDataResult<List<GetModelListResponse>>(getModelListResponses,"Models listed", HttpStatus.OK);
     }
 
     @Override
     public DataResult<GetModelResponse> getById(int id) {
         Model model = modelRepository.findById(id).orElseThrow();
         GetModelResponse getModelResponse = this.modelMapperService.forResponse().map(model,GetModelResponse.class);
-        return new SuccessDataResult<GetModelResponse>(getModelResponse,"Model listed");
+        return new SuccessDataResult<GetModelResponse>(getModelResponse,"Model listed", HttpStatus.OK);
     }
 
     @Override
@@ -49,7 +50,7 @@ public class ModelManager implements ModelService {
 
         Model model = this.modelMapperService.forRequest().map(addModelRequest,Model.class);
         this.modelRepository.save(model);
-        return new SuccessResult("Model added");
+        return new SuccessResult( HttpStatus.CREATED,"Model added");
     }
 
 
@@ -60,13 +61,13 @@ public class ModelManager implements ModelService {
 
         Model model = this.modelMapperService.forRequest().map(updateModelRequest,Model.class);
         this.modelRepository.save(model);
-        return new SuccessResult("Model updated");
+        return new SuccessResult( HttpStatus.OK,"Model updated");
     }
 
     @Override
     public Result delete(int id) {
 
         this.modelRepository.deleteById(id);
-        return new SuccessResult("Model deleted !");
+        return new SuccessResult( HttpStatus.OK,"Model deleted !");
     }
 }

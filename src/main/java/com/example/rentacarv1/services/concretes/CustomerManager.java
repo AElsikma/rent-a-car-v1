@@ -13,6 +13,7 @@ import com.example.rentacarv1.services.dtos.requests.customer.UpdateCustomerRequ
 import com.example.rentacarv1.services.dtos.responses.customer.GetCustomerListResponse;
 import com.example.rentacarv1.services.dtos.responses.customer.GetCustomerResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -29,33 +30,33 @@ public class CustomerManager implements CustomerService {
         List<GetCustomerListResponse> customerListResponse=customers.stream().map(customer -> this.modelMapperService.forResponse()
                 .map(customer,GetCustomerListResponse.class)).collect(Collectors.toList());
 
-        return new SuccessDataResult<List<GetCustomerListResponse>>(customerListResponse,"Customers listed");
+        return new SuccessDataResult<List<GetCustomerListResponse>>(customerListResponse,"Customers listed", HttpStatus.OK);
     }
 
     @Override
     public DataResult<GetCustomerResponse> getById(int id) {
         Customer customer = customerRepository.findById(id).orElseThrow();
         GetCustomerResponse getCustomerResponse=this.modelMapperService.forResponse().map(customer,GetCustomerResponse.class);
-        return new SuccessDataResult<GetCustomerResponse>(getCustomerResponse,"Customer Listed");
+        return new SuccessDataResult<GetCustomerResponse>(getCustomerResponse,"Customer Listed", HttpStatus.OK);
     }
 
     @Override
     public Result add(AddCustomerRequest addCustomerRequest) {
         Customer customer=this.modelMapperService.forRequest().map(addCustomerRequest,Customer.class);
         this.customerRepository.save(customer);
-        return new SuccessResult("Customer added");
+        return new SuccessResult( HttpStatus.CREATED,"Customer added");
     }
 
     @Override
     public Result update(UpdateCustomerRequest updateCustomerRequest) {
         Customer customer =this.modelMapperService.forRequest().map(updateCustomerRequest,Customer.class);
         customerRepository.save(customer);
-        return new SuccessResult("Customer updated");
+        return new SuccessResult( HttpStatus.OK,"Customer updated");
     }
 
     @Override
     public Result delete(int id) {
         customerRepository.deleteById(id);
-        return new SuccessResult("Customer deleted !");
+        return new SuccessResult( HttpStatus.OK,"Customer deleted !");
     }
 }

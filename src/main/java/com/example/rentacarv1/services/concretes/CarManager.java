@@ -1,6 +1,5 @@
 package com.example.rentacarv1.services.concretes;
 
-import com.example.rentacarv1.core.config.cache.RedisCacheManager;
 import com.example.rentacarv1.core.utilities.results.DataResult;
 import com.example.rentacarv1.core.utilities.results.Result;
 import com.example.rentacarv1.core.utilities.results.SuccessDataResult;
@@ -15,7 +14,7 @@ import com.example.rentacarv1.services.dtos.responses.car.GetCarListResponse;
 import com.example.rentacarv1.services.dtos.responses.car.GetCarResponse;
 import com.example.rentacarv1.services.rules.CarBusinessRules;
 import lombok.AllArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,43 +22,27 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-
 public class CarManager implements CarService {
 
     private CarRepository carRepository;
     private ModelMapperService modelMapperService;
     private CarBusinessRules carBusinessRules;
-    private RedisCacheManager redisCacheManager;
 
-
+    @Override
     public DataResult<List<GetCarListResponse>> getAll() {
-        List<GetCarListResponse> carListResponses = (List<GetCarListResponse>) redisCacheManager.getCachedData("carListCache", "getCarsAndCache");
-
-        if (carListResponses == null) {
-            carListResponses = getCarsAndCache();
-            redisCacheManager.cacheData("carListCache", "getCarsAndCache", carListResponses);
-        }
-
-        return new SuccessDataResult<>(carListResponses, "Cars Listed.");
+      List<Car> cars= carRepository.findAll();
+      List<GetCarListResponse> carListResponses=cars.stream()
+              .map(car -> this.modelMapperService.forResponse()
+                      .map(car,GetCarListResponse.class)).collect(Collectors.toList());
+      return new SuccessDataResult<List<GetCarListResponse>>(carListResponses,"Cars Listed", HttpStatus.OK);
     }
-
-    public List<GetCarListResponse> getCarsAndCache() {
-        List<Car> cars = carRepository.findAll();
-        List<GetCarListResponse> carListResponses = cars.stream()
-                .map(car -> modelMapperService.forResponse().map(car, GetCarListResponse.class))
-                .collect(Collectors.toList());
-        return carListResponses;
-    }
-
-
-
 
     @Override
     public DataResult<GetCarResponse> getById(int id) {
         Car car=this.carRepository.findById(id).orElseThrow();
         GetCarResponse carResponse=this.modelMapperService.forResponse()
                 .map(car, GetCarResponse.class);
-        return new SuccessDataResult<GetCarResponse>(carResponse,"Car Listed") ;
+        return new SuccessDataResult<GetCarResponse>(carResponse,"Car Listed", HttpStatus.OK) ;
 
     }
 
@@ -72,8 +55,7 @@ public class CarManager implements CarService {
         Car car =this.modelMapperService.forRequest().map(addCarRequest,Car.class);
 
         this.carRepository.save(car);
-        redisCacheManager.cacheData("carListCache", "getCarsAndCache", null);
-        return new SuccessResult("Car added");
+         return new SuccessResult(HttpStatus.CREATED,"Car added");
     }
 
     @Override
@@ -83,15 +65,13 @@ public class CarManager implements CarService {
 
        Car car=this.modelMapperService.forRequest().map(updateCarRequest,Car.class);
        this.carRepository.save(car);
-        redisCacheManager.cacheData("carListCache", "getCarsAndCache", null);
-       return new SuccessResult("Car updated");
+       return new SuccessResult( HttpStatus.OK,"Car updated");
 
     }
 
     @Override
     public Result delete(int id) {
          this.carRepository.deleteById(id);
-        redisCacheManager.cacheData("carListCache", "getCarsAndCache", null);
-         return new SuccessResult("Car deleted !");
+         return new SuccessResult( HttpStatus.OK,"Car deleted !");
     }
 }

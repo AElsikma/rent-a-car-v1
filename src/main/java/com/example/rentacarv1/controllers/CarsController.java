@@ -9,7 +9,9 @@ import com.example.rentacarv1.services.dtos.responses.car.GetCarListResponse;
 import com.example.rentacarv1.services.dtos.responses.car.GetCarResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,8 +24,8 @@ public class CarsController {
     private CarService carService;
 
     @GetMapping("/getAll")
-    public DataResult<List<GetCarListResponse>> getAll(){
-      return this.carService.getAll();
+    public DataResult<List<GetCarListResponse>> getAll() {
+        return (carService.getAll());
     }
 
     @GetMapping("/{id}")
@@ -37,7 +39,6 @@ public class CarsController {
         return this.carService.add(addCarRequest);
 
     }
-
 
     @PutMapping("/update")
     public Result update( @RequestBody @Valid() UpdateCarRequest updateCarRequest){

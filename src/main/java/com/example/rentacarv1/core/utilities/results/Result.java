@@ -19,6 +19,9 @@ public class Result {
         this(success, httpStatus);
         this.message = message;
     }
+    public Result(){
+
+    }
 
     public boolean isSuccess() {
         return success;

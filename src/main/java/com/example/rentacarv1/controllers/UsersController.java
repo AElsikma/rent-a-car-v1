@@ -24,6 +24,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/users")
 @AllArgsConstructor
+@CrossOrigin
 public class UsersController {
     private UserService userService;
     private final AuthenticationManager authenticationManager;

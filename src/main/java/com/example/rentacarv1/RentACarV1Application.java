@@ -3,11 +3,8 @@ package com.example.rentacarv1;
 import com.example.rentacarv1.core.utilities.exceptions.BusinessException;
 import com.example.rentacarv1.core.utilities.exceptions.ProblemDetails;
 import com.example.rentacarv1.core.utilities.exceptions.ValidationProblemDetails;
-import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -49,9 +46,5 @@ public class RentACarV1Application {
         return  validationProblemDetails;
     }
 
-    @Bean
-    public ModelMapper getModelMapper(){
-        return new ModelMapper();
-    }
 
 }

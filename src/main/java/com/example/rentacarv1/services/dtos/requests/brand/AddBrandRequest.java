@@ -1,6 +1,6 @@
 package com.example.rentacarv1.services.dtos.requests.brand;
 
-import jakarta.validation.constraints.Min;
+import com.example.rentacarv1.services.constants.brand.BrandMessages;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -12,8 +12,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AddBrandRequest {
 
-    @NotBlank(message = "Brand name must not be blank!")
-    @Size(min = 2, message = "Brand name must be at least 2 characters long!")
+    @NotBlank(message = BrandMessages.BRAND_NOT_BLANK)
+    @Size(min = 2, max = 20, message = BrandMessages.NAME_SHOULD_BE_BETWEEN_2_AND_20_CHARACTERS)
     private String name;
 
 }
+

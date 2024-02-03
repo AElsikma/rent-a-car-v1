@@ -1,5 +1,6 @@
 package com.example.rentacarv1.services.dtos.requests.car;
 
+import com.example.rentacarv1.services.constants.car.CarMessages;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,36 +11,36 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateCarRequest {
 
-    @NotNull(message = "The car id cannot be null.")
-    @Positive(message = "Id must be a positive number.")
+    @NotNull(message =CarMessages.CAR_NOT_NULL)
+    @Positive(message = CarMessages.POSITIVE_NUMBER)
     private  int id;
 
-    @NotNull(message = "The daily price field cannot be null !")
-    @DecimalMin(value = "0.0",inclusive = false,message = "Daily price must be greater than 0.")
+    @NotNull(message = CarMessages.CAR_NOT_NULL)
+    @DecimalMin(value = "0.0",inclusive = false,message = CarMessages.POSITIVE_NUMBER)
     private double daily_price;
 
 
-    @NotNull(message = "The kilometer field cannot be null !")
-    @Min(value = 0,message = "Kilometer must be greater than or equal to 0.")
+    @NotNull(message = CarMessages.CAR_NOT_NULL)
+    @Min(value = 0,message = CarMessages.POSITIVE_NUMBER)
     private int kilometer;
 
 
-    @NotBlank(message = "The plate field can't be empty.")
-    @Size(min=5,max=9,message = "Licence plate must be between 5 and 9 characters")
+    @NotBlank(message = CarMessages.CAR_NOT_BLANK)
+    @Size(min=5,max=9,message = CarMessages.PLATE_SHOULD_BE_BETWEEN_5_AND_9_CHARACTERS)
     private String plate;
 
 
-    @NotNull(message = "The year field cannot be null")
-    @Min(value = 2005,message = "Year must be greater than or equal to 2005.")
-    @Max(value = 2024, message ="Year must be less than or equal to the current yaer." )
+    @NotNull(message =CarMessages.CAR_NOT_NULL)
+    @Min(value = 2005,message = CarMessages.YEAR_SHOULD_BE_GREATER_THAN_OR_EQUAL_TO_2005)
+    @Max(value = 2024,message = CarMessages.YEAR_CANNOT_BE_HIGHER_THAN_2024)
     private int year;
 
-    @NotNull(message = "The color id cannot be null.")
-    @Positive(message = "Id must be a positive number.")
+    @NotNull(message =CarMessages.CAR_NOT_NULL)
+    @Positive(message =CarMessages.POSITIVE_NUMBER)
     private int colorId;
 
-    @NotNull(message = "The model id cannot be null.")
-    @Positive(message = "Id must be a positive number.")
+    @NotNull(message = CarMessages.CAR_NOT_NULL)
+    @Positive(message = CarMessages.POSITIVE_NUMBER)
     private int modelId;
 
 }

@@ -1,5 +1,7 @@
 package com.example.rentacarv1.services.dtos.requests.user;
 
+import com.example.rentacarv1.entities.User;
+import com.example.rentacarv1.services.constants.user.UserMessages;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
@@ -11,8 +13,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateUserRequest {
 
-    @NotNull(message = "Id can not be null.")
-    @Positive(message = "Id must be a positive number.")
+    @NotNull(message = UserMessages.USER_NOT_NULL)
+    @Positive(message = UserMessages.POSITIVE_NUMBER)
     private int id;
 
     private String name;

@@ -5,14 +5,13 @@ import com.example.rentacarv1.core.utilities.results.DataResult;
 import com.example.rentacarv1.core.utilities.results.Result;
 import com.example.rentacarv1.core.utilities.results.SuccessDataResult;
 import com.example.rentacarv1.core.utilities.results.SuccessResult;
-import com.example.rentacarv1.entities.concretes.Car;
 import com.example.rentacarv1.entities.concretes.Color;
 import com.example.rentacarv1.core.utilities.mappers.ModelMapperService;
 import com.example.rentacarv1.repositories.ColorRepository;
 import com.example.rentacarv1.services.abstracts.ColorService;
+import com.example.rentacarv1.services.constants.baseMessage.BaseMessages;
 import com.example.rentacarv1.services.dtos.requests.color.AddColorRequest;
 import com.example.rentacarv1.services.dtos.requests.color.UpdateColorRequest;
-import com.example.rentacarv1.services.dtos.responses.car.GetCarListResponse;
 import com.example.rentacarv1.services.dtos.responses.color.GetColorListResponse;
 import com.example.rentacarv1.services.dtos.responses.color.GetColorResponse;
 import com.example.rentacarv1.services.rules.ColorBusinessRules;
@@ -39,7 +38,7 @@ public class ColorManager implements ColorService {
             colorListResponses = getColorsAndCache();
             redisCacheManager.cacheData("colorListCache", "getColorsAndCache", colorListResponses);
         }
-        return new SuccessDataResult<>(colorListResponses, "Colors Listed.",HttpStatus.OK);
+        return new SuccessDataResult<>(colorListResponses, BaseMessages.GET_ALL.getMessage(),HttpStatus.OK);
     }
 
     public List<GetColorListResponse> getColorsAndCache() {
@@ -55,7 +54,7 @@ public class ColorManager implements ColorService {
         Color color  = this.colorRepository.findById(id).orElseThrow();
         GetColorResponse getColorResponse =this.modelMapperService.forResponse()
                 .map(color,GetColorResponse.class);
-        return new SuccessDataResult<GetColorResponse>(getColorResponse,"Color listed", HttpStatus.OK);
+        return new SuccessDataResult<GetColorResponse>(getColorResponse, BaseMessages.GET.getMessage(), HttpStatus.OK);
     }
 
     @Override
@@ -66,7 +65,7 @@ public class ColorManager implements ColorService {
         Color color = this.modelMapperService.forRequest().map(addColorRequest,Color.class);
         this.colorRepository.save(color);
         redisCacheManager.cacheData("colorListCache", "getColorsAndCache", null);
-        return new SuccessResult( HttpStatus.CREATED,"Color added");
+        return new SuccessResult( HttpStatus.CREATED, BaseMessages.ADD.getMessage());
     }
 
     @Override
@@ -76,7 +75,7 @@ public class ColorManager implements ColorService {
         Color color = this.modelMapperService.forRequest().map(updateColorRequest,Color.class);
         this.colorRepository.save(color);
         redisCacheManager.cacheData("colorListCache", "getColorsAndCache", null);
-        return  new SuccessResult( HttpStatus.OK,"Color updated");
+        return  new SuccessResult( HttpStatus.OK, BaseMessages.UPDATE.getMessage());
     }
 
     @Override
@@ -84,6 +83,6 @@ public class ColorManager implements ColorService {
 
         this.colorRepository.deleteById(id);
         redisCacheManager.cacheData("colorListCache", "getColorsAndCache", null);
-        return new SuccessResult( HttpStatus.OK,"Color deleted !");
+        return new SuccessResult( HttpStatus.OK, BaseMessages.DELETE.getMessage());
     }
 }

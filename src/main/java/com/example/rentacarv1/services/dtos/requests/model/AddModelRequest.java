@@ -1,5 +1,6 @@
 package com.example.rentacarv1.services.dtos.requests.model;
 
+import com.example.rentacarv1.services.constants.model.ModelMessages;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,11 +11,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AddModelRequest {
 
-    @NotBlank(message = "Model name can not be empty!")
-    @Size(min = 2, message = "Model name must be at least 2 characters long!")
+    @NotBlank(message = ModelMessages.MODEL_NOT_BLANK)
+    @Size(min = 2, message = ModelMessages.NAME_SHOULD_BE_BETWEEN_2_AND_20_CHARACTERS)
     private String name;
 
-    @NotNull(message = "The brand id can not be null.")
-    @Positive(message = "Id must be a positive number.")
+    @NotNull(message = ModelMessages.MODEL_NOT_NULL)
+    @Positive(message =ModelMessages.POSITIVE_NUMBER)
     private int brandId;
 }

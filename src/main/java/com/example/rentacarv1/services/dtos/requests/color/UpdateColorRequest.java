@@ -1,5 +1,6 @@
 package com.example.rentacarv1.services.dtos.requests.color;
 
+import com.example.rentacarv1.services.constants.color.ColorMessages;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -12,10 +13,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UpdateColorRequest {
-    @NotNull(message = "ID can not be null.")
-    @Positive(message = "Id must be a positive number.")
+    @NotNull(message = ColorMessages.COLOR_NOT_NULL)
+    @Positive(message = ColorMessages.POSITIVE_NUMBER)
     private int id;
-    @NotBlank(message = "Color name can not be empty!")
-    @Size(min = 3,max = 20,message = "Color name must be between 2 and 20!")
+    @NotBlank(message = ColorMessages.COLOR_NOT_BLANK)
+    @Size(min = 3,max = 20,message =ColorMessages.COLOR_SHOULD_BE_BETWEEN_2_AND_20_CHARACTERS)
     private String name;
 }

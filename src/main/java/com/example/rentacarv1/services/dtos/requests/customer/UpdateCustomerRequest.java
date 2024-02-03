@@ -1,5 +1,6 @@
 package com.example.rentacarv1.services.dtos.requests.customer;
 
+import com.example.rentacarv1.services.constants.customer.CustomerMessages;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -13,10 +14,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateCustomerRequest {
 
-    @NotNull(message = "ID can not be null.")
-    @Positive(message = "Id must be a positive number.")
+    @NotNull(message = CustomerMessages.CUSTOMER_NOT_NULL)
+    @Positive(message = CustomerMessages.POSITIVE_NUMBER)
     private int id;
-    @Digits(integer = 11,fraction = 0, message = "You can only enter integers")
-    @Size(min=11,max=11,message = "Nationality Id can only be 11 characters")
+
+    @Digits(integer = 11, fraction = 0, message = CustomerMessages.ONLY_ENTER_INTEGER)
+    @Size(min = 11, max = 11, message = CustomerMessages.ONLY_BE_11_CHARACTER)
     private String nationalityId;
 }

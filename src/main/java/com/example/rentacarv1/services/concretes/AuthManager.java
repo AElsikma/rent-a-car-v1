@@ -1,7 +1,6 @@
 package com.example.rentacarv1.services.concretes;
 
 import com.example.rentacarv1.core.services.JwtService;
-import com.example.rentacarv1.core.utilities.mappers.ModelMapperService;
 import com.example.rentacarv1.entities.User;
 import com.example.rentacarv1.entities.concretes.Role;
 import com.example.rentacarv1.entities.concretes.Token;
@@ -9,10 +8,8 @@ import com.example.rentacarv1.entities.enums.TokenType;
 import com.example.rentacarv1.repositories.TokenRepository;
 import com.example.rentacarv1.repositories.UserRepository;
 import com.example.rentacarv1.services.abstracts.AuthService;
-import com.example.rentacarv1.services.abstracts.RoleService;
 import com.example.rentacarv1.services.dtos.requests.auth.LoginRequest;
 import com.example.rentacarv1.services.dtos.requests.auth.RegisterRequest;
-import com.example.rentacarv1.services.dtos.requests.user.AddUserRequest;
 import com.example.rentacarv1.services.dtos.responses.auth.AuthenticationResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,7 +24,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.stream.Collectors;
+
 
 @Service
 @AllArgsConstructor

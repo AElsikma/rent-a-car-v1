@@ -7,14 +7,13 @@ import com.example.rentacarv1.core.utilities.results.SuccessDataResult;
 import com.example.rentacarv1.core.utilities.results.SuccessResult;
 import com.example.rentacarv1.entities.concretes.Brand;
 import com.example.rentacarv1.core.utilities.mappers.ModelMapperService;
-import com.example.rentacarv1.entities.concretes.Car;
 import com.example.rentacarv1.repositories.BrandRepository;
 import com.example.rentacarv1.services.abstracts.BrandService;
+import com.example.rentacarv1.services.constants.baseMessage.BaseMessages;
 import com.example.rentacarv1.services.dtos.requests.brand.AddBrandRequest;
 import com.example.rentacarv1.services.dtos.requests.brand.UpdateBrandRequest;
 import com.example.rentacarv1.services.dtos.responses.brand.GetBrandListResponse;
 import com.example.rentacarv1.services.dtos.responses.brand.GetBrandResponse;
-import com.example.rentacarv1.services.dtos.responses.car.GetCarListResponse;
 import com.example.rentacarv1.services.rules.BrandBusinessRules;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -43,7 +42,7 @@ public class BrandManager implements BrandService {
             redisCacheManager.cacheData("brandListCache", "getBrandsAndCache", brandListResponses);
         }
 
-        return new SuccessDataResult<>(brandListResponses, "Brands Listed.",HttpStatus.OK);
+        return new SuccessDataResult<>(brandListResponses, BaseMessages.GET_ALL.getMessage(),HttpStatus.OK);
     }
 
     public List<GetBrandListResponse> getBrandsAndCache() {
@@ -59,7 +58,7 @@ public class BrandManager implements BrandService {
 
         Brand brand = brandRepository.findById(id).orElseThrow();
         GetBrandResponse getBrandResponse=this.modelMapperService.forResponse().map(brand,GetBrandResponse.class);
-        return new SuccessDataResult<GetBrandResponse>(getBrandResponse,"Brand listed",HttpStatus.OK);
+        return new SuccessDataResult<GetBrandResponse>(getBrandResponse, BaseMessages.GET.getMessage(),HttpStatus.OK);
     }
 
     @Override
@@ -70,7 +69,7 @@ public class BrandManager implements BrandService {
         Brand brand=this.modelMapperService.forRequest().map(addBrandRequest,Brand.class);
         this.brandRepository.save(brand);
         redisCacheManager.cacheData("brandListCache", "getBrandsAndCache", null);
-        return new SuccessResult(HttpStatus.CREATED, "Brand added");
+        return new SuccessResult(HttpStatus.CREATED, BaseMessages.ADD.getMessage());
     }
 
     @Override
@@ -80,14 +79,14 @@ public class BrandManager implements BrandService {
         Brand brand =this.modelMapperService.forRequest().map(updateBrandRequest,Brand.class);
         brandRepository.save(brand);
         redisCacheManager.cacheData("brandListCache", "getBrandsAndCache", null);
-        return new SuccessResult( HttpStatus.OK,"Brand update");
+        return new SuccessResult( HttpStatus.OK, BaseMessages.UPDATE.getMessage());
     }
 
     @Override
     public Result delete(int id) {
         brandRepository.deleteById(id);
         redisCacheManager.cacheData("brandListCache", "getBrandsAndCache", null);
-        return new SuccessResult( HttpStatus.OK,"Brand deleted !");
+        return new SuccessResult( HttpStatus.OK, BaseMessages.DELETE.getMessage());
     }
 
 }

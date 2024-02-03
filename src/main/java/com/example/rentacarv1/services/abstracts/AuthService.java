@@ -3,7 +3,6 @@ package com.example.rentacarv1.services.abstracts;
 import com.example.rentacarv1.entities.User;
 import com.example.rentacarv1.services.dtos.requests.auth.LoginRequest;
 import com.example.rentacarv1.services.dtos.requests.auth.RegisterRequest;
-import com.example.rentacarv1.services.dtos.requests.user.AddUserRequest;
 import com.example.rentacarv1.services.dtos.responses.auth.AuthenticationResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

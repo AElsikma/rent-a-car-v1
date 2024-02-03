@@ -9,6 +9,7 @@ import com.example.rentacarv1.entities.concretes.Car;
 import com.example.rentacarv1.core.utilities.mappers.ModelMapperService;
 import com.example.rentacarv1.repositories.CarRepository;
 import com.example.rentacarv1.services.abstracts.CarService;
+import com.example.rentacarv1.services.constants.baseMessage.BaseMessages;
 import com.example.rentacarv1.services.dtos.requests.car.AddCarRequest;
 import com.example.rentacarv1.services.dtos.requests.car.UpdateCarRequest;
 import com.example.rentacarv1.services.dtos.responses.car.GetCarListResponse;
@@ -38,7 +39,7 @@ public class CarManager implements CarService {
             redisCacheManager.cacheData("carListCache", "getCarsAndCache", carListResponses);
         }
 
-        return new SuccessDataResult<>(carListResponses, "Cars Listed.",HttpStatus.OK);
+        return new SuccessDataResult<>(carListResponses, BaseMessages.GET_ALL.getMessage(),HttpStatus.OK);
     }
 
     public List<GetCarListResponse> getCarsAndCache() {
@@ -54,7 +55,7 @@ public class CarManager implements CarService {
         Car car=this.carRepository.findById(id).orElseThrow();
         GetCarResponse carResponse=this.modelMapperService.forResponse()
                 .map(car, GetCarResponse.class);
-        return new SuccessDataResult<>(carResponse,"Car Listed", HttpStatus.OK) ;
+        return new SuccessDataResult<>(carResponse, BaseMessages.GET.getMessage(), HttpStatus.OK) ;
 
     }
 
@@ -68,7 +69,7 @@ public class CarManager implements CarService {
 
         this.carRepository.save(car);
         redisCacheManager.cacheData("carListCache", "getCarsAndCache", null);
-         return new SuccessResult(HttpStatus.CREATED,"Car added");
+         return new SuccessResult(HttpStatus.CREATED, BaseMessages.ADD.getMessage());
     }
 
     @Override
@@ -79,7 +80,7 @@ public class CarManager implements CarService {
        Car car=this.modelMapperService.forRequest().map(updateCarRequest,Car.class);
        this.carRepository.save(car);
         redisCacheManager.cacheData("carListCache", "getCarsAndCache", null);
-       return new SuccessResult( HttpStatus.OK,"Car updated");
+       return new SuccessResult( HttpStatus.OK, BaseMessages.UPDATE.getMessage());
 
     }
 
@@ -87,6 +88,6 @@ public class CarManager implements CarService {
     public Result delete(int id) {
          this.carRepository.deleteById(id);
         redisCacheManager.cacheData("carListCache", "getCarsAndCache", null);
-         return new SuccessResult( HttpStatus.OK,"Car deleted !");
+         return new SuccessResult( HttpStatus.OK, BaseMessages.DELETE.getMessage());
     }
 }

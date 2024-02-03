@@ -11,22 +11,27 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "logs")
 public class Log  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
     private Long id;
 
-    @Column(name = "log_message")
-    private String logMessage;
-
-    @Column(name = "log_level")
+    private String message;
     private String logLevel;
+    private LocalDateTime creationTime;
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
+
+
+    public Log() {
+        this.creationTime = LocalDateTime.now();
+    }
+
+    public Log(String message, String logLevel) {
+        this.message = message;
+        this.logLevel = logLevel;
+        this.creationTime = LocalDateTime.now();
+    }
 }

@@ -1,6 +1,5 @@
 package com.example.rentacarv1.services.dtos.requests.user;
 
-import com.example.rentacarv1.entities.User;
 import com.example.rentacarv1.services.constants.user.UserMessages;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;

@@ -1,7 +1,6 @@
 package com.example.rentacarv1.services.dtos.requests.color;
 
 import com.example.rentacarv1.services.constants.color.ColorMessages;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;

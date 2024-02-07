@@ -1,6 +1,7 @@
 package com.example.rentacarv1.services.concretes;
 
 import com.example.rentacarv1.core.config.cache.RedisCacheManager;
+import com.example.rentacarv1.core.internationalization.MessageService;
 import com.example.rentacarv1.core.utilities.results.DataResult;
 import com.example.rentacarv1.core.utilities.results.Result;
 import com.example.rentacarv1.core.utilities.results.SuccessDataResult;
@@ -34,8 +35,8 @@ public class RentalManager implements RentalService {
     private final CustomerRepository customerRepository;
     private final CarRepository carRepository;
     private final EmployeeRepository employeeRepository;
-    private final RentalBusinessRules rentalBusinessRules;
     private RedisCacheManager redisCacheManager;
+    private final MessageService messageService;
 
 
     @Override
@@ -46,7 +47,7 @@ public class RentalManager implements RentalService {
             redisCacheManager.cacheData("rentalListCache", "getRentalsAndCache", rentalListResponses);
         }
 
-        return new SuccessDataResult<>(rentalListResponses, BaseMessages.GET_ALL.getMessage(),HttpStatus.OK);
+        return new SuccessDataResult<>(rentalListResponses,messageService.getMessage(BaseMessages.GET_ALL),HttpStatus.OK);
     }
 
     public List<GetRentalListResponse> getRentalsAndCache() {
@@ -61,7 +62,7 @@ public class RentalManager implements RentalService {
     public DataResult<GetRentalResponse> getById(int id) {
         Rental rental = rentalRepository.findById(id).orElseThrow();
         GetRentalResponse getRentalResponse=this.modelMapperService.forResponse().map(rental,GetRentalResponse.class);
-        return new SuccessDataResult<GetRentalResponse>(getRentalResponse, BaseMessages.GET.getMessage(), HttpStatus.OK) ;
+        return new SuccessDataResult<GetRentalResponse>(getRentalResponse,messageService.getMessage(BaseMessages.GET) , HttpStatus.OK) ;
     }
 
     @Override
@@ -83,7 +84,7 @@ public class RentalManager implements RentalService {
         rental.setTotalPrice(car.getDailyPrice() * rentalLimit);
         this.rentalRepository.save(rental);
         redisCacheManager.cacheData("rentalListCache", "getRentalsAndCache", null);
-        return new SuccessResult( HttpStatus.CREATED, BaseMessages.ADD.getMessage());
+        return new SuccessResult( HttpStatus.CREATED, messageService.getMessage(BaseMessages.ADD));
 
     }
 
@@ -92,7 +93,7 @@ public class RentalManager implements RentalService {
         Rental rental =this.modelMapperService.forRequest().map(updateRentalRequest,Rental.class);
         rentalRepository.save(rental);
         redisCacheManager.cacheData("rentalListCache", "getRentalsAndCache", null);
-        return new SuccessResult( HttpStatus.OK, BaseMessages.UPDATE.getMessage());
+        return new SuccessResult( HttpStatus.OK, messageService.getMessage(BaseMessages.UPDATE));
     }
 
     @Override
@@ -100,6 +101,6 @@ public class RentalManager implements RentalService {
 
         rentalRepository.deleteById(id);
         redisCacheManager.cacheData("rentalListCache", "getRentalsAndCache", null);
-        return new SuccessResult( HttpStatus.OK, BaseMessages.DELETE.getMessage());
+        return new SuccessResult( HttpStatus.OK, messageService.getMessage(BaseMessages.DELETE));
     }
 }

@@ -1,7 +1,6 @@
 package com.example.rentacarv1.services.dtos.requests.rental;
 
 import com.example.rentacarv1.services.constants.rental.RentalMessages;
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

@@ -15,4 +15,5 @@ public class GetUserResponse implements Serializable {
     private String surname;
     private String gsm;
     private String email;
+
 }

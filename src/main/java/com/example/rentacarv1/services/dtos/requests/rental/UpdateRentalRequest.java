@@ -1,6 +1,5 @@
 package com.example.rentacarv1.services.dtos.requests.rental;
 
-import com.example.rentacarv1.entities.concretes.Car;
 import com.example.rentacarv1.services.constants.rental.RentalMessages;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;

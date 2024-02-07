@@ -1,6 +1,7 @@
 package com.example.rentacarv1.services.concretes;
 
 import com.example.rentacarv1.core.config.cache.RedisCacheManager;
+import com.example.rentacarv1.core.internationalization.MessageService;
 import com.example.rentacarv1.core.utilities.results.DataResult;
 import com.example.rentacarv1.core.utilities.results.Result;
 import com.example.rentacarv1.core.utilities.results.SuccessDataResult;
@@ -30,6 +31,7 @@ public class CarManager implements CarService {
     private ModelMapperService modelMapperService;
     private CarBusinessRules carBusinessRules;
     private RedisCacheManager redisCacheManager;
+    private final MessageService messageService;
 
     @Override
     public DataResult<List<GetCarListResponse>> getAll() {
@@ -39,7 +41,7 @@ public class CarManager implements CarService {
             redisCacheManager.cacheData("carListCache", "getCarsAndCache", carListResponses);
         }
 
-        return new SuccessDataResult<>(carListResponses, BaseMessages.GET_ALL.getMessage(),HttpStatus.OK);
+        return new SuccessDataResult<>(carListResponses, messageService.getMessage(BaseMessages.GET_ALL),HttpStatus.OK);
     }
 
     public List<GetCarListResponse> getCarsAndCache() {
@@ -55,7 +57,7 @@ public class CarManager implements CarService {
         Car car=this.carRepository.findById(id).orElseThrow();
         GetCarResponse carResponse=this.modelMapperService.forResponse()
                 .map(car, GetCarResponse.class);
-        return new SuccessDataResult<>(carResponse, BaseMessages.GET.getMessage(), HttpStatus.OK) ;
+        return new SuccessDataResult<>(carResponse, messageService.getMessage(BaseMessages.GET), HttpStatus.OK) ;
 
     }
 
@@ -69,7 +71,7 @@ public class CarManager implements CarService {
 
         this.carRepository.save(car);
         redisCacheManager.cacheData("carListCache", "getCarsAndCache", null);
-         return new SuccessResult(HttpStatus.CREATED, BaseMessages.ADD.getMessage());
+         return new SuccessResult(HttpStatus.CREATED, messageService.getMessage(BaseMessages.ADD));
     }
 
     @Override
@@ -80,7 +82,7 @@ public class CarManager implements CarService {
        Car car=this.modelMapperService.forRequest().map(updateCarRequest,Car.class);
        this.carRepository.save(car);
         redisCacheManager.cacheData("carListCache", "getCarsAndCache", null);
-       return new SuccessResult( HttpStatus.OK, BaseMessages.UPDATE.getMessage());
+       return new SuccessResult( HttpStatus.OK, messageService.getMessage(BaseMessages.UPDATE));
 
     }
 
@@ -88,6 +90,6 @@ public class CarManager implements CarService {
     public Result delete(int id) {
          this.carRepository.deleteById(id);
         redisCacheManager.cacheData("carListCache", "getCarsAndCache", null);
-         return new SuccessResult( HttpStatus.OK, BaseMessages.DELETE.getMessage());
+         return new SuccessResult( HttpStatus.OK, messageService.getMessage(BaseMessages.DELETE));
     }
 }

@@ -1,6 +1,7 @@
 package com.example.rentacarv1.services.concretes;
 
 import com.example.rentacarv1.core.config.cache.RedisCacheManager;
+import com.example.rentacarv1.core.internationalization.MessageService;
 import com.example.rentacarv1.core.utilities.results.DataResult;
 import com.example.rentacarv1.core.utilities.results.Result;
 import com.example.rentacarv1.core.utilities.results.SuccessDataResult;
@@ -27,6 +28,7 @@ public class EmployeeManager implements EmployeeService {
     private EmployeeRepository employeeRepository;
     private ModelMapperService modelMapperService;
     private RedisCacheManager redisCacheManager;
+    private final MessageService messageService;
     @Override
     public DataResult<List<GetEmployeeListResponse>> getAll() {
         List<GetEmployeeListResponse> employeeListResponses = (List<GetEmployeeListResponse>) redisCacheManager.getCachedData("employeeListCache", "getEmployeesAndCache");
@@ -35,7 +37,7 @@ public class EmployeeManager implements EmployeeService {
             redisCacheManager.cacheData("employeeListCache", "getEmployeesAndCache", employeeListResponses);
         }
 
-        return new SuccessDataResult<>(employeeListResponses, BaseMessages.GET_ALL.getMessage(),HttpStatus.OK);
+        return new SuccessDataResult<>(employeeListResponses, messageService.getMessage(BaseMessages.GET_ALL),HttpStatus.OK);
     }
 
     public List<GetEmployeeListResponse> getEmployeesAndCache() {
@@ -50,7 +52,7 @@ public class EmployeeManager implements EmployeeService {
     public DataResult<GetEmployeeResponse> getById(int id) {
         Employee employee = employeeRepository.findById(id).orElseThrow();
         GetEmployeeResponse getEmployeeResponse=this.modelMapperService.forResponse().map(employee,GetEmployeeResponse.class);
-        return new SuccessDataResult<GetEmployeeResponse>(getEmployeeResponse, BaseMessages.GET.getMessage(), HttpStatus.OK);
+        return new SuccessDataResult<GetEmployeeResponse>(getEmployeeResponse, messageService.getMessage(BaseMessages.GET), HttpStatus.OK);
     }
 
     @Override
@@ -58,7 +60,7 @@ public class EmployeeManager implements EmployeeService {
         Employee employee =this.modelMapperService.forRequest().map(addEmployeeRequest,Employee.class);
         this.employeeRepository.save(employee);
         redisCacheManager.cacheData("employeeListCache", "getEmployeesAndCache", null);
-        return new SuccessResult( HttpStatus.CREATED, BaseMessages.ADD.getMessage());
+        return new SuccessResult( HttpStatus.CREATED,messageService.getMessage(BaseMessages.ADD));
     }
 
     @Override
@@ -66,13 +68,13 @@ public class EmployeeManager implements EmployeeService {
         Employee employee =this.modelMapperService.forRequest().map(updateEmployeeRequest,Employee.class);
         employeeRepository.save(employee);
         redisCacheManager.cacheData("employeeListCache", "getEmployeesAndCache", null);
-        return new SuccessResult( HttpStatus.OK, BaseMessages.UPDATE.getMessage());
+        return new SuccessResult( HttpStatus.OK, messageService.getMessage(BaseMessages.UPDATE));
     }
 
     @Override
     public Result delete(int id) {
         employeeRepository.deleteById(id);
         redisCacheManager.cacheData("employeeListCache", "getEmployeesAndCache", null);
-        return new SuccessResult( HttpStatus.OK, BaseMessages.DELETE.getMessage());
+        return new SuccessResult( HttpStatus.OK, messageService.getMessage(BaseMessages.DELETE));
     }
 }

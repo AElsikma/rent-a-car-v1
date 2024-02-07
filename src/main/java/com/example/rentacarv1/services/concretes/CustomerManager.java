@@ -1,6 +1,7 @@
 package com.example.rentacarv1.services.concretes;
 
 import com.example.rentacarv1.core.config.cache.RedisCacheManager;
+import com.example.rentacarv1.core.internationalization.MessageService;
 import com.example.rentacarv1.core.utilities.results.DataResult;
 import com.example.rentacarv1.core.utilities.results.Result;
 import com.example.rentacarv1.core.utilities.results.SuccessDataResult;
@@ -9,6 +10,7 @@ import com.example.rentacarv1.entities.concretes.Customer;
 import com.example.rentacarv1.core.utilities.mappers.ModelMapperService;
 import com.example.rentacarv1.repositories.CustomerRepository;
 import com.example.rentacarv1.services.abstracts.CustomerService;
+import com.example.rentacarv1.services.constants.baseMessage.BaseMessages;
 import com.example.rentacarv1.services.dtos.requests.customer.AddCustomerRequest;
 import com.example.rentacarv1.services.dtos.requests.customer.UpdateCustomerRequest;
 import com.example.rentacarv1.services.dtos.responses.customer.GetCustomerListResponse;
@@ -26,6 +28,7 @@ public class CustomerManager implements CustomerService {
     private CustomerRepository customerRepository;
     private ModelMapperService modelMapperService;
     private RedisCacheManager redisCacheManager;
+    private final MessageService messageService;
     @Override
     public DataResult<List<GetCustomerListResponse>> getAll() {
         List<GetCustomerListResponse> customerListResponses = (List<GetCustomerListResponse>) redisCacheManager.getCachedData("customerListCache", "getCustomersAndCache");
@@ -34,7 +37,7 @@ public class CustomerManager implements CustomerService {
             redisCacheManager.cacheData("customerListCache", "getCustomersAndCache", customerListResponses);
         }
 
-        return new SuccessDataResult<>(customerListResponses, "Customers Listed.",HttpStatus.OK);
+        return new SuccessDataResult<>(customerListResponses, messageService.getMessage(BaseMessages.GET_ALL),HttpStatus.OK);
     }
 
     public List<GetCustomerListResponse> getCustomersAndCache() {
@@ -49,7 +52,7 @@ public class CustomerManager implements CustomerService {
     public DataResult<GetCustomerResponse> getById(int id) {
         Customer customer = customerRepository.findById(id).orElseThrow();
         GetCustomerResponse getCustomerResponse=this.modelMapperService.forResponse().map(customer,GetCustomerResponse.class);
-        return new SuccessDataResult<GetCustomerResponse>(getCustomerResponse,"Customer Listed", HttpStatus.OK);
+        return new SuccessDataResult<GetCustomerResponse>(getCustomerResponse,messageService.getMessage(BaseMessages.GET), HttpStatus.OK);
     }
 
     @Override
@@ -57,7 +60,7 @@ public class CustomerManager implements CustomerService {
         Customer customer=this.modelMapperService.forRequest().map(addCustomerRequest,Customer.class);
         this.customerRepository.save(customer);
         redisCacheManager.cacheData("customerListCache", "getCustomersAndCache", null);
-        return new SuccessResult( HttpStatus.CREATED,"Customer added");
+        return new SuccessResult( HttpStatus.CREATED,messageService.getMessage(BaseMessages.ADD));
     }
 
     @Override
@@ -65,13 +68,13 @@ public class CustomerManager implements CustomerService {
         Customer customer =this.modelMapperService.forRequest().map(updateCustomerRequest,Customer.class);
         customerRepository.save(customer);
         redisCacheManager.cacheData("customerListCache", "getCustomersAndCache", null);
-        return new SuccessResult( HttpStatus.OK,"Customer updated");
+        return new SuccessResult( HttpStatus.OK,messageService.getMessage(BaseMessages.UPDATE));
     }
 
     @Override
     public Result delete(int id) {
         customerRepository.deleteById(id);
         redisCacheManager.cacheData("customerListCache", "getCustomersAndCache", null);
-        return new SuccessResult( HttpStatus.OK,"Customer deleted !");
+        return new SuccessResult( HttpStatus.OK,messageService.getMessage(BaseMessages.DELETE));
     }
 }

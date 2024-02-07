@@ -1,6 +1,7 @@
 package com.example.rentacarv1.services.concretes;
 
 import com.example.rentacarv1.core.config.cache.RedisCacheManager;
+import com.example.rentacarv1.core.internationalization.MessageService;
 import com.example.rentacarv1.core.utilities.results.DataResult;
 import com.example.rentacarv1.core.utilities.results.Result;
 import com.example.rentacarv1.core.utilities.results.SuccessDataResult;
@@ -33,6 +34,7 @@ public class UserManager implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final RoleService roleService;
     private RedisCacheManager redisCacheManager;
+    private final MessageService messageService;
 
     @Override
     public DataResult<List<GetUserListResponse>> getAll() {
@@ -42,7 +44,7 @@ public class UserManager implements UserService {
             redisCacheManager.cacheData("userListCache", "getUsersAndCache", userListResponses);
         }
 
-        return new SuccessDataResult<>(userListResponses, BaseMessages.GET_ALL.getMessage(),HttpStatus.OK);
+        return new SuccessDataResult<>(userListResponses, messageService.getMessage(BaseMessages.GET_ALL),HttpStatus.OK);
     }
     public List<GetUserListResponse> getUsersAndCache() {
         List<User> users = userRepository.findAll();
@@ -56,7 +58,7 @@ public class UserManager implements UserService {
     public DataResult<GetUserResponse> getById(int id) {
         User user = userRepository.findById(id).orElseThrow();
         GetUserResponse getUserResponse=this.modelMapperService.forResponse().map(user,GetUserResponse.class);
-        return new SuccessDataResult<GetUserResponse>(getUserResponse, BaseMessages.GET.getMessage(), HttpStatus.OK);
+        return new SuccessDataResult<GetUserResponse>(getUserResponse,messageService.getMessage(BaseMessages.GET) , HttpStatus.OK);
     }
 
     @Override
@@ -76,7 +78,7 @@ public class UserManager implements UserService {
 
         userRepository.save(user);
         redisCacheManager.cacheData("userListCache", "getUsersAndCache", null);
-        return new SuccessResult( HttpStatus.CREATED, BaseMessages.ADD.getMessage());
+        return new SuccessResult( HttpStatus.CREATED, messageService.getMessage( BaseMessages.ADD));
     }
 
     @Override
@@ -84,7 +86,7 @@ public class UserManager implements UserService {
         User user =this.modelMapperService.forRequest().map(updateUserRequest,User.class);
         userRepository.save(user);
         redisCacheManager.cacheData("userListCache", "getUsersAndCache", null);
-        return new SuccessResult( HttpStatus.OK, BaseMessages.UPDATE.getMessage());
+        return new SuccessResult( HttpStatus.OK,messageService.getMessage(BaseMessages.UPDATE));
     }
 
     @Override
@@ -92,7 +94,7 @@ public class UserManager implements UserService {
 
         userRepository.deleteById(id);
         redisCacheManager.cacheData("userListCache", "getUsersAndCache", null);
-        return new SuccessResult( HttpStatus.OK, BaseMessages.DELETE.getMessage());
+        return new SuccessResult( HttpStatus.OK, messageService.getMessage(BaseMessages.DELETE));
     }
 
 

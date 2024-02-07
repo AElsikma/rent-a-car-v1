@@ -1,6 +1,7 @@
 package com.example.rentacarv1.services.concretes;
 
 import com.example.rentacarv1.core.config.cache.RedisCacheManager;
+import com.example.rentacarv1.core.internationalization.MessageService;
 import com.example.rentacarv1.core.utilities.results.DataResult;
 import com.example.rentacarv1.core.utilities.results.Result;
 import com.example.rentacarv1.core.utilities.results.SuccessDataResult;
@@ -28,6 +29,7 @@ public class ModelManager implements ModelService {
     private final ModelMapperService modelMapperService;
     private final ModelBusinessRules modelBusinessRules;
     private RedisCacheManager redisCacheManager;
+    private final MessageService messageService;
 
     @Override
     public DataResult<List<GetModelListResponse>> getAll() {
@@ -37,7 +39,7 @@ public class ModelManager implements ModelService {
             redisCacheManager.cacheData("modelListCache", "getModelsAndCache", modelListResponses);
         }
 
-        return new SuccessDataResult<>(modelListResponses, BaseMessages.GET_ALL.getMessage(),HttpStatus.OK);
+        return new SuccessDataResult<>(modelListResponses, messageService.getMessage(BaseMessages.GET_ALL),HttpStatus.OK);
     }
 
     public List<GetModelListResponse> getModelsAndCache() {
@@ -52,7 +54,7 @@ public class ModelManager implements ModelService {
     public DataResult<GetModelResponse> getById(int id) {
         Model model = modelRepository.findById(id).orElseThrow();
         GetModelResponse getModelResponse = this.modelMapperService.forResponse().map(model,GetModelResponse.class);
-        return new SuccessDataResult<GetModelResponse>(getModelResponse, BaseMessages.GET.getMessage(), HttpStatus.OK);
+        return new SuccessDataResult<GetModelResponse>(getModelResponse,messageService.getMessage(BaseMessages.GET) , HttpStatus.OK);
     }
 
     @Override
@@ -63,7 +65,7 @@ public class ModelManager implements ModelService {
         Model model = this.modelMapperService.forRequest().map(addModelRequest,Model.class);
         this.modelRepository.save(model);
         redisCacheManager.cacheData("modelListCache", "getModelsAndCache", null);
-        return new SuccessResult( HttpStatus.CREATED, BaseMessages.ADD.getMessage());
+        return new SuccessResult( HttpStatus.CREATED,messageService.getMessage(BaseMessages.ADD) );
     }
 
 
@@ -75,7 +77,7 @@ public class ModelManager implements ModelService {
         Model model = this.modelMapperService.forRequest().map(updateModelRequest,Model.class);
         this.modelRepository.save(model);
         redisCacheManager.cacheData("modelListCache", "getModelsAndCache", null);
-        return new SuccessResult( HttpStatus.OK, BaseMessages.UPDATE.getMessage());
+        return new SuccessResult( HttpStatus.OK, messageService.getMessage(BaseMessages.UPDATE));
     }
 
     @Override
@@ -83,6 +85,6 @@ public class ModelManager implements ModelService {
 
         this.modelRepository.deleteById(id);
         redisCacheManager.cacheData("modelListCache", "getModelsAndCache", null);
-        return new SuccessResult( HttpStatus.OK, BaseMessages.DELETE.getMessage());
+        return new SuccessResult( HttpStatus.OK, messageService.getMessage(BaseMessages.DELETE));
     }
 }

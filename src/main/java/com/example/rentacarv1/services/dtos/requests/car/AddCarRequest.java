@@ -1,14 +1,10 @@
 package com.example.rentacarv1.services.dtos.requests.car;
 
-import com.example.rentacarv1.entities.concretes.Car;
 import com.example.rentacarv1.services.constants.car.CarMessages;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.Year;
-import java.util.Date;
 
 @Data
 @AllArgsConstructor

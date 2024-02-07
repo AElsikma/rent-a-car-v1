@@ -1,22 +1,17 @@
 package com.example.rentacarv1.services.constants.baseMessage;
 
-public enum BaseMessages {
-
-    ADD("The addition operation was successful!"),
-    UPDATE("The update operation was successful!"),
-    DELETE("The deletion operation was successful!"),
-    GET_ALL("All records were listed!"),
-    GET("The record was found!"),
-    ;
+import lombok.Getter;
 
 
-    private final String message;
+public  class BaseMessages {
 
-    BaseMessages(String message) {
-        this.message = message;
-    }
+    public static final String ADD="ADD";
+    public static final String UPDATE="UPDATE";
+    public static final String DELETE="DELETE";
+    public static final String GET_ALL="GET_ALL";
+    public static final String GET="GET";
 
-    public String getMessage() {
-        return message;
-    }
+
+
+
 }

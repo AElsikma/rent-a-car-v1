@@ -1,4 +1,4 @@
-package com.example.rentacarv1.core.utilities.exceptions;
+package com.example.rentacarv1.core.utilities.exceptions.problemDetails;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

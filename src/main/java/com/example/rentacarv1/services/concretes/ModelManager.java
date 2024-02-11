@@ -57,6 +57,15 @@ public class ModelManager implements ModelService {
     }
 
     @Override
+    public DataResult<List<GetModelListResponse>> getByBrandId(int id) {
+        List<Model> models = modelRepository.findByBrandId(id);
+        List<GetModelListResponse> modelListResponses = models.stream()
+                .map(model -> modelMapperService.forResponse().map(model, GetModelListResponse.class))
+                .collect(Collectors.toList());
+        return new SuccessDataResult<>(modelListResponses,"Model listed",HttpStatus.OK);
+    }
+
+    @Override
     public Result add(AddModelRequest addModelRequest) {
 
         modelBusinessRules.checkIfModelNameExists(addModelRequest.getName());

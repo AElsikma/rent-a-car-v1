@@ -30,6 +30,10 @@ public class ModelsController {
     public DataResult<GetModelResponse> getById(@PathVariable int id){
         return this.modelService.getById(id);
     }
+    @GetMapping("/getByBrandId/{id}")
+    public DataResult<List<GetModelListResponse>> getByBrandId(@PathVariable int id){
+        return this.modelService.getByBrandId(id);
+    }
 
     @PostMapping("/add")
     @ResponseStatus(code= HttpStatus.CREATED)

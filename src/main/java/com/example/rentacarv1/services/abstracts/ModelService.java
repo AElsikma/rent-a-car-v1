@@ -12,8 +12,6 @@ import java.util.List;
 public interface ModelService {
     DataResult<List<GetModelListResponse>> getAll();
     DataResult<GetModelResponse> getById(int id);
-
-    DataResult<List<GetModelListResponse>> getByBrandId(int id);
     Result add(AddModelRequest addModelRequest);
 
     Result update(UpdateModelRequest updateModelRequest);

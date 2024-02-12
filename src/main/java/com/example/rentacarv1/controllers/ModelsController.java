@@ -17,7 +17,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/models")
 @AllArgsConstructor
-@CrossOrigin
 public class ModelsController {
     private ModelService modelService;
 
@@ -29,10 +28,6 @@ public class ModelsController {
     @GetMapping("/{id}")
     public DataResult<GetModelResponse> getById(@PathVariable int id){
         return this.modelService.getById(id);
-    }
-    @GetMapping("/getByBrandId/{id}")
-    public DataResult<List<GetModelListResponse>> getByBrandId(@PathVariable int id){
-        return this.modelService.getByBrandId(id);
     }
 
     @PostMapping("/add")

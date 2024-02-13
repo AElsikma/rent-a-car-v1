@@ -1,5 +1,7 @@
 package com.example.rentacarv1.services.concretes;
 
+import com.example.rentacarv1.core.config.cache.RedisCacheManager;
+import com.example.rentacarv1.core.internationalization.MessageService;
 import com.example.rentacarv1.core.utilities.results.DataResult;
 import com.example.rentacarv1.core.utilities.results.Result;
 import com.example.rentacarv1.core.utilities.results.SuccessDataResult;
@@ -9,7 +11,7 @@ import com.example.rentacarv1.core.utilities.mappers.ModelMapperService;
 import com.example.rentacarv1.repositories.UserRepository;
 import com.example.rentacarv1.services.abstracts.RoleService;
 import com.example.rentacarv1.services.abstracts.UserService;
-import com.example.rentacarv1.services.dtos.requests.auth.LoginRequest;
+import com.example.rentacarv1.services.constants.baseMessage.BaseMessages;
 import com.example.rentacarv1.services.dtos.requests.user.AddUserRequest;
 import com.example.rentacarv1.services.dtos.requests.user.UpdateUserRequest;
 import com.example.rentacarv1.services.dtos.responses.user.GetUserListResponse;
@@ -31,21 +33,32 @@ public class UserManager implements UserService {
     private final ModelMapperService modelMapperService;
     private final PasswordEncoder passwordEncoder;
     private final RoleService roleService;
+    private RedisCacheManager redisCacheManager;
+    private final MessageService messageService;
 
     @Override
     public DataResult<List<GetUserListResponse>> getAll() {
-        List<User> users=userRepository.findAll();
-        List<GetUserListResponse> userListResponse=users.stream().map(user -> this.modelMapperService.forResponse()
-                .map(user,GetUserListResponse.class)).collect(Collectors.toList());
+        List<GetUserListResponse> userListResponses = (List<GetUserListResponse>) redisCacheManager.getCachedData("userListCache", "getUsersAndCache");
+        if (userListResponses == null) {
+            userListResponses = getUsersAndCache();
+            redisCacheManager.cacheData("userListCache", "getUsersAndCache", userListResponses);
+        }
 
-        return new SuccessDataResult<List<GetUserListResponse>>(userListResponse,"Users listed", HttpStatus.OK);
+        return new SuccessDataResult<>(userListResponses, messageService.getMessage(BaseMessages.GET_ALL),HttpStatus.OK);
+    }
+    public List<GetUserListResponse> getUsersAndCache() {
+        List<User> users = userRepository.findAll();
+        List<GetUserListResponse> userListResponses = users.stream()
+                .map(user -> modelMapperService.forResponse().map(user, GetUserListResponse.class))
+                .collect(Collectors.toList());
+        return userListResponses;
     }
 
     @Override
     public DataResult<GetUserResponse> getById(int id) {
         User user = userRepository.findById(id).orElseThrow();
         GetUserResponse getUserResponse=this.modelMapperService.forResponse().map(user,GetUserResponse.class);
-        return new SuccessDataResult<GetUserResponse>(getUserResponse,"User listed", HttpStatus.OK);
+        return new SuccessDataResult<GetUserResponse>(getUserResponse,messageService.getMessage(BaseMessages.GET) , HttpStatus.OK);
     }
 
     @Override
@@ -64,21 +77,24 @@ public class UserManager implements UserService {
                 .build();
 
         userRepository.save(user);
-        return new SuccessResult( HttpStatus.CREATED,"User added");
+        redisCacheManager.cacheData("userListCache", "getUsersAndCache", null);
+        return new SuccessResult( HttpStatus.CREATED, messageService.getMessage( BaseMessages.ADD));
     }
 
     @Override
     public Result update(UpdateUserRequest updateUserRequest) {
         User user =this.modelMapperService.forRequest().map(updateUserRequest,User.class);
         userRepository.save(user);
-        return new SuccessResult( HttpStatus.OK,"User updated");
+        redisCacheManager.cacheData("userListCache", "getUsersAndCache", null);
+        return new SuccessResult( HttpStatus.OK,messageService.getMessage(BaseMessages.UPDATE));
     }
 
     @Override
     public Result delete(int id) {
 
         userRepository.deleteById(id);
-        return new SuccessResult( HttpStatus.OK,"User deleted !");
+        redisCacheManager.cacheData("userListCache", "getUsersAndCache", null);
+        return new SuccessResult( HttpStatus.OK, messageService.getMessage(BaseMessages.DELETE));
     }
 
 

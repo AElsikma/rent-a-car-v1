@@ -1,5 +1,6 @@
 package com.example.rentacarv1.services.dtos.requests.customer;
 
+import com.example.rentacarv1.services.constants.customer.CustomerMessages;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -10,7 +11,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddCustomerRequest {
-    @Digits(integer = 11,fraction = 0, message = "You can only enter integers")
-    @Size(min=11,max=11,message = "Nationality Id can only be 11 characters")
+
+    @Digits(integer = 11, fraction = 0, message = CustomerMessages.ONLY_ENTER_INTEGER)
+    @Size(min = 11, max = 11, message = CustomerMessages.ONLY_BE_11_CHARACTER)
     private String nationalityId;
 }
+

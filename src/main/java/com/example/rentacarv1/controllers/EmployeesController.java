@@ -9,7 +9,6 @@ import com.example.rentacarv1.services.dtos.responses.employee.GetEmployeeListRe
 import com.example.rentacarv1.services.dtos.responses.employee.GetEmployeeResponse;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/employees")
 @AllArgsConstructor
+@CrossOrigin
 public class EmployeesController {
     private EmployeeService employeeService;
 

@@ -1,4 +1,4 @@
-package com.example.rentacarv1.core.utilities.exceptions;
+package com.example.rentacarv1.core.utilities.exceptions.types;
 
 public class BusinessException extends RuntimeException{
 

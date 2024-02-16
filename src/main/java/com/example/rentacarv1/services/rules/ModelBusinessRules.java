@@ -13,6 +13,7 @@ public class ModelBusinessRules {
 
     public void checkIfModelNameExists(String name){
         if(this.modelRepository.existsByName(name)){
+
             throw new BusinessException("There cannot be more than one model with the same model name");
         };
     };

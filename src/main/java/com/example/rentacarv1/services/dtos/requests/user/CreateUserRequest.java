@@ -34,6 +34,7 @@ public class CreateUserRequest {
                     "Does not contain spaces, tabs, etc.")
     private String password;
 
+
     @NotBlank
     private List<Role> roles;
 }

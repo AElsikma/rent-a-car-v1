@@ -2,6 +2,7 @@ package com.example.rentacarv1.services.rules;
 
 import com.example.rentacarv1.core.utilities.exceptions.types.BusinessException;
 import com.example.rentacarv1.repositories.ColorRepository;
+import com.example.rentacarv1.services.constants.color.ColorMessages;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ public class ColorBusinessRules {
 
     public void checkIfColorNameExists(String name){
         if(this.colorRepository.existsByName(name)){
-            throw new BusinessException("There cannot be more than one color with the same color name");
+            throw new BusinessException(ColorMessages.COLOR_ALREADY_EXISTS);
         };
     };
 }

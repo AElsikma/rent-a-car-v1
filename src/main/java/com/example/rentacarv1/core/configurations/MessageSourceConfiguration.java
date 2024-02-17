@@ -15,12 +15,13 @@ public class MessageSourceConfiguration {
 
     @Bean
     public LocaleResolver localeResolver() {
-      //  AcceptHeaderLocaleResolver acceptHeaderLocaleResolver = new AcceptHeaderLocaleResolver();
+
+        //AcceptHeaderLocaleResolver acceptHeaderLocaleResolver = new AcceptHeaderLocaleResolver();
         //acceptHeaderLocaleResolver.setDefaultLocale(Locale.US);
+        //return acceptHeaderLocaleResolver;
+
         SessionLocaleResolver localeResolver = new SessionLocaleResolver();
         localeResolver.setDefaultLocale(Locale.US);
-
-       //return acceptHeaderLocaleResolver;
         return localeResolver;
     }
 

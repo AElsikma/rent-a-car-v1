@@ -1,6 +1,7 @@
 package com.example.rentacarv1.services.dtos.requests.user;
 
 import com.example.rentacarv1.entities.concretes.Role;
+import com.example.rentacarv1.services.constants.user.UserMessages;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -17,21 +18,13 @@ import java.util.List;
 @Builder
 public class CreateUserRequest {
 
-    @NotBlank(message = "Email cannot be blank")
-    @Email(message = "Invalid email address format")
+    @NotBlank(message = UserMessages.USER_NOT_BLANK)
+    @Email(message = UserMessages.EMAIL_FORMAT)
     private String email;
 
     @NotBlank
     @Pattern(regexp = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=.*])(?=\\S+$).{8,}",
-            message = "At least 8 characters\n" +
-                    "\n" +
-                    "Contains at least one digit\n" +
-                    "\n" +
-                    "Contains at least one lowercase and one uppercase letter\n" +
-                    "\n" +
-                    "Contains at least one special character from the set (@#%$^.*etc.)\n" +
-                    "\n" +
-                    "Does not contain spaces, tabs, etc.")
+            message = UserMessages.PASSWORD_FORMAT)
     private String password;
 
 

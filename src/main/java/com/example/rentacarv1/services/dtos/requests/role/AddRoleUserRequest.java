@@ -1,5 +1,6 @@
 package com.example.rentacarv1.services.dtos.requests.role;
 
+import com.example.rentacarv1.services.constants.user.UserMessages;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -13,11 +14,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AddRoleUserRequest {
 
-    @NotNull(message = "Id can not be null.")
-    @Positive(message = "Id must be a positive number.")
+    @NotNull(message = UserMessages.USER_NOT_NULL)
+    @Positive(message = UserMessages.POSITIVE_NUMBER)
     private int id;
 
-    @NotBlank(message = "Name cannot be blank")
-    @Size(min = 2, max = 20, message = "Name must be between 2 and 20 characters")
+    @NotBlank(message = UserMessages.USER_NOT_BLANK)
+    @Size(min = 2, max = 20, message = UserMessages.NAME_SHOULD_BE_BETWEEN_2_AND_20_CHARACTERS)
     private String name;
 }

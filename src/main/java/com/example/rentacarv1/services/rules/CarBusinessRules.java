@@ -2,6 +2,7 @@ package com.example.rentacarv1.services.rules;
 
 import com.example.rentacarv1.core.utilities.exceptions.types.BusinessException;
 import com.example.rentacarv1.repositories.CarRepository;
+import com.example.rentacarv1.services.constants.car.CarMessages;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,7 @@ public class CarBusinessRules {
 
   public void existsByPlate(String plate){
         if(this.carRepository.existsByPlate(plate)){
-        throw new BusinessException("There cannot be more than one vehicle with the same license plate");
+        throw new BusinessException(CarMessages.CAR_ALREADY_EXISTS);
     }}
 
     public String plateValidator(String plate){
@@ -26,7 +27,7 @@ public class CarBusinessRules {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(plate);
         if (!matcher.matches()) {
-            throw new RuntimeException("Plaka formatı hatalı.");
+            throw new RuntimeException(CarMessages.PLATE_FORMAT);
         }
         return plate;
     }

@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Set;
 
 
 @Service
@@ -42,12 +43,15 @@ public class AuthManager implements AuthService {
 
     @Override
     public AuthenticationResponse register(RegisterRequest registerRequest) {
-        var role = Role.builder().name(registerRequest.getRoleName()).build();
+        Set<Role> authorities = registerRequest.convertRolesToAuthorities(); // Roller buradan alınıyor
 
         var user = User.builder()
+                .name(registerRequest.getName())
+                .surname(registerRequest.getSurname())
+                .gsm(registerRequest.getGsm())
                 .email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
-                .authorities(new HashSet<>(Collections.singletonList(role)))
+                .authorities(authorities)
                 .build();
         var savedUser = userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);

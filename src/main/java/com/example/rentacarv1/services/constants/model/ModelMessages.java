@@ -5,4 +5,5 @@ public class ModelMessages {
     public static final String POSITIVE_NUMBER = "The field must be a positive number.";
     public static final String MODEL_NOT_BLANK = "The field cannot be empty!";
     public static final String NAME_SHOULD_BE_BETWEEN_2_AND_20_CHARACTERS="Model name must be at least 2 characters long!";
+    public static final String MODEL_ALREADY_EXISTS="There cannot be more than one model with the same model name";
 }

@@ -1,5 +1,7 @@
 package com.example.rentacarv1.services.dtos.requests.user;
 
+import com.example.rentacarv1.entities.User;
+import com.example.rentacarv1.services.constants.user.UserMessages;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,23 +12,23 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateUserRequest {
 
-    @NotNull(message = "Id can not be null.")
-    @Positive(message = "Id must be a positive number.")
+    @NotNull(message = UserMessages.USER_NOT_NULL)
+    @Positive(message = UserMessages.POSITIVE_NUMBER)
     private int id;
 
-    @NotBlank(message = "Name cannot be blank")
-    @Size(min = 2, max = 20, message = "Name must be between 2 and 20 characters")
+    @NotBlank(message = UserMessages.USER_NOT_BLANK)
+    @Size(min = 2, max = 20, message = UserMessages.NAME_SHOULD_BE_BETWEEN_2_AND_20_CHARACTERS)
     private String name;
 
-    @NotBlank(message = "Surname cannot be blank")
-    @Size(min = 2, max = 20, message = "Surname must be between 2 and 20 characters")
+    @NotBlank(message = UserMessages.USER_NOT_BLANK)
+    @Size(min = 2, max = 20, message =UserMessages.NAME_SHOULD_BE_BETWEEN_2_AND_20_CHARACTERS)
     private String surname;
 
-    @NotBlank(message = "Phone number cannot be blank")
-    @Pattern(regexp = "05[0-9]{9}", message = "Invalid phone number format. It must be in the format 05xxxxxxxxx.")
+    @NotBlank(message = UserMessages.USER_NOT_BLANK)
+    @Pattern(regexp = "05[0-9]{9}", message =UserMessages.PHONE_NUMBER_FORMAT)
     private String gsm;
 
-    @NotBlank(message = "Email cannot be blank")
-    @Email(message = "Invalid email address format")
+    @NotBlank(message =UserMessages.USER_NOT_BLANK)
+    @Email(message = UserMessages.EMAIL_FORMAT)
     private String email;
 }

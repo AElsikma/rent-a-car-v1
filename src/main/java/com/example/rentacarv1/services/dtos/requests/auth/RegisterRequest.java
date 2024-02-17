@@ -66,6 +66,7 @@ public class RegisterRequest {
                     .map(roleName -> Role.builder().name(roleName).build())
                     .collect(Collectors.toSet());
         }
+
         return Collections.emptySet();
     }
 

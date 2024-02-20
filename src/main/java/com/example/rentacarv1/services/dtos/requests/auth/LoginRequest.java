@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class LoginRequest {
 
+
     @NotBlank(message = UserMessages.USER_NOT_BLANK)
     @Email(message = UserMessages.EMAIL_FORMAT)
     private String email;

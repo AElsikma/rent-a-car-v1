@@ -16,5 +16,8 @@ public class UserMessages {
             "Contains at least one special character from the set (@#%$^.*etc.)\n" +
             "\n" +
             "Does not contain spaces, tabs, etc.";
+    public static final String EMAIL_AND_PHONE_ALREADY_EXISTS="This email address and phone number are already in use.";
+    public static final String EMAIL_ALREADY_EXISTS="This email address is already in use.";
+    public static final String PHONE_ALREADY_EXISTS="This phone number is already in use.";
 
 }

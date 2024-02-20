@@ -8,6 +8,7 @@ import com.example.rentacarv1.entities.enums.TokenType;
 import com.example.rentacarv1.repositories.TokenRepository;
 import com.example.rentacarv1.repositories.UserRepository;
 import com.example.rentacarv1.services.abstracts.AuthService;
+import com.example.rentacarv1.services.constants.user.UserMessages;
 import com.example.rentacarv1.services.dtos.requests.auth.LoginRequest;
 import com.example.rentacarv1.services.dtos.requests.auth.RegisterRequest;
 import com.example.rentacarv1.services.dtos.responses.auth.AuthenticationResponse;
@@ -20,6 +21,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -28,6 +30,7 @@ import java.util.Set;
 
 
 @Service
+@Transactional
 @AllArgsConstructor
 public class AuthManager implements AuthService {
 
@@ -43,6 +46,18 @@ public class AuthManager implements AuthService {
 
     @Override
     public AuthenticationResponse register(RegisterRequest registerRequest) {
+
+        boolean emailExists = userRepository.findByEmail(registerRequest.getEmail()).isPresent();
+        boolean gsmExists = userRepository.findByGsm(registerRequest.getGsm()).isPresent();
+
+        if (emailExists && gsmExists) {
+            throw new RuntimeException(UserMessages.EMAIL_AND_PHONE_ALREADY_EXISTS);
+        } else if (emailExists) {
+            throw new RuntimeException(UserMessages.EMAIL_ALREADY_EXISTS);
+        } else if (gsmExists) {
+            throw new RuntimeException(UserMessages.PHONE_ALREADY_EXISTS);
+        }
+
         Set<Role> authorities = registerRequest.convertRolesToAuthorities(); // Roller buradan alınıyor
 
         var user = User.builder()

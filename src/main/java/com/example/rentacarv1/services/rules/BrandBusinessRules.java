@@ -18,4 +18,6 @@ public class BrandBusinessRules {
             throw new BusinessException(BrandMessages.BRAND_ALREADY_EXISTS);
         };
     }
+
+
 }

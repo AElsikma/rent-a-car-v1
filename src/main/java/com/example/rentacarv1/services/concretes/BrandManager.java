@@ -17,6 +17,7 @@ import com.example.rentacarv1.services.dtos.responses.brand.GetBrandListResponse
 import com.example.rentacarv1.services.dtos.responses.brand.GetBrandResponse;
 import com.example.rentacarv1.services.rules.BrandBusinessRules;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -27,11 +28,13 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class BrandManager implements BrandService {
 
+
     private final BrandRepository brandRepository;
     private final ModelMapperService modelMapperService;
     private final BrandBusinessRules brandBusinessRules;
     private RedisCacheManager redisCacheManager;
     private final MessageService messageService;
+
 
 
 

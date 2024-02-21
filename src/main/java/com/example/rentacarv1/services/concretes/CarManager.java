@@ -2,6 +2,7 @@ package com.example.rentacarv1.services.concretes;
 
 import com.example.rentacarv1.core.config.cache.RedisCacheManager;
 import com.example.rentacarv1.core.internationalization.MessageService;
+import com.example.rentacarv1.core.services.CloudinaryService;
 import com.example.rentacarv1.core.utilities.results.DataResult;
 import com.example.rentacarv1.core.utilities.results.Result;
 import com.example.rentacarv1.core.utilities.results.SuccessDataResult;
@@ -32,6 +33,7 @@ public class CarManager implements CarService {
     private CarBusinessRules carBusinessRules;
     private RedisCacheManager redisCacheManager;
     private final MessageService messageService;
+    private final CloudinaryService cloudinaryService;
 
     @Override
     public DataResult<List<GetCarListResponse>> getAll() {
@@ -68,6 +70,7 @@ public class CarManager implements CarService {
         carBusinessRules.existsByPlate(addCarRequest.getPlate());
 
         Car car =this.modelMapperService.forRequest().map(addCarRequest,Car.class);
+        car.setImagePath(cloudinaryService.uploadFile(addCarRequest.getFile()));
 
         this.carRepository.save(car);
         redisCacheManager.cacheData("carListCache", "getCarsAndCache", null);
@@ -80,6 +83,7 @@ public class CarManager implements CarService {
         carBusinessRules.existsByPlate(updateCarRequest.getPlate());
 
        Car car=this.modelMapperService.forRequest().map(updateCarRequest,Car.class);
+        car.setImagePath(cloudinaryService.uploadFile(updateCarRequest.getFile()));
        this.carRepository.save(car);
         redisCacheManager.cacheData("carListCache", "getCarsAndCache", null);
        return new SuccessResult( HttpStatus.OK, messageService.getMessage(BaseMessages.UPDATE));

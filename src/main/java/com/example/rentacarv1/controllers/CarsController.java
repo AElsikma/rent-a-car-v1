@@ -33,13 +33,13 @@ public class CarsController {
 
     @PostMapping("/add")
     @ResponseStatus(code= HttpStatus.CREATED)
-    public Result add(@RequestBody @Valid() AddCarRequest addCarRequest){
+    public Result add(@ModelAttribute @Valid() AddCarRequest addCarRequest){
         return this.carService.add(addCarRequest);
 
     }
 
     @PutMapping("/update")
-    public Result update( @RequestBody @Valid() UpdateCarRequest updateCarRequest){
+    public Result update( @ModelAttribute @Valid() UpdateCarRequest updateCarRequest){
        return this.carService.update(updateCarRequest);
     }
 

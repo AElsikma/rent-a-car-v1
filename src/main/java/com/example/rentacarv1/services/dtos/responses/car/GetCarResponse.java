@@ -14,6 +14,7 @@ import java.io.Serializable;
 public class GetCarResponse  implements Serializable {
     private int id;
     private double daily_price;
+    private String imagePath;
     private int kilometer;
     private String plate;
     private int year;

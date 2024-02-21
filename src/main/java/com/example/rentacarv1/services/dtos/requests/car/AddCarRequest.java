@@ -5,6 +5,7 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 @AllArgsConstructor
@@ -31,6 +32,8 @@ public class AddCarRequest {
     @Min(value = 2005,message = CarMessages.YEAR_SHOULD_BE_GREATER_THAN_OR_EQUAL_TO_2005)
     @Max(value = 2024,message = CarMessages.YEAR_CANNOT_BE_HIGHER_THAN_2024)
     private int year;
+
+    private MultipartFile file;
 
     @NotNull(message =CarMessages.CAR_NOT_NULL)
     @Positive(message =CarMessages.POSITIVE_NUMBER)

@@ -1,5 +1,6 @@
 package com.example.rentacarv1.services.dtos.requests.car;
 
+import com.example.rentacarv1.entities.enums.CarState;
 import com.example.rentacarv1.services.constants.car.CarMessages;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ public class AddCarRequest {
 
     @NotNull(message = CarMessages.CAR_NOT_NULL)
     @Positive(message = CarMessages.POSITIVE_NUMBER)
-    private double daily_price;
+    private double dailyPrice;
 
 
     @NotNull(message = CarMessages.CAR_NOT_NULL)
@@ -34,6 +35,9 @@ public class AddCarRequest {
     private int year;
 
     private MultipartFile file;
+
+    @NotNull(message =CarMessages.CAR_NOT_NULL)
+    private CarState carState;
 
     @NotNull(message =CarMessages.CAR_NOT_NULL)
     @Positive(message =CarMessages.POSITIVE_NUMBER)

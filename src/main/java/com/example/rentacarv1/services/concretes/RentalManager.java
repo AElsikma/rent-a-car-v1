@@ -84,7 +84,7 @@ public class RentalManager implements RentalService {
      rental.setStartKilometer(carResponse.getData().getKilometer());
 
         double carPrice = rentalBusinessRules.calculateTotalPrice(addRentalRequest.getStartDate(),
-                addRentalRequest.getEndDate(), carResponse.getData().getDaily_price());
+                addRentalRequest.getEndDate(), carResponse.getData().getDailyPrice());
 
         double totalPrice = 0.0;
         totalPrice += carPrice;
@@ -111,7 +111,7 @@ public class RentalManager implements RentalService {
         DataResult<GetCarResponse> carResponse = carService.getById(updateRentalRequest.getCarId());
         rental.setStartKilometer(carResponse.getData().getKilometer());
 
-        rental.setTotalPrice(this.rentalBusinessRules.calculateTotalPrice(updateRentalRequest.getStartDate(), updateRentalRequest.getEndDate(), carResponse.getData().getDaily_price()));
+        rental.setTotalPrice(this.rentalBusinessRules.calculateTotalPrice(updateRentalRequest.getStartDate(), updateRentalRequest.getEndDate(), carResponse.getData().getDailyPrice()));
         rentalRepository.save(rental);
         redisCacheManager.cacheData("rentalListCache", "getRentalsAndCache", null);
         return new SuccessResult( HttpStatus.OK, messageService.getMessage(BaseMessages.UPDATE));

@@ -74,6 +74,7 @@ public class CarManager implements CarService {
 
         Car car =this.modelMapperService.forRequest().map(addCarRequest,Car.class);
         car.setImagePath(cloudinaryService.uploadFile(addCarRequest.getFile()));
+        car.setCarState(addCarRequest.getCarState());
 
         this.carRepository.save(car);
         redisCacheManager.cacheData("carListCache", "getCarsAndCache", null);
@@ -90,6 +91,7 @@ public class CarManager implements CarService {
 
        Car car=this.modelMapperService.forRequest().map(updateCarRequest,Car.class);
         car.setImagePath(cloudinaryService.uploadFile(updateCarRequest.getFile()));
+        car.setCarState(updateCarRequest.getCarState());
        this.carRepository.save(car);
         redisCacheManager.cacheData("carListCache", "getCarsAndCache", null);
        return new SuccessResult( HttpStatus.OK, messageService.getMessage(BaseMessages.UPDATE));

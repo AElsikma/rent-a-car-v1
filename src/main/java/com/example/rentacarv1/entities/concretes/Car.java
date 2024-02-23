@@ -1,5 +1,6 @@
 package com.example.rentacarv1.entities.concretes;
 import com.example.rentacarv1.entities.abstracts.BaseEntity;
+import com.example.rentacarv1.entities.enums.CarState;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -33,6 +34,10 @@ public class Car extends BaseEntity {
 
     @Column(name = "image_path")
     private String imagePath;
+
+    @Column(name = "car_state")
+    @Enumerated(EnumType.STRING)
+    private CarState carState;
 
     @ManyToOne
     @JoinColumn(name = "model_id")

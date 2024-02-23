@@ -4,8 +4,7 @@ package com.example.rentacarv1.controllers;
 import com.example.rentacarv1.core.utilities.results.DataResult;
 import com.example.rentacarv1.core.utilities.results.Result;
 import com.example.rentacarv1.services.abstracts.UserService;
-import com.example.rentacarv1.services.dtos.requests.user.AddUserRequest;
-import com.example.rentacarv1.services.dtos.requests.user.UpdateUserRequest;
+import com.example.rentacarv1.services.dtos.requests.user.*;
 import com.example.rentacarv1.services.dtos.responses.user.GetUserListResponse;
 import com.example.rentacarv1.services.dtos.responses.user.GetUserResponse;
 import jakarta.validation.Valid;
@@ -50,6 +49,20 @@ public class UsersController {
     public Result delete( @PathVariable int id){
 
         return this.userService.delete(id);
+    }
+    @PutMapping("/{id}/updateEmail")
+    public void updateEmail(@PathVariable int id, @RequestBody @Valid UpdateEmailRequest updateEmailRequest) {
+        userService.updateEmail(id, updateEmailRequest);
+    }
+
+    @PutMapping("/{id}/updatePhoneNumber")
+    public void updatePhoneNumber(@PathVariable int id, @RequestBody @Valid UpdateGsmRequest updateGsmRequest) {
+        userService.updateGsm(id, updateGsmRequest);
+    }
+
+    @PutMapping("/{id}/updatePassword")
+    public void updatePassword(@PathVariable int id, @RequestBody @Valid UpdatePasswordRequest updatePasswordRequest) {
+        userService.updatePassword(id, updatePasswordRequest);
     }
 
 

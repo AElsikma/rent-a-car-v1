@@ -12,8 +12,7 @@ import com.example.rentacarv1.repositories.UserRepository;
 import com.example.rentacarv1.services.abstracts.UserService;
 import com.example.rentacarv1.services.constants.baseMessage.BaseMessages;
 import com.example.rentacarv1.services.constants.user.UserMessages;
-import com.example.rentacarv1.services.dtos.requests.user.AddUserRequest;
-import com.example.rentacarv1.services.dtos.requests.user.UpdateUserRequest;
+import com.example.rentacarv1.services.dtos.requests.user.*;
 import com.example.rentacarv1.services.dtos.responses.user.GetUserListResponse;
 import com.example.rentacarv1.services.dtos.responses.user.GetUserResponse;
 import com.example.rentacarv1.services.rules.UserBusinessRules;
@@ -108,5 +107,49 @@ public class UserManager implements UserService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException(UserMessages.USER_NOT_EXIST));
+    }
+    @Override
+    public boolean isEmailExists(String email) {
+        return userRepository.findByEmail(email).isPresent();
+    }
+    @Override
+    public boolean isGsmExists(String phoneNumber) {
+        return userRepository.findByGsm(phoneNumber).isPresent();
+    }
+    @Override
+    public Result updateEmail(int id, UpdateEmailRequest request) {
+        String newEmail = request.getEmail();
+        if (isEmailExists(newEmail)) {
+            throw new IllegalArgumentException("Email address is already in use");
+        }
+        User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        user.setEmail(newEmail);
+        userRepository.save(user);
+        return new SuccessResult( HttpStatus.OK,messageService.getMessage(BaseMessages.UPDATE));
+    }
+
+    @Override
+    public Result updateGsm(int id, UpdateGsmRequest request) {
+        String newPhoneNumber = request.getGsm();
+        if (isGsmExists(newPhoneNumber)) {
+            throw new IllegalArgumentException("Phone number is already in use");
+        }
+        User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        user.setGsm(newPhoneNumber);
+        userRepository.save(user);
+        return new SuccessResult( HttpStatus.OK,messageService.getMessage(BaseMessages.UPDATE));
+    }
+
+    @Override
+    public Result updatePassword(int id, UpdatePasswordRequest request) {
+        String newPassword = request.getNewPassword();
+        String confirmNewPassword = request.getConfirmNewPassword();
+        if (!newPassword.equals(confirmNewPassword)) {
+            throw new IllegalArgumentException("Passwords do not match");
+        }
+        User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        user.setPassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
+        return new SuccessResult( HttpStatus.OK,messageService.getMessage(BaseMessages.UPDATE));
     }
 }

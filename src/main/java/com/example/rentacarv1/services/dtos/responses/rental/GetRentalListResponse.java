@@ -1,5 +1,7 @@
 package com.example.rentacarv1.services.dtos.responses.rental;
 
+import com.example.rentacarv1.services.dtos.responses.car.GetCarListResponse;
+import com.example.rentacarv1.services.dtos.responses.car.GetCarResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,6 +30,7 @@ public class GetRentalListResponse  implements Serializable {
 
 
     private Double totalPrice;
+    private GetCarResponse carResponse;
 
 
 

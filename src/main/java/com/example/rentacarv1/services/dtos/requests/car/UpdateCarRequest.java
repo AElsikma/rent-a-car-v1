@@ -1,5 +1,6 @@
 package com.example.rentacarv1.services.dtos.requests.car;
 
+import com.example.rentacarv1.entities.enums.CarState;
 import com.example.rentacarv1.services.constants.car.CarMessages;
 import org.springframework.web.multipart.MultipartFile;
 import jakarta.validation.constraints.*;
@@ -18,7 +19,7 @@ public class UpdateCarRequest {
 
     @NotNull(message = CarMessages.CAR_NOT_NULL)
     @Positive(message = CarMessages.POSITIVE_NUMBER)
-    private double daily_price;
+    private double dailyPrice;
 
 
     @NotNull(message = CarMessages.CAR_NOT_NULL)
@@ -37,6 +38,7 @@ public class UpdateCarRequest {
     private int year;
 
     private MultipartFile file;
+    private CarState carState;
 
     @NotNull(message =CarMessages.CAR_NOT_NULL)
     @Positive(message =CarMessages.POSITIVE_NUMBER)

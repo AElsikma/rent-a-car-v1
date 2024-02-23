@@ -1,5 +1,6 @@
 package com.example.rentacarv1.core.configurations;
 import com.example.rentacarv1.core.filters.JwtAuthenticationFilter;
+import com.example.rentacarv1.entities.enums.Role;
 import com.example.rentacarv1.services.abstracts.UserService;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -56,12 +57,11 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(x ->
                         x.requestMatchers(WHITE_LIST_URLS).permitAll()
                                 .requestMatchers("/api/auth/register", "/api/auth/login", "/api/auth/refreshToken").permitAll()
-                                // SecurityConfiguration içinde
-                                .requestMatchers(HttpMethod.GET, "/api/users/**").hasAnyAuthority("USER", "ADMIN")
-                                .requestMatchers(HttpMethod.GET, "/api/admins/**").hasAuthority("ADMIN")
-                                .requestMatchers(HttpMethod.POST, "/api/admins/**").hasAuthority("ADMIN")
-                                .requestMatchers(HttpMethod.PUT, "/api/admins/**").hasAuthority("ADMIN")
-                                .requestMatchers(HttpMethod.DELETE, "/api/admins/**").hasAuthority("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/api/users/**").hasAnyAuthority(Role.USER.name(), Role.ADMIN.name())
+                                .requestMatchers(HttpMethod.GET, "/api/admins/**").hasAuthority(Role.ADMIN.name())
+                                .requestMatchers(HttpMethod.POST, "/api/admins/**").hasAuthority(Role.ADMIN.name())
+                                .requestMatchers(HttpMethod.PUT, "/api/admins/**").hasAuthority(Role.ADMIN.name())
+                                .requestMatchers(HttpMethod.DELETE, "/api/admins/**").hasAuthority(Role.ADMIN.name())
 
                                 .anyRequest().authenticated())
                 .httpBasic(AbstractHttpConfigurer::disable)

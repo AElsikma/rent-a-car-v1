@@ -61,7 +61,7 @@ public class UserManager implements UserService {
         userBusinessRules.checkIfUserByIdExists(id);
         User user = userRepository.findById(id).orElseThrow();
         GetUserResponse getUserResponse=this.modelMapperService.forResponse().map(user,GetUserResponse.class);
-        return new SuccessDataResult<GetUserResponse>(getUserResponse,messageService.getMessage(BaseMessages.GET) , HttpStatus.OK);
+        return new SuccessDataResult<>(getUserResponse,messageService.getMessage(BaseMessages.GET) , HttpStatus.OK);
     }
 
     @Override

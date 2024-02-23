@@ -8,7 +8,6 @@ public enum Role implements GrantedAuthority {
 
     USER,
     ADMIN,
-    GUEST,
     MODERATOR;
 
     @Override

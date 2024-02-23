@@ -1,5 +1,6 @@
 package com.example.rentacarv1.services.dtos.requests.user;
 
+import com.example.rentacarv1.entities.enums.Role;
 import com.example.rentacarv1.services.constants.user.UserMessages;
 import com.example.rentacarv1.services.dtos.requests.role.AddRoleUserRequest;
 import jakarta.validation.constraints.Email;
@@ -38,7 +39,8 @@ public class AddUserRequest {
             message =UserMessages.PASSWORD_FORMAT)
     private String password;
 
-    @NotBlank
-    private List<AddRoleUserRequest> roles;
+    private Role role;
+
+
 
 }

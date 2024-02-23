@@ -17,7 +17,7 @@ public class UpdateCarRequest {
     private  int id;
 
     @NotNull(message = CarMessages.CAR_NOT_NULL)
-    @DecimalMin(value = "0.0",inclusive = false,message = CarMessages.POSITIVE_NUMBER)
+    @Positive(message = CarMessages.POSITIVE_NUMBER)
     private double daily_price;
 
 

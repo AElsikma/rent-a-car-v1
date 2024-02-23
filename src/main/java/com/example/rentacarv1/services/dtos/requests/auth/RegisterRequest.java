@@ -2,9 +2,8 @@ package com.example.rentacarv1.services.dtos.requests.auth;
 
 
 import com.example.rentacarv1.entities.User;
-import com.example.rentacarv1.entities.concretes.Role;
+import com.example.rentacarv1.entities.enums.Role;
 import com.example.rentacarv1.services.constants.user.UserMessages;
-import com.example.rentacarv1.services.dtos.requests.role.AddRoleUserRequest;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -46,29 +45,9 @@ public class RegisterRequest {
     private String password;
 
 
-    private List<String> roles; // Yeni eklenen rol listesi
 
-    public User toUser() {
-        return User.builder()
-                .name(this.name)
-                .surname(this.surname)
-                .gsm(this.gsm)
-                .email(this.email)
-                .password(this.password)
-                .authorities(convertRolesToAuthorities())
-                .build();
-    }
 
-    public Set<Role> convertRolesToAuthorities() {
-        if (roles == null || roles.isEmpty()) {
-            // Varsa rolleri Role nesnelerine çevir ve set olarak döndür
-            return roles.stream()
-                    .map(roleName -> Role.builder().name(roleName).build())
-                    .collect(Collectors.toSet());
-        }
 
-        return Collections.emptySet();
-    }
 
 
 }

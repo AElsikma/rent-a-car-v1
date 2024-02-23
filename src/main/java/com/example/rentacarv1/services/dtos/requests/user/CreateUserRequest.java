@@ -1,6 +1,6 @@
 package com.example.rentacarv1.services.dtos.requests.user;
 
-import com.example.rentacarv1.entities.concretes.Role;
+import com.example.rentacarv1.entities.enums.Role;
 import com.example.rentacarv1.services.constants.user.UserMessages;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -28,6 +28,5 @@ public class CreateUserRequest {
     private String password;
 
 
-    @NotBlank
-    private List<Role> roles;
+
 }

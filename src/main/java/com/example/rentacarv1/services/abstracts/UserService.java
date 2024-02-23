@@ -4,7 +4,6 @@ import com.example.rentacarv1.core.utilities.results.DataResult;
 import com.example.rentacarv1.core.utilities.results.Result;
 import com.example.rentacarv1.services.dtos.requests.auth.LoginRequest;
 import com.example.rentacarv1.services.dtos.requests.user.AddUserRequest;
-import com.example.rentacarv1.services.dtos.requests.user.CreateUserRequest;
 import com.example.rentacarv1.services.dtos.requests.user.UpdateUserRequest;
 import com.example.rentacarv1.services.dtos.responses.user.GetUserListResponse;
 import com.example.rentacarv1.services.dtos.responses.user.GetUserResponse;

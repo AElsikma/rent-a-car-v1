@@ -2,14 +2,17 @@ package com.example.rentacarv1.entities;
 import com.example.rentacarv1.entities.abstracts.BaseEntity;
 import com.example.rentacarv1.entities.concretes.Customer;
 import com.example.rentacarv1.entities.concretes.Employee;
-import com.example.rentacarv1.entities.concretes.Role;
+import com.example.rentacarv1.entities.concretes.Token;
+import com.example.rentacarv1.entities.enums.Role;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -33,6 +36,10 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name = "password")
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role")
+    private Role role;
+
     @OneToMany(mappedBy = "user")
     @JsonIgnore
     private List<Customer> customers;
@@ -41,10 +48,13 @@ public class User extends BaseEntity implements UserDetails {
     @JsonIgnore
     private List<Employee> employees;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    private Set<Role> authorities;
 
 
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(role.name()));
+    }
 
     @Override
     public String getUsername() {

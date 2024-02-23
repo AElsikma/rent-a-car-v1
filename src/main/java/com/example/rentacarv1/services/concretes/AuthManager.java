@@ -2,13 +2,12 @@ package com.example.rentacarv1.services.concretes;
 
 import com.example.rentacarv1.core.services.JwtService;
 import com.example.rentacarv1.entities.User;
-import com.example.rentacarv1.entities.concretes.Role;
+import com.example.rentacarv1.entities.enums.Role;
 import com.example.rentacarv1.entities.concretes.Token;
 import com.example.rentacarv1.entities.enums.TokenType;
 import com.example.rentacarv1.repositories.TokenRepository;
 import com.example.rentacarv1.repositories.UserRepository;
 import com.example.rentacarv1.services.abstracts.AuthService;
-import com.example.rentacarv1.services.constants.user.UserMessages;
 import com.example.rentacarv1.services.dtos.requests.auth.LoginRequest;
 import com.example.rentacarv1.services.dtos.requests.auth.RegisterRequest;
 import com.example.rentacarv1.services.dtos.responses.auth.AuthenticationResponse;
@@ -25,8 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 
@@ -50,15 +47,13 @@ public class AuthManager implements AuthService {
     public AuthenticationResponse register(RegisterRequest registerRequest) {
         userBusinessRules.checkIfUserByEmailExists(registerRequest.getEmail());
         userBusinessRules.checkIfUserByGsmExists(registerRequest.getGsm());
-        Set<Role> authorities = registerRequest.convertRolesToAuthorities(); // Roller buradan alınıyor
-
         var user = User.builder()
                 .name(registerRequest.getName())
                 .surname(registerRequest.getSurname())
                 .gsm(registerRequest.getGsm())
                 .email(registerRequest.getEmail())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
-                .authorities(authorities)
+                .role(Role.USER)
                 .build();
         var savedUser = userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
@@ -83,6 +78,7 @@ public class AuthManager implements AuthService {
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
+                .role(user.getRole())
                 .id(user.getId())
                 .build();
 

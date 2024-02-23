@@ -9,7 +9,6 @@ import com.example.rentacarv1.core.utilities.results.SuccessResult;
 import com.example.rentacarv1.entities.User;
 import com.example.rentacarv1.core.utilities.mappers.ModelMapperService;
 import com.example.rentacarv1.repositories.UserRepository;
-import com.example.rentacarv1.services.abstracts.RoleService;
 import com.example.rentacarv1.services.abstracts.UserService;
 import com.example.rentacarv1.services.constants.baseMessage.BaseMessages;
 import com.example.rentacarv1.services.constants.user.UserMessages;
@@ -34,7 +33,6 @@ public class UserManager implements UserService {
     private final UserRepository userRepository;
     private final ModelMapperService modelMapperService;
     private final PasswordEncoder passwordEncoder;
-    private final RoleService roleService;
     private RedisCacheManager redisCacheManager;
     private final MessageService messageService;
 
@@ -73,12 +71,8 @@ public class UserManager implements UserService {
                 .surname(addUserRequest.getSurname())
                 .gsm(addUserRequest.getGsm())
                 .email(addUserRequest.getEmail())
-                .authorities(
-                        addUserRequest.getRoles().stream()
-                                .map(addRoleUserRequest -> roleService.findByName(addRoleUserRequest.getName()))
-                                .collect(Collectors.toSet())
-                )
                 .password(passwordEncoder.encode(addUserRequest.getPassword()))
+                .role(addUserRequest.getRole())
                 .build();
 
         userRepository.save(user);

@@ -1,6 +1,6 @@
 package com.example.rentacarv1.services.concretes;
 
-import com.example.rentacarv1.core.config.cache.RedisCacheManager;
+import com.example.rentacarv1.core.configurations.cache.RedisCacheManager;
 import com.example.rentacarv1.core.internationalization.MessageService;
 import com.example.rentacarv1.core.services.CloudinaryService;
 import com.example.rentacarv1.core.utilities.results.DataResult;
@@ -56,6 +56,7 @@ public class CarManager implements CarService {
 
         @Override
     public DataResult<GetCarResponse> getById(int id) {
+        carBusinessRules.checkIfCarByIdExists(id);
         Car car=this.carRepository.findById(id).orElseThrow();
         GetCarResponse carResponse=this.modelMapperService.forResponse()
                 .map(car, GetCarResponse.class);
@@ -68,6 +69,8 @@ public class CarManager implements CarService {
 
         addCarRequest.setPlate(carBusinessRules.plateValidator(addCarRequest.getPlate()));
         carBusinessRules.existsByPlate(addCarRequest.getPlate());
+        carBusinessRules.existsByColorId(addCarRequest.getColorId());
+        carBusinessRules.existsByModelId(addCarRequest.getModelId());
 
         Car car =this.modelMapperService.forRequest().map(addCarRequest,Car.class);
         car.setImagePath(cloudinaryService.uploadFile(addCarRequest.getFile()));
@@ -80,7 +83,10 @@ public class CarManager implements CarService {
     @Override
     public Result update(UpdateCarRequest updateCarRequest) {
         updateCarRequest.setPlate(carBusinessRules.plateValidator(updateCarRequest.getPlate()));
+        carBusinessRules.checkIfCarByIdExists(updateCarRequest.getId());
         carBusinessRules.existsByPlate(updateCarRequest.getPlate());
+        carBusinessRules.existsByColorId(updateCarRequest.getColorId());
+        carBusinessRules.existsByModelId(updateCarRequest.getModelId());
 
        Car car=this.modelMapperService.forRequest().map(updateCarRequest,Car.class);
         car.setImagePath(cloudinaryService.uploadFile(updateCarRequest.getFile()));
@@ -92,8 +98,17 @@ public class CarManager implements CarService {
 
     @Override
     public Result delete(int id) {
+        carBusinessRules.checkIfCarByIdExists(id);
          this.carRepository.deleteById(id);
         redisCacheManager.cacheData("carListCache", "getCarsAndCache", null);
          return new SuccessResult( HttpStatus.OK, messageService.getMessage(BaseMessages.DELETE));
+    }
+
+    @Override
+
+    public boolean getCarById(Integer id) {
+
+        return this.carRepository.existsById(id);
+
     }
 }

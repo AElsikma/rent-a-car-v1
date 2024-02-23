@@ -5,5 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BrandRepository extends JpaRepository<Brand,Integer> {
     boolean existsByName(String brandName);
+    boolean getBrandById(Integer id);
 
 }

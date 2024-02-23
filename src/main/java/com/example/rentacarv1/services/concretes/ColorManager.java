@@ -1,6 +1,6 @@
 package com.example.rentacarv1.services.concretes;
 
-import com.example.rentacarv1.core.config.cache.RedisCacheManager;
+import com.example.rentacarv1.core.configurations.cache.RedisCacheManager;
 import com.example.rentacarv1.core.internationalization.MessageService;
 import com.example.rentacarv1.core.utilities.results.DataResult;
 import com.example.rentacarv1.core.utilities.results.Result;
@@ -52,6 +52,7 @@ public class ColorManager implements ColorService {
 
     @Override
     public DataResult<GetColorResponse> getById(int id) {
+        colorBusinessRules.checkIfColorByIdExists(id);
         Color color  = this.colorRepository.findById(id).orElseThrow();
         GetColorResponse getColorResponse =this.modelMapperService.forResponse()
                 .map(color,GetColorResponse.class);
@@ -71,6 +72,7 @@ public class ColorManager implements ColorService {
 
     @Override
     public Result update(UpdateColorRequest updateColorRequest) {
+        colorBusinessRules.checkIfColorByIdExists(updateColorRequest.getId());
         colorBusinessRules.checkIfColorNameExists(updateColorRequest.getName());
 
         Color color = this.modelMapperService.forRequest().map(updateColorRequest,Color.class);
@@ -81,9 +83,17 @@ public class ColorManager implements ColorService {
 
     @Override
     public Result delete(int id) {
-
+        colorBusinessRules.checkIfColorByIdExists(id);
         this.colorRepository.deleteById(id);
         redisCacheManager.cacheData("colorListCache", "getColorsAndCache", null);
         return new SuccessResult( HttpStatus.OK, messageService.getMessage(BaseMessages.DELETE));
+    }
+
+    @Override
+
+    public boolean getColorById(Integer id) {
+
+        return this.colorRepository.existsById(id);
+
     }
 }

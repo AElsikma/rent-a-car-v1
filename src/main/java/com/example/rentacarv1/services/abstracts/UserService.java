@@ -22,4 +22,5 @@ public interface UserService extends UserDetailsService {
     Result delete (int id);
 
 
+    boolean getUserById(Integer id);
 }

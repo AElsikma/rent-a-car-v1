@@ -18,7 +18,6 @@ import java.util.List;
 @Table(name = "employees")
 public class Employee extends BaseEntity {
 
-
     @Column(name="salary")
     private Double salary;
 

@@ -12,6 +12,7 @@ import com.example.rentacarv1.services.constants.user.UserMessages;
 import com.example.rentacarv1.services.dtos.requests.auth.LoginRequest;
 import com.example.rentacarv1.services.dtos.requests.auth.RegisterRequest;
 import com.example.rentacarv1.services.dtos.responses.auth.AuthenticationResponse;
+import com.example.rentacarv1.services.rules.UserBusinessRules;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -43,21 +44,12 @@ public class AuthManager implements AuthService {
     private final JwtService jwtService;
 
     private final AuthenticationManager authenticationManager;
+    private final UserBusinessRules userBusinessRules;
 
     @Override
     public AuthenticationResponse register(RegisterRequest registerRequest) {
-
-        boolean emailExists = userRepository.findByEmail(registerRequest.getEmail()).isPresent();
-        boolean gsmExists = userRepository.findByGsm(registerRequest.getGsm()).isPresent();
-
-        if (emailExists && gsmExists) {
-            throw new RuntimeException(UserMessages.EMAIL_AND_PHONE_ALREADY_EXISTS);
-        } else if (emailExists) {
-            throw new RuntimeException(UserMessages.EMAIL_ALREADY_EXISTS);
-        } else if (gsmExists) {
-            throw new RuntimeException(UserMessages.PHONE_ALREADY_EXISTS);
-        }
-
+        userBusinessRules.checkIfUserByEmailExists(registerRequest.getEmail());
+        userBusinessRules.checkIfUserByGsmExists(registerRequest.getGsm());
         Set<Role> authorities = registerRequest.convertRolesToAuthorities(); // Roller buradan alınıyor
 
         var user = User.builder()

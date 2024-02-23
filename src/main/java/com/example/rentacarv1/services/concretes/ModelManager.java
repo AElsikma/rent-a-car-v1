@@ -1,6 +1,6 @@
 package com.example.rentacarv1.services.concretes;
 
-import com.example.rentacarv1.core.config.cache.RedisCacheManager;
+import com.example.rentacarv1.core.configurations.cache.RedisCacheManager;
 import com.example.rentacarv1.core.internationalization.MessageService;
 import com.example.rentacarv1.core.utilities.results.DataResult;
 import com.example.rentacarv1.core.utilities.results.Result;
@@ -52,6 +52,7 @@ public class ModelManager implements ModelService {
 
     @Override
     public DataResult<GetModelResponse> getById(int id) {
+        modelBusinessRules.checkIfModelByIdExists(id);
         Model model = modelRepository.findById(id).orElseThrow();
         GetModelResponse getModelResponse = this.modelMapperService.forResponse().map(model,GetModelResponse.class);
         return new SuccessDataResult<GetModelResponse>(getModelResponse,messageService.getMessage(BaseMessages.GET) , HttpStatus.OK);
@@ -81,6 +82,7 @@ public class ModelManager implements ModelService {
 
     @Override
     public Result update(UpdateModelRequest updateModelRequest) {
+        modelBusinessRules.checkIfModelByIdExists(updateModelRequest.getId());
         modelBusinessRules.checkIfModelNameExists(updateModelRequest.getName());
 
         Model model = this.modelMapperService.forRequest().map(updateModelRequest,Model.class);
@@ -91,9 +93,17 @@ public class ModelManager implements ModelService {
 
     @Override
     public Result delete(int id) {
-
+        modelBusinessRules.checkIfModelByIdExists(id);
         this.modelRepository.deleteById(id);
         redisCacheManager.cacheData("modelListCache", "getModelsAndCache", null);
         return new SuccessResult( HttpStatus.OK, messageService.getMessage(BaseMessages.DELETE));
+    }
+
+    @Override
+
+    public boolean getModelById(Integer id) {
+
+        return this.modelRepository.existsById(id);
+
     }
 }

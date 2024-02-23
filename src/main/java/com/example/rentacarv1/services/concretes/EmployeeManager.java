@@ -1,6 +1,6 @@
 package com.example.rentacarv1.services.concretes;
 
-import com.example.rentacarv1.core.config.cache.RedisCacheManager;
+import com.example.rentacarv1.core.configurations.cache.RedisCacheManager;
 import com.example.rentacarv1.core.internationalization.MessageService;
 import com.example.rentacarv1.core.utilities.results.DataResult;
 import com.example.rentacarv1.core.utilities.results.Result;
@@ -15,6 +15,7 @@ import com.example.rentacarv1.services.dtos.requests.employee.AddEmployeeRequest
 import com.example.rentacarv1.services.dtos.requests.employee.UpdateEmployeeRequest;
 import com.example.rentacarv1.services.dtos.responses.employee.GetEmployeeListResponse;
 import com.example.rentacarv1.services.dtos.responses.employee.GetEmployeeResponse;
+import com.example.rentacarv1.services.rules.EmployeeBusinessRules;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ public class EmployeeManager implements EmployeeService {
     private ModelMapperService modelMapperService;
     private RedisCacheManager redisCacheManager;
     private final MessageService messageService;
+    private  final EmployeeBusinessRules employeeBusinessRules;
     @Override
     public DataResult<List<GetEmployeeListResponse>> getAll() {
         List<GetEmployeeListResponse> employeeListResponses = (List<GetEmployeeListResponse>) redisCacheManager.getCachedData("employeeListCache", "getEmployeesAndCache");
@@ -50,6 +52,7 @@ public class EmployeeManager implements EmployeeService {
 
     @Override
     public DataResult<GetEmployeeResponse> getById(int id) {
+        employeeBusinessRules.checkIfEmployeeByIdExists(id);
         Employee employee = employeeRepository.findById(id).orElseThrow();
         GetEmployeeResponse getEmployeeResponse=this.modelMapperService.forResponse().map(employee,GetEmployeeResponse.class);
         return new SuccessDataResult<GetEmployeeResponse>(getEmployeeResponse, messageService.getMessage(BaseMessages.GET), HttpStatus.OK);
@@ -65,6 +68,7 @@ public class EmployeeManager implements EmployeeService {
 
     @Override
     public Result update(UpdateEmployeeRequest updateEmployeeRequest) {
+        employeeBusinessRules.checkIfEmployeeByIdExists(updateEmployeeRequest.getId());
         Employee employee =this.modelMapperService.forRequest().map(updateEmployeeRequest,Employee.class);
         employeeRepository.save(employee);
         redisCacheManager.cacheData("employeeListCache", "getEmployeesAndCache", null);
@@ -73,8 +77,16 @@ public class EmployeeManager implements EmployeeService {
 
     @Override
     public Result delete(int id) {
+        employeeBusinessRules.checkIfEmployeeByIdExists(id);
         employeeRepository.deleteById(id);
         redisCacheManager.cacheData("employeeListCache", "getEmployeesAndCache", null);
         return new SuccessResult( HttpStatus.OK, messageService.getMessage(BaseMessages.DELETE));
+    }
+    @Override
+
+    public boolean getEmployeeById(Integer id) {
+
+        return this.employeeRepository.existsById(id);
+
     }
 }

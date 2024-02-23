@@ -16,4 +16,5 @@ public interface EmployeeService {
     Result add (AddEmployeeRequest addEmployeeRequest);
     Result update (UpdateEmployeeRequest updateEmployeeRequest);
     Result delete (int id);
+    boolean getEmployeeById(Integer id);
 }

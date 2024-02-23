@@ -20,5 +20,6 @@ public interface CarService {
     Result update(UpdateCarRequest updateCarRequest);
 
     Result delete(int id);
+    boolean getCarById(Integer id);
 
 }

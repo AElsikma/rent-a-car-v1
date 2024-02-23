@@ -1,6 +1,7 @@
 package com.example.rentacarv1.services.dtos.requests.rental;
 
 import com.example.rentacarv1.entities.concretes.Car;
+import com.example.rentacarv1.services.constants.rental.RentalMessages;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,39 +15,44 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class UpdateRentalRequest {
 
-    @NotNull(message = "Id can not be null.")
-    @Positive(message = "Id must be a positive number.")
+    @NotNull(message =RentalMessages.RENTAL_NOT_NULL)
+    @Positive(message = RentalMessages.POSITIVE_NUMBER)
     private  int id;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @FutureOrPresent(message = "The starting date cannot be further back than today.")
+    @FutureOrPresent(message = RentalMessages.START_DATE_CANNOT_BE_FURTHER_BACK_THAN_TODAY)
     private LocalDate startDate;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Future(message = "The end date cannot be further back than today.")
+    @Future(message = RentalMessages.END_DATE_CANNOT_BE_FURTHER_BACK_THAN_TODAY)
     private LocalDate endDate;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    @Future(message = "The end date cannot be further back than today.")
+    @Future(message = RentalMessages.RETURN_DATE_CANNOT_BE_FURTHER_BACK_THAN_TODAY)
     private LocalDate returnDate;
 
-    @NotNull(message = "The kilometer field cannot be null !")
-    @Min(value = 0,message = "Kilometer must be greater than or equal to 0.")
+    @NotNull(message = RentalMessages.RENTAL_NOT_NULL)
+    @Min(value = 0,message =RentalMessages.KILOMETER_RULE)
     private int startKilometer;
 
-    @NotNull(message = "The kilometer field cannot be null !")
-    @Min(value = 0,message = "Kilometer must be greater than or equal to 0.")
+    @NotNull(message =RentalMessages.RENTAL_NOT_NULL)
+    @Min(value = 0,message = RentalMessages.KILOMETER_RULE)
     private int endKilometer;
 
-    @NotNull(message = "The total price field cannot be null !")
-    @Min(value = 0,message = "Total Price must be greater than or equal to 0.")
-    private double totalPrice;
 
-    @Min(value = 0,message = "The discount value can not be lower than 0")
+    @Min(value = 0,message = RentalMessages.DISCOUNT_CANNOT_BE_LOWER_ZERO)
     private double discount;
 
-    @NotBlank
-    private Car car;
+    @Positive(message = RentalMessages.POSITIVE_NUMBER)
+    private int carId;
+
+    @Positive(message = RentalMessages.POSITIVE_NUMBER)
+    private int customerId;
+
+    @Positive(message = RentalMessages.POSITIVE_NUMBER)
+    private int employeeId;
+
+
 
 
 }

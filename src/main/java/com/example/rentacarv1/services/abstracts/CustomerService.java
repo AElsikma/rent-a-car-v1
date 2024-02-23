@@ -15,4 +15,5 @@ public interface CustomerService {
     Result add (AddCustomerRequest addCustomerRequest);
     Result update (UpdateCustomerRequest updateCustomerRequest);
     Result delete (int id);
+    boolean getCustomerById(Integer id);
 }

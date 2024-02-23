@@ -20,5 +20,5 @@ public interface ColorService {
     Result delete(int id);
 
 
-
+    boolean getColorById(Integer id);
 }

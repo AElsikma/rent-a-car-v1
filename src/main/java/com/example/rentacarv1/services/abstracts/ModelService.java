@@ -18,4 +18,6 @@ public interface ModelService {
 
     Result update(UpdateModelRequest updateModelRequest);
     Result delete(int id);
+
+    boolean getModelById(Integer id);
 }

@@ -1,6 +1,6 @@
 package com.example.rentacarv1.services.concretes;
 
-import com.example.rentacarv1.core.config.cache.RedisCacheManager;
+import com.example.rentacarv1.core.configurations.cache.RedisCacheManager;
 import com.example.rentacarv1.core.internationalization.MessageService;
 import com.example.rentacarv1.core.utilities.results.DataResult;
 import com.example.rentacarv1.core.utilities.results.Result;
@@ -12,10 +12,12 @@ import com.example.rentacarv1.repositories.UserRepository;
 import com.example.rentacarv1.services.abstracts.RoleService;
 import com.example.rentacarv1.services.abstracts.UserService;
 import com.example.rentacarv1.services.constants.baseMessage.BaseMessages;
+import com.example.rentacarv1.services.constants.user.UserMessages;
 import com.example.rentacarv1.services.dtos.requests.user.AddUserRequest;
 import com.example.rentacarv1.services.dtos.requests.user.UpdateUserRequest;
 import com.example.rentacarv1.services.dtos.responses.user.GetUserListResponse;
 import com.example.rentacarv1.services.dtos.responses.user.GetUserResponse;
+import com.example.rentacarv1.services.rules.UserBusinessRules;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -35,6 +37,8 @@ public class UserManager implements UserService {
     private final RoleService roleService;
     private RedisCacheManager redisCacheManager;
     private final MessageService messageService;
+
+    private final UserBusinessRules userBusinessRules;
 
     @Override
     public DataResult<List<GetUserListResponse>> getAll() {
@@ -56,6 +60,7 @@ public class UserManager implements UserService {
 
     @Override
     public DataResult<GetUserResponse> getById(int id) {
+        userBusinessRules.checkIfUserByIdExists(id);
         User user = userRepository.findById(id).orElseThrow();
         GetUserResponse getUserResponse=this.modelMapperService.forResponse().map(user,GetUserResponse.class);
         return new SuccessDataResult<GetUserResponse>(getUserResponse,messageService.getMessage(BaseMessages.GET) , HttpStatus.OK);
@@ -83,6 +88,7 @@ public class UserManager implements UserService {
 
     @Override
     public Result update(UpdateUserRequest updateUserRequest) {
+        userBusinessRules.checkIfUserByIdExists(updateUserRequest.getId());
         User user =this.modelMapperService.forRequest().map(updateUserRequest,User.class);
         userRepository.save(user);
         redisCacheManager.cacheData("userListCache", "getUsersAndCache", null);
@@ -91,16 +97,22 @@ public class UserManager implements UserService {
 
     @Override
     public Result delete(int id) {
-
+        userBusinessRules.checkIfUserByIdExists(id);
         userRepository.deleteById(id);
         redisCacheManager.cacheData("userListCache", "getUsersAndCache", null);
         return new SuccessResult( HttpStatus.OK, messageService.getMessage(BaseMessages.DELETE));
     }
 
+    @Override
+    public boolean getUserById(Integer id) {
+
+        return this.userRepository.existsById(id);
+
+    }
 
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("User not found!"));
+        return userRepository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException(UserMessages.USER_NOT_EXIST));
     }
 }

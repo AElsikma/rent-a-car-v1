@@ -19,5 +19,9 @@ public class BrandBusinessRules {
         };
     }
 
-
+    public void checkIfBrandIdExists(Integer id) {
+        if (!this.brandRepository.existsById(id)) {
+            throw new BusinessException(BrandMessages.ID_NOT_FOUND);
+        }
+    }
 }

@@ -1,6 +1,6 @@
 package com.example.rentacarv1.services.concretes;
 
-import com.example.rentacarv1.core.config.cache.RedisCacheManager;
+import com.example.rentacarv1.core.configurations.cache.RedisCacheManager;
 import com.example.rentacarv1.core.internationalization.MessageService;
 import com.example.rentacarv1.core.utilities.results.DataResult;
 import com.example.rentacarv1.core.utilities.results.Result;
@@ -17,7 +17,6 @@ import com.example.rentacarv1.services.dtos.responses.brand.GetBrandListResponse
 import com.example.rentacarv1.services.dtos.responses.brand.GetBrandResponse;
 import com.example.rentacarv1.services.rules.BrandBusinessRules;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -60,7 +59,7 @@ public class BrandManager implements BrandService {
 
     @Override
     public DataResult<GetBrandResponse> getById(int id) {
-
+        brandBusinessRules.checkIfBrandIdExists(id);
         Brand brand = brandRepository.findById(id).orElseThrow();
         GetBrandResponse getBrandResponse=this.modelMapperService.forResponse().map(brand,GetBrandResponse.class);
         return new SuccessDataResult<GetBrandResponse>(getBrandResponse,messageService.getMessage(BaseMessages.GET) ,HttpStatus.OK);
@@ -79,6 +78,7 @@ public class BrandManager implements BrandService {
 
     @Override
     public Result update(UpdateBrandRequest updateBrandRequest) {
+        brandBusinessRules.checkIfBrandIdExists(updateBrandRequest.getId());
         brandBusinessRules.checkIfBrandNameExists(updateBrandRequest.getName());
 
         Brand brand =this.modelMapperService.forRequest().map(updateBrandRequest,Brand.class);
@@ -89,6 +89,7 @@ public class BrandManager implements BrandService {
 
     @Override
     public Result delete(int id) {
+        brandBusinessRules.checkIfBrandIdExists(id);
         brandRepository.deleteById(id);
         redisCacheManager.cacheData("brandListCache", "getBrandsAndCache", null);
         return new SuccessResult( HttpStatus.OK, messageService.getMessage(BaseMessages.DELETE));

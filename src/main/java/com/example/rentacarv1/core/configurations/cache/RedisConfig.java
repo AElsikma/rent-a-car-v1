@@ -1,4 +1,4 @@
-package com.example.rentacarv1.core.config.cache;
+package com.example.rentacarv1.core.configurations.cache;
 
 import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
 import org.springframework.cache.annotation.EnableCaching;

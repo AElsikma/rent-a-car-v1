@@ -1,6 +1,6 @@
 package com.example.rentacarv1.services.concretes;
 
-import com.example.rentacarv1.core.config.cache.RedisCacheManager;
+import com.example.rentacarv1.core.configurations.cache.RedisCacheManager;
 import com.example.rentacarv1.core.internationalization.MessageService;
 import com.example.rentacarv1.core.utilities.results.DataResult;
 import com.example.rentacarv1.core.utilities.results.Result;
@@ -12,10 +12,12 @@ import com.example.rentacarv1.entities.concretes.Customer;
 import com.example.rentacarv1.entities.concretes.Employee;
 import com.example.rentacarv1.entities.concretes.Rental;
 import com.example.rentacarv1.repositories.*;
+import com.example.rentacarv1.services.abstracts.CarService;
 import com.example.rentacarv1.services.abstracts.RentalService;
 import com.example.rentacarv1.services.constants.baseMessage.BaseMessages;
 import com.example.rentacarv1.services.dtos.requests.rental.AddRentalRequest;
 import com.example.rentacarv1.services.dtos.requests.rental.UpdateRentalRequest;
+import com.example.rentacarv1.services.dtos.responses.car.GetCarResponse;
 import com.example.rentacarv1.services.dtos.responses.rental.GetRentalListResponse;
 import com.example.rentacarv1.services.dtos.responses.rental.GetRentalResponse;
 import com.example.rentacarv1.services.rules.RentalBusinessRules;
@@ -32,11 +34,10 @@ public class RentalManager implements RentalService {
 
     private final RentalRepository rentalRepository;
     private final ModelMapperService modelMapperService;
-    private final CustomerRepository customerRepository;
-    private final CarRepository carRepository;
-    private final EmployeeRepository employeeRepository;
     private RedisCacheManager redisCacheManager;
     private final MessageService messageService;
+    private final RentalBusinessRules rentalBusinessRules;
+    private final CarService carService;
 
 
     @Override
@@ -60,6 +61,7 @@ public class RentalManager implements RentalService {
 
     @Override
     public DataResult<GetRentalResponse> getById(int id) {
+        rentalBusinessRules.checkIfRentalByIdExists(id);
         Rental rental = rentalRepository.findById(id).orElseThrow();
         GetRentalResponse getRentalResponse=this.modelMapperService.forResponse().map(rental,GetRentalResponse.class);
         return new SuccessDataResult<GetRentalResponse>(getRentalResponse,messageService.getMessage(BaseMessages.GET) , HttpStatus.OK) ;
@@ -68,20 +70,26 @@ public class RentalManager implements RentalService {
     @Override
     public Result add(AddRentalRequest addRentalRequest) {
 
-        Customer customer = customerRepository.findById(Integer.valueOf(addRentalRequest.getCustomerId()))
-                .orElseThrow(()-> new IllegalArgumentException("The specified user was not found"));
-        Car car = carRepository.findById(Integer.valueOf(addRentalRequest.getCarId()))
-                .orElseThrow(()-> new IllegalArgumentException("The specified car was not found"));
-        Employee employee = employeeRepository.findById(Integer.valueOf(addRentalRequest.getEmployeeId()))
-                .orElseThrow(()-> new IllegalArgumentException("The specified user was not found"));
+     rentalBusinessRules.existsByCarId(addRentalRequest.getCarId());
+     rentalBusinessRules.existsByCustomerId(addRentalRequest.getCustomerId());
+     rentalBusinessRules.existsByEmployeeId(addRentalRequest.getEmployeeId());
+     rentalBusinessRules.checkIfRentalByStartDate(addRentalRequest.getStartDate());
+     rentalBusinessRules.checkIfRentalByEndDate(addRentalRequest.getEndDate(), addRentalRequest.getStartDate());
+     rentalBusinessRules.checkIfRentalByDateValid(addRentalRequest.getStartDate(), addRentalRequest.getEndDate());
 
-        Rental rental=this.modelMapperService.forRequest().map(addRentalRequest,Rental.class);
-        rental.setCar(car);
-        rental.setCustomer(customer);
-        rental.setEmployee(employee);
-        rental.setStartKilometer(car.getKilometer());
-        int rentalLimit = rental.getStartDate().until(rental.getEndDate()).getDays() + 1;
-        rental.setTotalPrice(car.getDailyPrice() * rentalLimit);
+
+     Rental rental=this.modelMapperService.forRequest().map(addRentalRequest,Rental.class);
+
+     DataResult<GetCarResponse> carResponse = carService.getById(addRentalRequest.getCarId());
+     rental.setStartKilometer(carResponse.getData().getKilometer());
+
+        double carPrice = rentalBusinessRules.calculateTotalPrice(addRentalRequest.getStartDate(),
+                addRentalRequest.getEndDate(), carResponse.getData().getDaily_price());
+
+        double totalPrice = 0.0;
+        totalPrice += carPrice;
+        rental.setTotalPrice(totalPrice);
+
         this.rentalRepository.save(rental);
         redisCacheManager.cacheData("rentalListCache", "getRentalsAndCache", null);
         return new SuccessResult( HttpStatus.CREATED, messageService.getMessage(BaseMessages.ADD));
@@ -90,7 +98,20 @@ public class RentalManager implements RentalService {
 
     @Override
     public Result update(UpdateRentalRequest updateRentalRequest) {
+        rentalBusinessRules.checkIfRentalByIdExists(updateRentalRequest.getId());
+        rentalBusinessRules.existsByCarId(updateRentalRequest.getCarId());
+        rentalBusinessRules.existsByCustomerId(updateRentalRequest.getCustomerId());
+        rentalBusinessRules.existsByEmployeeId(updateRentalRequest.getEmployeeId());
+        rentalBusinessRules.checkIfRentalByStartDate(updateRentalRequest.getStartDate());
+        rentalBusinessRules.checkIfRentalByEndDate(updateRentalRequest.getEndDate(), updateRentalRequest.getStartDate());
+        rentalBusinessRules.checkIfRentalByDateValid(updateRentalRequest.getStartDate(), updateRentalRequest.getEndDate());
+
         Rental rental =this.modelMapperService.forRequest().map(updateRentalRequest,Rental.class);
+
+        DataResult<GetCarResponse> carResponse = carService.getById(updateRentalRequest.getCarId());
+        rental.setStartKilometer(carResponse.getData().getKilometer());
+
+        rental.setTotalPrice(this.rentalBusinessRules.calculateTotalPrice(updateRentalRequest.getStartDate(), updateRentalRequest.getEndDate(), carResponse.getData().getDaily_price()));
         rentalRepository.save(rental);
         redisCacheManager.cacheData("rentalListCache", "getRentalsAndCache", null);
         return new SuccessResult( HttpStatus.OK, messageService.getMessage(BaseMessages.UPDATE));
@@ -98,7 +119,7 @@ public class RentalManager implements RentalService {
 
     @Override
     public Result delete(int id) {
-
+        rentalBusinessRules.checkIfRentalByIdExists(id);
         rentalRepository.deleteById(id);
         redisCacheManager.cacheData("rentalListCache", "getRentalsAndCache", null);
         return new SuccessResult( HttpStatus.OK, messageService.getMessage(BaseMessages.DELETE));

@@ -1,6 +1,6 @@
 package com.example.rentacarv1.services.concretes;
 
-import com.example.rentacarv1.core.config.cache.RedisCacheManager;
+import com.example.rentacarv1.core.configurations.cache.RedisCacheManager;
 import com.example.rentacarv1.core.internationalization.MessageService;
 import com.example.rentacarv1.core.utilities.results.DataResult;
 import com.example.rentacarv1.core.utilities.results.Result;
@@ -15,6 +15,7 @@ import com.example.rentacarv1.services.dtos.requests.customer.AddCustomerRequest
 import com.example.rentacarv1.services.dtos.requests.customer.UpdateCustomerRequest;
 import com.example.rentacarv1.services.dtos.responses.customer.GetCustomerListResponse;
 import com.example.rentacarv1.services.dtos.responses.customer.GetCustomerResponse;
+import com.example.rentacarv1.services.rules.CustomerBusinessRules;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ public class CustomerManager implements CustomerService {
     private ModelMapperService modelMapperService;
     private RedisCacheManager redisCacheManager;
     private final MessageService messageService;
+    private final CustomerBusinessRules customerBusinessRules;
     @Override
     public DataResult<List<GetCustomerListResponse>> getAll() {
         List<GetCustomerListResponse> customerListResponses = (List<GetCustomerListResponse>) redisCacheManager.getCachedData("customerListCache", "getCustomersAndCache");
@@ -50,6 +52,7 @@ public class CustomerManager implements CustomerService {
 
     @Override
     public DataResult<GetCustomerResponse> getById(int id) {
+        customerBusinessRules.checkIfCustomerByIdExists(id);
         Customer customer = customerRepository.findById(id).orElseThrow();
         GetCustomerResponse getCustomerResponse=this.modelMapperService.forResponse().map(customer,GetCustomerResponse.class);
         return new SuccessDataResult<GetCustomerResponse>(getCustomerResponse,messageService.getMessage(BaseMessages.GET), HttpStatus.OK);
@@ -65,6 +68,7 @@ public class CustomerManager implements CustomerService {
 
     @Override
     public Result update(UpdateCustomerRequest updateCustomerRequest) {
+        customerBusinessRules.checkIfCustomerByIdExists(updateCustomerRequest.getId());
         Customer customer =this.modelMapperService.forRequest().map(updateCustomerRequest,Customer.class);
         customerRepository.save(customer);
         redisCacheManager.cacheData("customerListCache", "getCustomersAndCache", null);
@@ -73,8 +77,17 @@ public class CustomerManager implements CustomerService {
 
     @Override
     public Result delete(int id) {
+        customerBusinessRules.checkIfCustomerByIdExists(id);
         customerRepository.deleteById(id);
         redisCacheManager.cacheData("customerListCache", "getCustomersAndCache", null);
         return new SuccessResult( HttpStatus.OK,messageService.getMessage(BaseMessages.DELETE));
+    }
+
+    @Override
+
+    public boolean getCustomerById(Integer id) {
+
+        return this.customerRepository.existsById(id);
+
     }
 }

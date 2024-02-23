@@ -103,7 +103,6 @@ class UserManagerTest {
     void getUserById() {
     }
 
-
     @Test
     void loadUserByUsername() {
     }

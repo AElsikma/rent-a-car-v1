@@ -73,6 +73,7 @@ public class RentalManager implements RentalService {
      rentalBusinessRules.existsByCarId(addRentalRequest.getCarId());
      rentalBusinessRules.existsByCustomerId(addRentalRequest.getCustomerId());
      rentalBusinessRules.existsByEmployeeId(addRentalRequest.getEmployeeId());
+     rentalBusinessRules.existsByUserId(addRentalRequest.getUserId());
      rentalBusinessRules.checkIfRentalByStartDate(addRentalRequest.getStartDate());
      rentalBusinessRules.checkIfRentalByEndDate(addRentalRequest.getEndDate(), addRentalRequest.getStartDate());
      rentalBusinessRules.checkIfRentalByDateValid(addRentalRequest.getStartDate(), addRentalRequest.getEndDate());

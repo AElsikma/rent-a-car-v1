@@ -34,6 +34,8 @@ public class AddRentalRequest {
     @Positive(message = RentalMessages.POSITIVE_NUMBER)
     private int employeeId;
 
+    @Positive(message = RentalMessages.POSITIVE_NUMBER)
+    private int userId;
 
 
 }

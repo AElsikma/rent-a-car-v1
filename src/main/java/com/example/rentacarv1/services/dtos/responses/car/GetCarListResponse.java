@@ -15,7 +15,7 @@ import java.io.Serializable;
 @NoArgsConstructor
 @RedisHash("CarList")
 public class GetCarListResponse implements Serializable {
-
+    public static final long serialVersionUID=4548968470391477304L;
     private int id;
     private double dailyPrice;
     private String imagePath;

@@ -6,11 +6,13 @@ import com.example.rentacarv1.services.abstracts.CarService;
 
 import com.example.rentacarv1.services.abstracts.CustomerService;
 import com.example.rentacarv1.services.abstracts.EmployeeService;
+import com.example.rentacarv1.services.abstracts.UserService;
 import com.example.rentacarv1.services.constants.car.CarMessages;
 import com.example.rentacarv1.services.constants.customer.CustomerMessages;
 
 import com.example.rentacarv1.services.constants.employee.EmployeeMessages;
 import com.example.rentacarv1.services.constants.rental.RentalMessages;
+import com.example.rentacarv1.services.constants.user.UserMessages;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,7 @@ public class RentalBusinessRules {
     private final CarService carService;
     private final CustomerService customerService;
     private  final EmployeeService employeeService;
+    private final UserService userService;
 
     public void existsByCarId(Integer id) {
         if (!carService.getCarById(id)) {
@@ -41,6 +44,11 @@ public class RentalBusinessRules {
     public void existsByEmployeeId(Integer id) {
         if (!employeeService.getEmployeeById(id)) {
             throw new BusinessException(EmployeeMessages.EMPLOYEE_NOT_EXIST);
+        }
+    }
+    public void existsByUserId(Integer id) {
+        if (!userService.getUserById(id)) {
+            throw new BusinessException(UserMessages.USER_NOT_EXIST);
         }
     }
 

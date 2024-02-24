@@ -9,6 +9,7 @@ import com.example.rentacarv1.core.utilities.results.SuccessDataResult;
 import com.example.rentacarv1.core.utilities.results.SuccessResult;
 import com.example.rentacarv1.entities.concretes.Car;
 import com.example.rentacarv1.core.utilities.mappers.ModelMapperService;
+import com.example.rentacarv1.entities.enums.CarState;
 import com.example.rentacarv1.repositories.CarRepository;
 import com.example.rentacarv1.services.abstracts.CarService;
 import com.example.rentacarv1.services.constants.baseMessage.BaseMessages;
@@ -112,5 +113,26 @@ public class CarManager implements CarService {
 
         return this.carRepository.existsById(id);
 
+    }
+
+    @Override
+    public void updateCarState(int carId, CarState newState) {
+        DataResult<GetCarResponse> carResponse = getById(carId);
+        Car car = modelMapperService.forResponse().map(carResponse.getData(), Car.class);
+        car.setCarState(newState);
+        carRepository.save(car);
+        redisCacheManager.cacheData("carListCache", "getCarsAndCache", null);
+    }
+
+    @Override
+    public boolean isCarUnderMaintenance(int carId) {
+        DataResult<GetCarResponse> carResponse = getById(carId);
+        return carResponse.getData().getCarState() == CarState.MAINTENANCE;
+    }
+
+    @Override
+    public boolean isCarRented(int carId) {
+        DataResult<GetCarResponse> carResponse = getById(carId);
+        return carResponse.getData().getCarState() == CarState.RENTED;
     }
 }

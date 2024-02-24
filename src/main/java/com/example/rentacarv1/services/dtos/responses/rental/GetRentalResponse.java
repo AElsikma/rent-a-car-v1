@@ -30,4 +30,6 @@ public class GetRentalResponse implements Serializable {
 
     private Double totalPrice;
 
+    private int carId;
+
 }

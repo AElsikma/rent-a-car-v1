@@ -53,10 +53,15 @@ public class RentalManager implements RentalService {
     public DataResult<List<GetRentalResponse>> getByCustomerId(int customerId) {
         List<Rental> rentals = rentalRepository.findByCustomerId(customerId);
         List<GetRentalResponse> rentalResponses = rentals.stream()
-                .map(rental -> modelMapperService.forResponse().map(rental, GetRentalResponse.class))
+                .map(rental -> {
+                    GetRentalResponse response = modelMapperService.forResponse().map(rental, GetRentalResponse.class);
+                    response.setCarId(rental.getCar().getId());
+                    return response;
+                })
                 .collect(Collectors.toList());
         return new SuccessDataResult<>(rentalResponses, messageService.getMessage(BaseMessages.GET_ALL), HttpStatus.OK);
     }
+
 
     public List<GetRentalListResponse> getRentalsAndCache() {
         List<Rental> rentals = rentalRepository.findAll();

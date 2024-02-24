@@ -26,10 +26,9 @@ public class RentalsController {
         return this.rentalService.getAll();
     }
 
-    @GetMapping("/{id}")
-    public DataResult<GetRentalResponse> getById(@PathVariable int id){
-
-        return this.rentalService.getById(id);
+    @GetMapping("/customer/{customerId}")
+    public DataResult<List<GetRentalResponse>> getByCustomerId(@PathVariable int customerId){
+        return this.rentalService.getByCustomerId(customerId);
     }
 
     @PostMapping("/add")

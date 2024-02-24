@@ -49,6 +49,14 @@ public class RentalManager implements RentalService {
 
         return new SuccessDataResult<>(rentalListResponses,messageService.getMessage(BaseMessages.GET_ALL),HttpStatus.OK);
     }
+    @Override
+    public DataResult<List<GetRentalResponse>> getByCustomerId(int customerId) {
+        List<Rental> rentals = rentalRepository.findByCustomerId(customerId);
+        List<GetRentalResponse> rentalResponses = rentals.stream()
+                .map(rental -> modelMapperService.forResponse().map(rental, GetRentalResponse.class))
+                .collect(Collectors.toList());
+        return new SuccessDataResult<>(rentalResponses, messageService.getMessage(BaseMessages.GET_ALL), HttpStatus.OK);
+    }
 
     public List<GetRentalListResponse> getRentalsAndCache() {
         List<Rental> rentals = rentalRepository.findAll();

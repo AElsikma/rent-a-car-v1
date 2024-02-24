@@ -2,19 +2,18 @@ package com.example.rentacarv1.services.concretes;
 
 import com.example.rentacarv1.core.configurations.cache.RedisCacheManager;
 import com.example.rentacarv1.core.internationalization.MessageService;
-import com.example.rentacarv1.core.utilities.results.DataResult;
-import com.example.rentacarv1.core.utilities.results.Result;
-import com.example.rentacarv1.core.utilities.results.SuccessDataResult;
-import com.example.rentacarv1.core.utilities.results.SuccessResult;
+import com.example.rentacarv1.core.utilities.results.*;
 import com.example.rentacarv1.core.utilities.mappers.ModelMapperService;
 import com.example.rentacarv1.entities.concretes.Car;
 import com.example.rentacarv1.entities.concretes.Customer;
 import com.example.rentacarv1.entities.concretes.Employee;
 import com.example.rentacarv1.entities.concretes.Rental;
+import com.example.rentacarv1.entities.enums.CarState;
 import com.example.rentacarv1.repositories.*;
 import com.example.rentacarv1.services.abstracts.CarService;
 import com.example.rentacarv1.services.abstracts.RentalService;
 import com.example.rentacarv1.services.constants.baseMessage.BaseMessages;
+import com.example.rentacarv1.services.constants.rental.RentalMessages;
 import com.example.rentacarv1.services.dtos.requests.rental.AddRentalRequest;
 import com.example.rentacarv1.services.dtos.requests.rental.UpdateRentalRequest;
 import com.example.rentacarv1.services.dtos.responses.car.GetCarResponse;
@@ -89,9 +88,21 @@ public class RentalManager implements RentalService {
         double totalPrice = 0.0;
         totalPrice += carPrice;
         rental.setTotalPrice(totalPrice);
+        // Eğer araç kiralandıysa, kiralanamaz durumunda uyarı veya hata dönebilirsiniz.
+        if (carService.isCarRented(addRentalRequest.getCarId())) {
+            return new ErrorResult(HttpStatus.BAD_REQUEST, RentalMessages.VEHICLE_RENTED);
+        }
 
         this.rentalRepository.save(rental);
         redisCacheManager.cacheData("rentalListCache", "getRentalsAndCache", null);
+
+        // Kiralama işlemi başarılıysa, aracın durumunu RENTED olarak güncelle
+        carService.updateCarState(addRentalRequest.getCarId(), CarState.RENTED);
+
+        // Eğer araba bakımdaysa, durumunu Maintenance olarak güncelle
+        if (carService.isCarUnderMaintenance(addRentalRequest.getCarId())) {
+            carService.updateCarState(addRentalRequest.getCarId(), CarState.MAINTENANCE);
+        }
         return new SuccessResult( HttpStatus.CREATED, messageService.getMessage(BaseMessages.ADD));
 
     }
@@ -120,8 +131,12 @@ public class RentalManager implements RentalService {
     @Override
     public Result delete(int id) {
         rentalBusinessRules.checkIfRentalByIdExists(id);
+        Rental deletedRental = rentalRepository.findById(id).orElseThrow();
+        carService.updateCarState(deletedRental.getCar().getId(), CarState.AVAILABLE);
         rentalRepository.deleteById(id);
         redisCacheManager.cacheData("rentalListCache", "getRentalsAndCache", null);
         return new SuccessResult( HttpStatus.OK, messageService.getMessage(BaseMessages.DELETE));
     }
+
+
 }

@@ -37,7 +37,7 @@ public class Car extends BaseEntity {
 
     @Column(name = "car_state")
     @Enumerated(EnumType.STRING)
-    private CarState carState;
+    private CarState carState=CarState.AVAILABLE;
 
     @ManyToOne
     @JoinColumn(name = "model_id")

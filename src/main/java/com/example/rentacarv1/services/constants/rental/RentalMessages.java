@@ -3,6 +3,7 @@ package com.example.rentacarv1.services.constants.rental;
 public class RentalMessages {
     public static final String RENTAL_NOT_NULL = "The field cannot be null";
     public static final String ID_NOT_FOUND = "Rental id was not found";
+    public static final String VEHICLE_RENTED="The vehicle is currently rented";
 
     public static final String POSITIVE_NUMBER = "The field must be a positive number.";
     public static final String START_DATE_CANNOT_BE_FURTHER_BACK_THAN_TODAY="The starting date cannot be further back than today.";

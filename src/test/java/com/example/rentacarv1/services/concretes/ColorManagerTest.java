@@ -63,7 +63,7 @@ public class ColorManagerTest
     }
 
     @Test
-    void colorNameShouldNotDuplicated()
+    void isExistsColorName()
     {
         String color = "Black";
         addColorRequest.setName(color);
@@ -74,7 +74,7 @@ public class ColorManagerTest
     }
 
     @Test
-    void succesfullyGetAll()
+    void correctGetAll()
     {
         Mockito.when(colorRepository.findAll()).thenReturn(colors);
         colorService.getAll();
@@ -83,7 +83,7 @@ public class ColorManagerTest
     }
 
     @Test
-    void successfulyGetById()
+    void correctGetById()
     {
          addColorRequest.setName("Red");
         Mockito.when(colorRepository.findById(color.getId())).thenReturn(Optional.of(new Color()));

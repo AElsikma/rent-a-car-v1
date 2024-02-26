@@ -7,7 +7,6 @@ import com.example.rentacarv1.entities.User;
 import com.example.rentacarv1.repositories.UserRepository;
 import com.example.rentacarv1.services.abstracts.UserService;
 import com.example.rentacarv1.services.dtos.requests.user.AddUserRequest;
-import com.example.rentacarv1.services.dtos.responses.user.GetUserListResponse;
 import com.example.rentacarv1.services.rules.UserBusinessRules;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,11 +19,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.assertj.core.api.Fail.fail;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class UserManagerTest {
     @Mock
@@ -73,7 +67,7 @@ class UserManagerTest {
     void getById() {
     }
     @Test
-    void isUserDuplicated()
+    void isExistsUser()
     {
         String email = "aslib@gmail.com";
         user.setEmail(email);

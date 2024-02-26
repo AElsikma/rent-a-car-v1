@@ -67,19 +67,19 @@ class BrandManagerTest {
 
 
     @Test
-    void succesfullyDelete() {
+    void correctDelete() {
 
     }
 
     @Test
-    void succesfullyGetAll(){
+    void correctGetAll(){
         Mockito.when(brandRepository.findAll()).thenReturn(brands);
         brandService.getAll();
         assert true;
     }
 
     @Test
-    void succesfullyGetbyId()
+    void correctGetById()
     {
         Mockito.when(brandRepository.findById(brand.getId())).thenReturn(Optional.of(new Brand()));
         brandService.getById(brand.getId());
